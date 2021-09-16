@@ -30,6 +30,7 @@ func main() {
 	fmt.Scanln(&action)
 	fmt.Println("Please input two numbers: ")
 	fmt.Scanln(&a, &b)
+
 	switch action {
 	case 1:
 		fmt.Println(Add(a, b))
