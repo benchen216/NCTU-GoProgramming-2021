@@ -13,6 +13,8 @@ func main() {
 	fmt.Println("3) Mul")
 	fmt.Println("4) Div")
 
+	var action, a, b int
+
 	fmt.Println("Please input your action: ")
 	fmt.Scanln(&action)
 	fmt.Println("Please input two numbers: ")
@@ -31,4 +33,20 @@ func main() {
 		fmt.Println("Wrong input!!")
 	}
 
+}
+
+func Add(a, b int) int {
+	return a + b
+}
+
+func Sub(a, b int) int {
+	return a - b
+}
+
+func Mul(a, b int) int {
+	return a * b
+}
+
+func Div(a, b int) int {
+	return a / b
 }
