@@ -46,8 +46,11 @@ func main() {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
 			r.ParseForm()
-			cycles := 5
-			cycles, _ = strconv.Atoi(strings.Join(r.Form["cycles"], ""))
+
+			cycles, err := strconv.Atoi(strings.Join(r.Form["cycles"], ""))
+			if err != nil {
+				cycles = 5
+			}
 			lissajous(w, float64(cycles))
 		}
 		http.HandleFunc("/", handler)
