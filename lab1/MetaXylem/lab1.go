@@ -19,7 +19,8 @@ func divide(a, b int) int {
 func main() {
 	cmd := 0
 	var a, b int
-	for _, err := fmt.Scanln(&cmd, &a, &b); err == nil; _, err = fmt.Scanln(&cmd, &a, &b) {
+	for _, err := fmt.Scanln(&cmd); err == nil; _, err = fmt.Scanln(&cmd) {
+		fmt.Scanln(&a, &b)
 		if cmd == 1 {
 			cmd = add(a, b)
 		} else if cmd == 2 {
