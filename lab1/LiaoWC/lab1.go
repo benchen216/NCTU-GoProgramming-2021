@@ -7,6 +7,7 @@ import (
 func main() {
 	// Please complete the code to make this program compiled without error.
 	// Notice that you can only add code in this file.
+	var action, a, b int64
 
 	fmt.Println("1) Add")
 	fmt.Println("2) Sub")
@@ -20,13 +21,13 @@ func main() {
 
 	switch action {
 	case 1:
-		fmt.Println(Add(a, b))
+		fmt.Println(a + b)
 	case 2:
-		fmt.Println(Sub(a, b))
+		fmt.Println(a - b)
 	case 3:
-		fmt.Println(Mul(a, b))
+		fmt.Println(a * b)
 	case 4:
-		fmt.Println(Div(a, b))
+		fmt.Println(a / b)
 	default:
 		fmt.Println("Wrong input!!")
 	}
