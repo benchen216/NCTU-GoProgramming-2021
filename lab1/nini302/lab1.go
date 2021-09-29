@@ -1,13 +1,24 @@
 package main
 
-import (
-	"fmt"
-)
-
+import "fmt"
+func Add(a int,b int)int{
+	return a+b
+}
+func Sub(a int,b int)int{
+	return a-b
+}
+func Mul(a int,b int)int{
+	return a*b
+}
+func Div(a int,b int)int{
+	return a/b
+}
 func main() {
 	// Please complete the code to make this program compiled without error.
 	// Notice that you can only add code in this file.
-
+	var action int
+	var a int
+	var b int
 	fmt.Println("1) Add")
 	fmt.Println("2) Sub")
 	fmt.Println("3) Mul")
