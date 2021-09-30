@@ -4,9 +4,29 @@ import (
 	"fmt"
 )
 
+func Add(x,y int) int {
+	return x+y
+}
+
+func Sub(x,y int) int {
+	return x-y
+}
+
+func Mul(x,y int) int {
+	return x*y
+}
+
+func Div(x,y int) int {
+	return x/y
+}
+
+
+
+
 func main() {
 	// Please complete the code to make this program compiled without error.
 	// Notice that you can only add code in this file.
+	var a,b,action int
 
 	fmt.Println("1) Add")
 	fmt.Println("2) Sub")
