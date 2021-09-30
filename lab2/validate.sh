@@ -3,10 +3,9 @@
 test_path="${BASH_SOURCE[0]}"
 solution_path="$(realpath .)"
 tmp_dir=$(mktemp -d -t lab2-XXXXXXXXXX)
-
 echo "working directory: $tmp_dir"
 cd $tmp_dir
-cp $solution_path/../*.txt .
+cp $solution_path/*.txt .
 #rm -rf *
 cp $solution_path/lab2.go .
 result=$(cat input1.txt | go run lab2.go 2>&1) ; ret=$?
