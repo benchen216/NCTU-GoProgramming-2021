@@ -3,16 +3,16 @@ package main
 import "fmt"
 
 func Sum(n int64) int64 {
-	sum, x := int64(0), int64(1)
-	for x=1; x<n; x++ {
+	sum, x := int64(1), int64(1)
+	fmt.Printf("%d", x)
+	for x=2; x<=n; x++ {
 		if x%7 == 0{
 			continue
 		}
 		sum += x
-		fmt.Printf("%d + ", x)
+		fmt.Printf("+%d", x)
 	}
-	sum += x
-	fmt.Printf("%d = %d\n", x, sum)
+	fmt.Printf("=%d\n", sum)
 	return sum
 }
 
