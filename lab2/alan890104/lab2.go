@@ -16,14 +16,16 @@ func main() {
 			break
 		} else {
 			s = 0
+			if n%7 == 0 {
+				n = n - 1
+			}
 			for i = 1; i <= n; i++ {
 				if i%7 != 0 {
-					if i != n {
-						fmt.Printf("%d+", i)
-					} else {
-						fmt.Printf("%d", i)
-					}
+					fmt.Printf("%d", i)
 					s += i
+					if i != n {
+						fmt.Print("+")
+					}
 				}
 			}
 			fmt.Printf("=%d\n", s)
