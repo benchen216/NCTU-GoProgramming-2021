@@ -10,7 +10,10 @@ func Sum(n int64) {
 			fmt.Printf("%d+", i)
 		}
 	}
-	fmt.Printf("%d=%d\n", n, a+n)
+	if n%7 != 0 {
+		a += n
+	}
+	fmt.Printf("%d=%d\n", n, a)
 }
 
 func main() {
