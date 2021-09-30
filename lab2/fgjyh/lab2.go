@@ -3,17 +3,25 @@ package main
 import "fmt"
 
 func Sum(n int64) {
+	if n == 1 {
+		fmt.Printf("%d\n", 1)
+		return
+	}
 	var a, i int64
-	for i = 1; i < n; i++ {
+	a = 1
+	fmt.Printf("%d", 1)
+	for i = 2; i < n; i++ {
 		if i%7 != 0 {
 			a += i
-			fmt.Printf("%d+", i)
+			fmt.Printf("+%d", i)
 		}
 	}
 	if n%7 != 0 {
-		a += n
+		fmt.Printf("+%d=%d\n", n, a+n)
+	} else {
+		fmt.Printf("=%d\n", a)
 	}
-	fmt.Printf("%d=%d\n", n, a)
+
 }
 
 func main() {
