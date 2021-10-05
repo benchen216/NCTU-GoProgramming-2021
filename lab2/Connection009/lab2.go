@@ -11,7 +11,7 @@ func Sum(n int64) {
 		fmt.Print("+", i)
 		sum += i
 	}
-	fmt.Println("=", sum)
+	fmt.Print("=", sum)
 }
 
 func main() {
