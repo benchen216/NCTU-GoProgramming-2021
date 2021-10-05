@@ -20,9 +20,7 @@ func main() {
 
 	var a, b, action int
 
-	fmt.Println("Please input your action: ")
 	fmt.Scanln(&action)
-	fmt.Println("Please input two numbers: ")
 	fmt.Scanln(&a)
 	fmt.Scanln(&b)
 
