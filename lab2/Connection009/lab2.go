@@ -8,10 +8,10 @@ func Sum(n int64) {
 	sum = 1
 	for i=2; i<=n; i++ {
 		if i % 7 == 0 { continue }
-		fmt.Print(" + ", i)
+		fmt.Print("+", i)
 		sum += i
 	}
-	fmt.Println(" =", sum)
+	fmt.Println("=", sum)
 }
 
 func main() {
