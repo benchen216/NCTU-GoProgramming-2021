@@ -20,6 +20,7 @@ func main() {
 	var n int64
 	for {
 		fmt.Scanln(&n)
-		if n > 0 && n <= 10000 { Sum(n) }
+		if n < 0 && n > 10000 { break }
+		Sum(n)
 	}
 }
