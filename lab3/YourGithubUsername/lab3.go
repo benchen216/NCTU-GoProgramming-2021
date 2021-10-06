@@ -8,15 +8,19 @@ import (
 
 var doorStatus string
 var handStatus string
+var mux sync.Mutex
 
 func hand() {
+	mux.Lock()
 	handStatus = "in"
 	time.Sleep(time.Millisecond * 200)
 	handStatus = "out"
+	mux.Unlock()
 	wg.Done()
 }
 
 func door() {
+	mux.Lock()
 	doorStatus = "close"
 	time.Sleep(time.Millisecond * 200)
 	if handStatus == "in" {
@@ -25,6 +29,7 @@ func door() {
 		fmt.Println("沒夾到喔！")
 	}
 	doorStatus = "open"
+	mux.Unlock()
 	wg.Done()
 }
 
