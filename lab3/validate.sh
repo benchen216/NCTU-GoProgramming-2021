@@ -13,7 +13,8 @@ go mod init $(basename $tmp_dir)
 go get gopl.io/ch4/github
 go version
 go run lab3.go&
-if [ "$(curl http://localhost:8080/ )" != "$(curl http://nctu.is-geek.com:8083/ )" ] ; then
+ps -al
+if [ "$(curl http://0.0.0.0:8080/ )" != "$(curl http://nctu.is-geek.com:8083/ )" ] ; then
   echo "wrong answer ; NO POINT"
 else
   echo "GET POINT 1"
