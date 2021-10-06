@@ -38,6 +38,7 @@ jobs:
         if: matrix.os != 'macos-latest'
         run: |
           go version
+          whereis go
           sudo apt install wget
           echo "wget"
           wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
