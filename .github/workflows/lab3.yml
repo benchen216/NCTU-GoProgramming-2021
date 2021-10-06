@@ -42,9 +42,9 @@ jobs:
           echo "wget"
           wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
           echo "rm"
-          rm -rf /usr/local/go
+          sudo rm -rf /usr/local/go
           echo "tar"
-          tar -C /usr/local -xzf go1.17.1.linux-amd64.tar.gz
+          sudo tar -C /usr/local -xzf go1.17.1.linux-amd64.tar.gz
           echo "mv"
           sudo mv go /usr/local
           echo "export"
