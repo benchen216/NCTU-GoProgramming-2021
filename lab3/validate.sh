@@ -18,7 +18,7 @@ else
   if [ "$ans" != "$result" ] ; then
     echo "wrong answer ; NO POINT"
     echo "答案錯了"
-    exit(1)
+    exit 1
   else
     echo "GET POINT 1"
   fi
