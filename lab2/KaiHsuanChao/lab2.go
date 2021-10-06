@@ -4,7 +4,7 @@ import "fmt"
 
 func Sum(n int64) {
 	sum := int64(0)
-	if n%7!=0{
+	if n%7 != 0 {
 		for a := int64(1); a <= n; a++ {
 			if a%7 == 0 {
 				continue
@@ -14,21 +14,21 @@ func Sum(n int64) {
 			}
 			sum = sum + a
 		}
-		fmt.Println(n,"=",sum)
+		fmt.Println(n, "=", sum)
 	}
-	if n%7 == 0{
+	if n%7 == 0 {
 		for a := int64(1); a <= n; a++ {
 			if a%7 == 0 {
 				continue
 			}
-			if a != n && (a+1)!=n{
-				fmt.Print(a,"+")
-			}else{
+			if a != n && (a+1) != n {
+				fmt.Print(a, "+")
+			} else {
 				fmt.Print(a)
 			}
 			sum = sum + a
 		}
-		fmt.Println("=",sum)
+		fmt.Println("=", sum)
 	}
 }
 
@@ -37,13 +37,12 @@ func main() {
 	// Notice that you can only add code in this file.
 	var n int64
 	for {
-		fmt.Println("Enter n.")
 		fmt.Scanln(&n)
 
-		if n==0{
+		if n == 0 {
 			break
 		}
-		if n!=0 {
+		if n != 0 {
 			Sum(n)
 		}
 
