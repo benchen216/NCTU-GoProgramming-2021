@@ -41,13 +41,14 @@ jobs:
           sudo apt install wget
           echo "wget"
           wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
+          echo "rm"
+          rm -rf /usr/local/go
           echo "tar"
-          sudo tar -xvf go1.17.1.linux-amd64.tar.gz
+          tar -C /usr/local -xzf go1.17.1.linux-amd64.tar.gz
           echo "mv"
           sudo mv go /usr/local
           echo "export"
-          export GOPATH=$HOME/.go
-          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin 
+          export PATH=$PATH:/usr/local/go/bin
           go version
       - name: grade
         run: |
