@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-20.04]
 
       fail-fast: false
 
@@ -37,7 +37,7 @@ jobs:
       - name: dependency (ubuntu)
         if: matrix.os != 'macos-latest'
         run: |
-          sudo apt-get -qy install python3
+          go version
           sudo apt install wget
           echo "wget"
           wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
