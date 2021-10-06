@@ -38,7 +38,17 @@ jobs:
         if: matrix.os != 'macos-latest'
         run: |
           sudo apt-get -qy install python3
-          sudo apt-get -qy install golang-go
+          sudo apt install wget
+          echo "wget"
+          wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
+          echo "tar"
+          sudo tar -xvf go1.17.1.linux-amd64.tar.gz
+          echo "mv"
+          sudo mv go /usr/local
+          echo "export"
+          export GOROOT=/usr/local/go 
+          export GOPATH=$HOME/Projects/Proj1 
+          export PATH=$GOPATH/bin:$GOROOT/bin:$PATH 
       - name: grade
         run: |
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
