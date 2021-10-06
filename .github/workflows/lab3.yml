@@ -39,6 +39,10 @@ jobs:
         run: |
           sudo apt-get -qy install python3
           sudo apt-get -qy install golang-go
+          sudo apt-get update
+          sudo apt-get install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade pwntools
       - name: grade
         run: |
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
