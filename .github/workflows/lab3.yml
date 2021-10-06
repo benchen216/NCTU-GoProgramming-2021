@@ -45,8 +45,6 @@ jobs:
           sudo rm -rf /usr/local/go
           echo "tar"
           sudo tar -C /usr/local -xzf go1.17.1.linux-amd64.tar.gz
-          echo "mv"
-          sudo mv go /usr/local
           echo "export"
           export PATH=$PATH:/usr/local/go/bin
           go version
