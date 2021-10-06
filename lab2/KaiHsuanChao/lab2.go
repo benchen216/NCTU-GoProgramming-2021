@@ -14,7 +14,8 @@ func Sum(n int64) {
 			}
 			sum = sum + a
 		}
-		fmt.Println(n, "=", sum)
+		fmt.Print(n)
+		fmt.Printf("=%d\n",sum)
 	}
 	if n%7 == 0 {
 		for a := int64(1); a <= n; a++ {
@@ -28,7 +29,7 @@ func Sum(n int64) {
 			}
 			sum = sum + a
 		}
-		fmt.Println("=", sum)
+		fmt.Printf("=%d\n", sum)
 	}
 }
 
