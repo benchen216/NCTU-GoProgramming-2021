@@ -46,9 +46,9 @@ jobs:
           echo "mv"
           sudo mv go /usr/local
           echo "export"
-          export GOROOT=/usr/local/go 
-          export GOPATH=$HOME/Projects/Proj1 
-          export PATH=$GOPATH/bin:$GOROOT/bin:$PATH 
+          export GOPATH=$HOME/.go
+          export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin 
+          go version
       - name: grade
         run: |
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
