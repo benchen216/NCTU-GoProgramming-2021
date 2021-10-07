@@ -10,7 +10,9 @@ cd $tmp_dir
 rm -rf *
 cp $solution_path/* .
 go version
-go run server.go & python3 validate.py
+pwd
+ls
+go run server.go & python3  $solution_path/../validate.py
 
 echo "deleting working directory $tmp_dir"
 rm -rf $tmp_dir
