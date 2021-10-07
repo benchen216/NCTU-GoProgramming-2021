@@ -5,7 +5,6 @@ import os
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, WebDriverException
-from Crypto.Util.number import getPrime
 
 def check(n,ans):
     chrome.find_element_by_id('value').clear()
