@@ -10,34 +10,37 @@ import (
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello world!")
-
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 
-	operation := pathParts[0]
-	a, _ := strconv.Atoi(pathParts[1])
-	b, _ := strconv.Atoi(pathParts[2])
+	if len(pathParts) != 4 {
+		fmt.Fprintf(w, "hello world!")
+		return
+	}
+
+	operation := pathParts[1]
+	a, err := strconv.Atoi(pathParts[2])
+	b, err := strconv.Atoi(pathParts[3])
+
+	if err != nil {
+		fmt.Fprintf(w, "hello world!")
+		return
+	}
 
 	if operation == "add" {
-		s := strconv.Itoa(a) + " + " + strconv.Itoa(b) + " = " + strconv.Itoa(a+b)
-		fmt.Fprint(w, s)
+		fmt.Fprintf(w, "%d + %d = %d\n", a, b, a+b)
 	} else if operation == "sub" {
-		s := strconv.Itoa(a) + " - " + strconv.Itoa(b) + " = " + strconv.Itoa(a-b)
-		fmt.Fprint(w, s)
+		fmt.Fprintf(w, "%d - %d = %d\n", a, b, a-b)
 	} else if operation == "mul" {
-		s := strconv.Itoa(a) + " * " + strconv.Itoa(b) + " = " + strconv.Itoa(a*b)
-		fmt.Fprint(w, s)
+		fmt.Fprintf(w, "%d * %d = %d\n", a, b, a*b)
 	} else if operation == "div" {
-		s := strconv.Itoa(a) + " / " + strconv.Itoa(b) + " = " + strconv.Itoa(a/b)
-		s += ", remainder = " + strconv.Itoa(a%b)
-		fmt.Fprint(w, s)
+		fmt.Fprintf(w, "%d / %d = %d, remainder = %d\n", a, b, a/b, a%b)
 	} else {
 		fmt.Fprintf(w, "hello world!")
 	}
 }
 
 func main() {
-	port := "12345"
+	port := "8500"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
