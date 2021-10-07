@@ -38,7 +38,7 @@ jobs:
         if: matrix.os != 'macos-latest'
         run: |
           sudo apt-get -qy install python3
-          pip install -U selenium
+          pip install -U selenium 
           sudo apt-get -qy install golang-go
       - name: grade
         run: |
