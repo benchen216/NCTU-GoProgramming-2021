@@ -54,10 +54,12 @@ jobs:
           pip install selenium
           python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade selenium
-          sudo add-apt-repository ppa:system76/pop
-          sudo apt install chromium-driver
-          sudo apt install chromium
-          sudo apt install chromium-browser
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository -y ppa:system76/pop
+          sudo apt update
+          sudo apt install -y chromium-driver
+          sudo apt install -y chromium
 
       - name: grade
         run: |
