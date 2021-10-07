@@ -19,10 +19,9 @@ func main() {
 				continue
 			}
 			sum += x
-			fmt.Print("+")
-			fmt.Print(x)
+			fmt.Print("+", x)
 		}
-
-		fmt.Println("=", sum+1)
+		fmt.Print("=", sum+1)
+		fmt.Println("")
 	}
 }
