@@ -37,9 +37,27 @@ jobs:
       - name: dependency (ubuntu)
         if: matrix.os != 'macos-latest'
         run: |
+          go version
+          whereis go
+          sudo apt install wget
+          echo "wget"
+          wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
+          echo "rm"
+          sudo rm -rf /usr/bin/go
+          echo "tar"
+          sudo tar -C /usr/bin -xzf go1.17.1.linux-amd64.tar.gz
+          echo "export"
+          export PATH=$PATH:/usr/bin/go/bin
+          go version 
           sudo apt-get -qy install python3
-          pip install -U selenium
-          sudo apt-get -qy install golang-go
+          sudo apt-get install python3 python3-pip python3-dev git libssl-dev libffi-dev build-essential
+          pip install selenium
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade selenium
+          add-apt-repository ppa:system76/pop
+          apt install chromium-driver
+          apt install chromium-browser
+
       - name: grade
         run: |
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
