@@ -12,19 +12,16 @@ func main() {
 		if n == 0 {
 			break
 		}
+		fmt.Print("1")
 		sum := 0
-		for x := 0; int64(x) <= n; x++ {
+		for x := 2; int64(x) <= n; x++ {
 			if x%7 == 0 {
 				continue
-			} else if x == 0 {
-				break
-			} else if int64(x) == n {
-				break
 			}
 			sum += x
-			fmt.Print(x, "+")
+			fmt.Print("+", x)
 		}
-		fmt.Print("=", sum)
+		fmt.Print("=", sum+1)
 	}
 
 }
