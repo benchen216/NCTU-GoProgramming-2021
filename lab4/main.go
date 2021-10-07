@@ -10,34 +10,37 @@ import (
 )
 
 func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello world!")
+	// fmt.Fprintf(w, "hello world!")
+	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 
-	// 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
-
-	// 	operation := pathParts[?]
-	// 	a, _ := strconv.Atoi(pathParts[?])
-	// 	b, _ := strconv.Atoi(pathParts[?])
-
-	// 	if operation == "add" {
-
-	// 	} else if operation == "sub" {
-
-	// 	} else if operation == "mul" {
-
-	// 	} else if operation == "div" {
-
-	// 	} else {
-	// 		fmt.Fprintf(w, "hello world!")
-	// 	}
+	if (len(pathParts) >= 4) {
+		operation := pathParts[1]
+		a, _ := strconv.Atoi(pathParts[2])
+		b, _ := strconv.Atoi(pathParts[3])
+	
+		if operation == "add" {
+			fmt.Fprintf(w, strconv.Itoa(a)+" + "+strconv.Itoa(b)+" = "+strconv.Itoa(a+b))
+		} else if operation == "sub" {
+			fmt.Fprintf(w, strconv.Itoa(a)+" - "+strconv.Itoa(b)+" = "+strconv.Itoa(a-b))
+		} else if operation == "mul" {
+			fmt.Fprintf(w, strconv.Itoa(a)+" * "+strconv.Itoa(b)+" = "+strconv.Itoa(a*b))
+		} else if operation == "div" {
+			fmt.Fprintf(w, strconv.Itoa(a)+" / "+strconv.Itoa(b)+" = "+strconv.Itoa(a/b)+", remainder = "+strconv.Itoa(a%b))
+		} else {
+			fmt.Fprintf(w, "hello world!")
+		}
+	} else {
+		fmt.Fprintf(w, "hello world!")
+	}
 }
 
-func add(a, b int) int {
+// func add(a, b int) int {
+// 	return a + b
+// }
 
-}
-
-func div(a, b int) int int {
-
-}
+// func div(a, b int) int int {
+// 	return a / b, a % b
+// }
 
 func main() {
 	port := "12345"
