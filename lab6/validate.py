@@ -5,13 +5,14 @@ import os
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, WebDriverException
+from webdriver_manager.chrome import ChromeDriverManager
 
 def check(n,ans):
     chrome.find_element_by_id('value').clear()
     chrome.find_element_by_id('value').send_keys(str(n))
     chrome.find_element_by_id('check').click()
     print('Your answer of '+ str(n) +' is "'+chrome.find_element_by_id('answer').get_attribute('innerHTML') +'"')
-    if ans == chrome.find_element_by_id('answer').get_attribute('innerHTML'):
+    if ans in chrome.find_element_by_id('answer').get_attribute('innerHTML'):
         print('get POINT 1')
         return 1
     else:
