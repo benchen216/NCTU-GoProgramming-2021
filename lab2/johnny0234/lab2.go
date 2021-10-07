@@ -9,16 +9,22 @@ func main() {
 
 	for {
 		fmt.Scanln(&n)
+		if n == 0 {
+			break
+		}
 		sum := 0
-		fmt.Print("1")
-		for x := 2; int64(x) <= n; x++ {
+		for x := 0; int64(x) <= n; x++ {
 			if x%7 == 0 {
 				continue
+			} else if x == 0 {
+				break
+			} else if int64(x) == n {
+				break
 			}
 			sum += x
-			fmt.Print("+", x)
+			fmt.Print(x, "+")
 		}
-		fmt.Print("=", sum+1)
+		fmt.Print("=", sum)
 	}
 
 }
