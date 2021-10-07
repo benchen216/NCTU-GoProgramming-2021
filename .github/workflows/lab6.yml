@@ -37,6 +37,7 @@ jobs:
       - name: dependency (ubuntu)
         if: matrix.os != 'macos-latest'
         run: |
+          sudo apt-get remove google-chrome-stable
           go version
           whereis go
           sudo apt install wget
