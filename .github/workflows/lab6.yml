@@ -57,7 +57,7 @@ jobs:
           sudo add-apt-repository ppa:system76/pop
           sudo apt install chromium-driver
           sudo apt install chromium
-          apt install chromium-browser
+          sudo apt install chromium-browser
 
       - name: grade
         run: |
