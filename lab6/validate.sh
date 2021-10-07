@@ -13,6 +13,7 @@ go version
 pwd
 ls
 chromium --version
+chromedriver --version
 go run server.go & python3  $solution_path/../validate.py
 
 echo "deleting working directory $tmp_dir"
