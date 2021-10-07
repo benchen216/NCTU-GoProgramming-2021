@@ -20,7 +20,6 @@ func main() {
 			sum += x
 			fmt.Print(x, "+")
 		}
-		fmt.Print(n, "=", int64(sum)+n)
+		fmt.Println(n, "=", int64(sum)+n)
 	}
-
 }
