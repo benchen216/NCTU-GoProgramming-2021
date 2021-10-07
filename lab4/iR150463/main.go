@@ -23,7 +23,7 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	} else if operation == "mul" {
 		fmt.Fprintf(w, "%d * %d = %d", a, b, a*b)
 	} else if operation == "div" {
-		fmt.Fprintf(w, "%d / %d = %d, remainder = %d", a, b, a/b, a%b)
+		fmt.Fprintf(w, "%d / %d = %d", a, b, a/b)
 	} else {
 		fmt.Fprintf(w, "hello world!")
 	}
