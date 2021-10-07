@@ -56,7 +56,7 @@ jobs:
           python3 -m pip install --upgrade selenium
           sudo add-apt-repository ppa:system76/pop
           sudo apt install chromium-driver
-          sudo apt install chromium-browser
+          sudo apt install chromium
 
       - name: grade
         run: |
