@@ -26,7 +26,6 @@ func main() {
 	// Notice that you can only add code in this file.
 	var n int64
 	for {
-		fmt.Println("Enter a int.")
 		fmt.Scanln(&n)
 
 		if n==0{
