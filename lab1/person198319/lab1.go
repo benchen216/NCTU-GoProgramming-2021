@@ -4,17 +4,27 @@ import (
 	"fmt"
 )
 
+func Add(a, b int) int {
+	return a + b
+}
+
+func Sub(a, b int) int {
+	return a - b
+}
+
+func Mul(a, b int) int {
+	return a * b
+}
+
+func Div(a, b int) int {
+	return a / b
+}
+
 func main() {
 	// Please complete the code to make this program compiled without error.
 	// Notice that you can only add code in this file.
-	var (
-		a, b   int
-		action string
-		Add    int = a + b
-		Sub    int = a - b
-		Mul    int = a * b
-		Div    int = a / b
-	)
+	var a, b int
+	var action int
 
 	fmt.Println("1) Add")
 	fmt.Println("2) Sub")
