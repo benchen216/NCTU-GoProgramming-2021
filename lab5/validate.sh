@@ -12,7 +12,7 @@ cp $solution_path/app_url.txt .
 a=$((1 + RANDOM % 100))
 b=$((1 + RANDOM % 100))
 ans=$a" + "$b" = "$((a+b))
-curl -o result.txt `cat app_url.txt`"?op=add&num1=$a&num2=$b"
+curl -o result.txt `cat app_url.txt`"Lab5?op=add&num1=$a&num2=$b"
 if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
   echo "right ans="$ans
   echo "your ans=$(cat result.txt)"
@@ -24,7 +24,7 @@ fi
 a=$((1 + RANDOM % 100))
 b=$((1 + RANDOM % 100))
 ans=$a" - "$b" = "$((a-b))
-curl -o result.txt `cat app_url.txt`"?op=sub&num1=$a&num2=$b"
+curl -o result.txt `cat app_url.txt`"Lab5?op=sub&num1=$a&num2=$b"
 if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
   echo "right ans="$ans
   echo "your ans=$(cat result.txt)"
@@ -35,7 +35,7 @@ fi
 a=$((1 + RANDOM % 100))
 b=$((1 + RANDOM % 100))
 ans=$a" * "$b" = "$((a*b))
-curl -o result.txt `cat app_url.txt`"?op=mul&num1=$a&num2=$b"
+curl -o result.txt `cat app_url.txt`"Lab5?op=mul&num1=$a&num2=$b"
 if [ "$(echo "$ans")" != "$(cat result.txt)" ] ; then
   echo "right ans=$(echo "$ans")"
   echo "your ans=$(cat result.txt)"
@@ -46,7 +46,7 @@ fi
 a=$((1 + RANDOM % 100))
 b=$((1 + RANDOM % 100))
 ans=$a" / "$b" = "$((a/b))", remainder = "$((a%b))
-curl -o result.txt `cat app_url.txt`"?op=div&num1=$a&num2=$b"
+curl -o result.txt `cat app_url.txt`"Lab5?op=div&num1=$a&num2=$b"
 if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
   echo "right ans="$ans
   echo "your ans=$(cat result.txt)"
@@ -69,8 +69,8 @@ y=`expr $b % $m`
 if [ $x -eq 0 -a $y -eq 0 ]
 then
 #echo gcd of $a and $b is $m
-ans=$m
-curl -o result.txt `cat app_url.txt`"?op=gcd&num1=$a&num2=$b"
+ans="gcd of "$a" and "$b" is "$m
+curl -o result.txt `cat app_url.txt`"Lab5?op=gcd&num1=$a&num2=$b"
 if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
   echo "right ans="$ans
   echo "your ans=$(cat result.txt)"
