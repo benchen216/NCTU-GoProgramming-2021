@@ -33,11 +33,11 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%d * %d = %d", num1, num2, num1*num2)
 		//fmt.Fprint(w, num1*num2)
 	case "div":
-		fmt.Fprintf(w, "%d / %d = %d", num1, num2, num1/num2)
+		fmt.Fprintf(w, "%d / %d = %d, remainder = %d", num1, num2, num1/num2, num1%num2)
 		//fmt.Fprint(w, num1/num2)
 	case "gcd":
 		fmt.Fprintf(w, "gcd of %d and %d is %d", num1, num2, GCD(num1,num2))
-		fmt.Fprint(w, GCD(num1,num2))
+		//fmt.Fprint(w, GCD(num1,num2))
 	default:
 		fmt.Fprint(w, "please specify operator")
 	}
