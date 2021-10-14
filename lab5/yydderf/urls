@@ -1,0 +1,5 @@
+https://yydderf.herokuapp.com/Lab5?op=add&num1=7&num2=3
+https://yydderf.herokuapp.com/Lab5?op=sub&num1=7&num2=3
+https://yydderf.herokuapp.com/Lab5?op=mul&num1=7&num2=3
+https://yydderf.herokuapp.com/Lab5?op=div&num1=7&num2=3
+https://yydderf.herokuapp.com/Lab5?op=gcd&num1=7&num2=3
