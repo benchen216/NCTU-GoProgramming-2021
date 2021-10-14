@@ -44,6 +44,6 @@ func main() {
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
-	http.HandleFunc("/Lab5", lab5)
+	http.HandleFunc("/", lab5)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
