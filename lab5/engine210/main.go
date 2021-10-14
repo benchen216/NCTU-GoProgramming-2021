@@ -24,14 +24,19 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 	num2, _ := strconv.Atoi(r.Form["num2"][0])
 	switch op {
 	case "add":
-		fmt.Fprint(w, num1+num2)
+		fmt.Fprintf(w, "%d + %d = %d", num1, num2, num1+num2)
+		//fmt.Fprint(w, num1+num2)
 	case "sub":
-		fmt.Fprint(w, num1-num2)
+		fmt.Fprintf(w, "%d - %d = %d", num1, num2, num1-num2)
+		//fmt.Fprint(w, num1-num2)
 	case "mul":
-		fmt.Fprint(w, num1*num2)
+		fmt.Fprintf(w, "%d * %d = %d", num1, num2, num1*num2)
+		//fmt.Fprint(w, num1*num2)
 	case "div":
-		fmt.Fprint(w, num1/num2)
+		fmt.Fprintf(w, "%d / %d = %d", num1, num2, num1/num2)
+		//fmt.Fprint(w, num1/num2)
 	case "gcd":
+		fmt.Fprintf(w, "gcd of %d and %d is %d", num1, num2, GCD(num1,num2))
 		fmt.Fprint(w, GCD(num1,num2))
 	default:
 		fmt.Fprint(w, "please specify operator")
