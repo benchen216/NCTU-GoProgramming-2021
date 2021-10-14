@@ -23,6 +23,8 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 	case "div":
 		fmt.Fprintf(w, "%d / %d = %d, remainder = %d", a, b, a/b, a%b)
 	case "gcd":
+		origin_a:=a
+		origin_b:=b
 		for ;a!=0&&b!=0; {
 			if (a >= b) {
 				a = a % b;
@@ -31,9 +33,9 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if a >= b {
-			fmt.Fprintf(w,"%d", a)
+			fmt.Fprintf(w,"gcd of %d and %d is %d", origin_a,origin_b,a)
 		}		else {
-			fmt.Fprintf(w, "%d", b)
+			fmt.Fprintf(w,"gcd of %d and %d is %d", origin_a,origin_b,b)
 		}
 	}
 
