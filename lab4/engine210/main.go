@@ -21,13 +21,17 @@ func hello(w http.ResponseWriter, r *http.Request) {
 		b, _ := strconv.Atoi(pathParts[3])
 
 		if operation == "add" {
-			fmt.Fprintf(w, strconv.Itoa(a + b))
+			fmt.Fprintf(w, "%d + %d = %d", a, b, a+b)
+			//fmt.Fprintf(w, strconv.Itoa(a + b))
 		} else if operation == "sub" {
-			fmt.Fprintf(w, strconv.Itoa(a - b))
+			fmt.Fprintf(w, "%d - %d = %d", a, b, a-b)
+			//fmt.Fprintf(w, strconv.Itoa(a - b))
 		} else if operation == "mul" {
-			fmt.Fprintf(w, strconv.Itoa(a * b))
+			fmt.Fprintf(w, "%d * %d = %d", a, b, a*b)
+			//fmt.Fprintf(w, strconv.Itoa(a * b))
 		} else if operation == "div" {
-			fmt.Fprintf(w, strconv.Itoa(a / b))
+			fmt.Fprintf(w, "%d / %d = %d, remainder = %d", a, b, a/b, a % b)
+			//fmt.Fprintf(w, strconv.Itoa(a / b))
 		} else {
 			fmt.Fprintf(w, "hello world!")
 		}
