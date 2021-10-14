@@ -18,9 +18,9 @@ func hello(w http.ResponseWriter, r *http.Request) {
 	b, _ := strconv.Atoi(pathParts[3])
 
 	if operation == "add" {
-		fmt.Fprintf(w, "%d + %d = %d ", a, b, add(a, b))
+		fmt.Fprintf(w, "%d + %d = %d", a, b, add(a, b))
 	} else if operation == "sub" {
-		fmt.Fprintf(w, "%d - %d = %d ", a, b, sub(a, b))
+		fmt.Fprintf(w, "%d - %d = %d", a, b, sub(a, b))
 	} else if operation == "mul" {
 		fmt.Fprintf(w, "%d * %d = %d", a, b, mul(a, b))
 	} else if operation == "div" {
