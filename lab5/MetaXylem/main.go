@@ -42,7 +42,7 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 	case "div":
 		fmt.Fprintf(w, strconv.Itoa(num1)+" / "+strconv.Itoa(num2)+" = "+strconv.Itoa(num1/num2)+", remainder = "+strconv.Itoa(num1%num2))
 	case "gcd":
-		fmt.Fprintf(w, "("+strconv.Itoa(num1)+", "+strconv.Itoa(num2)+") = "+strconv.Itoa(gcd(num1, num2)))
+		fmt.Fprintf(w, "gcd of "+strconv.Itoa(num1)+" and "+strconv.Itoa(num2)+" is "+strconv.Itoa(gcd(num1, num2)))
 	}
 }
 
