@@ -85,9 +85,8 @@ func main() {
 	}
 	http.Handle("/")
 
-	/*
-		Hint: "isr" is "github.issuesSearchResult"
-			http.Handle("/", ???)
-			log.Fatal(http.ListenAndServe(":8080", nil))
-	*/
+	//Hint: "isr" is "github.issuesSearchResult"
+	//http.Handle("/", ???)
+	//log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
