@@ -44,28 +44,19 @@ type newIssues struct {
 	github.IssuesSearchResult
 }
 
-// Call this function to print error logs
 func logPrint(v interface{}) {
 	if v != nil {
 		log.Print(v)
 	}
 }
 
-// Hint: use "logPrint(issueTemplate.Execute(w, ???))" to render html
 func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
-		/*
-			List issues (issueListTemplate) here
-		*/
-
+		logPrint(issueListTemplate.Execute(w, nis.IssuesSearchResult))
 		return
 	}
-
-	/*
-		Show issues (issueTemplate) here
-	*/
-
+	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult))
 }
 
 func main() {
@@ -75,12 +66,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/", newIssues.ServeHTTP())
-
-	log.Fatal(http.ListenAndServe("localhost:8080", nil))
-	/*
-		Hint: "isr" is "github.issuesSearchResult"
-			http.Handle("/", ???)
-			log.Fatal(http.ListenAndServe(":8080", nil))
-	*/
+	http.Handle("/", newIssues{*isr})
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
