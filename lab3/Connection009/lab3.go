@@ -17,6 +17,26 @@ import (
 	"gopl.io/ch4/github"
 )
 
+var issueListTemplate = template.Must(template.New("issueList").Parse(`
+<h1>Total {{.Items | len}} issues</h1>
+<table>
+	<tr style='text-align: left'>
+		<th>#</th>
+		<th>State</th>
+		<th>User</th>
+		<th>Title</th>
+	</tr>
+	{{range $i, $e := .Items}}
+	<tr>
+		<td><a href='/issues/{{$i}}'>{{.Number}}</td>
+		<td>{{.State}}</td>
+		<td><a href='{{.User.HTMLURL}}'>{{.User.Login}}</a></td>
+		<td><a href='/issues/{{$i}}'>{{.Title}}</a></td>
+	</tr>
+	{{end}}
+</table>
+`))
+
 var issueTemplate = template.Must(template.New("issue").Parse(`
 <h1>#{{.Number}} {{.Title}}</h1>
 <dl>
