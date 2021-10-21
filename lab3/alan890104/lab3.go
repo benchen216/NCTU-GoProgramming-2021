@@ -87,5 +87,6 @@ func main() {
 	nis := newIssues{*isr}
 	http.Handle("/", http.HandlerFunc(nis.ServeHTTP))
 	logPrint(http.ListenAndServe(":8080", nil))
-
 }
+
+/* i forget to add 8080 :P*/
