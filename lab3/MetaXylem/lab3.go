@@ -6,14 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	//舊版go
-	//get the package by command "$go get github.com/adonovan/gopl.io/ch4/github"
-	//github "github.com/adonovan/gopl.io/ch4/github"
-
-	//go 版本17 get the package by command
-	//cd Lab4
-	//go mod init whatever_you_like (在Lab4資料夾下開mod)
-	//go mod tidy   (或 go get gopl.io/ch4/github)
 	"gopl.io/ch4/github"
 )
 
@@ -83,10 +75,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+	http.Handle("/", newIssues.ServeHTTP())
 
-	//Hint: "isr" is "github.issuesSearchResult"
-	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
-
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
+	/*
+		Hint: "isr" is "github.issuesSearchResult"
+			http.Handle("/", ???)
+			log.Fatal(http.ListenAndServe(":8080", nil))
+	*/
 }
