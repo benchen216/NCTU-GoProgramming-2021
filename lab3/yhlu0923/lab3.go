@@ -23,20 +23,35 @@ import (
 
 var issueListTemplate = template.Must(template.New("issueList").Parse(`
 <h1>Total {{.Items | len}} issues</h1>
+
 <table>
+
 	<tr style='text-align: left'>
+
 		<th>#</th>
+
 		<th>State</th>
+
 		<th>User</th>
+
 		<th>Title</th>
+
 	</tr>
+
 	{{range $i, $e := .Items}}
+
 	<tr>
+
 		<td><a href='/issues/{{$i}}'>{{.Number}}</td>
+
 		<td>{{.State}}</td>
+
 		<td><a href='{{.User.HTMLURL}}'>{{.User.Login}}</a></td>
+
 		<td><a href='/issues/{{$i}}'>{{.Title}}</a></td>
+
 	</tr>
+	
 	{{end}}
 </table>
 `))
@@ -69,20 +84,14 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
 		// List issues (issueListTemplate) here
-		logPrint("issueListTemplate")
+		// logPrint("issueListTemplate")
 
 		logPrint(issueListTemplate.Execute(w, nis))
 
 		return
 	}
 
-	/*
-		Show issues (issueTemplate) here
-	*/
-	logPrint("issueTemplate")
-	// fmt.Printf("len() %d\n", len(pathParts))
-	// fmt.Printf("pathParts %s\n", pathParts)
-	// fmt.Printf("%s, %s\n", pathParts[1], pathParts[2])
+	// logPrint("issueTemplate")
 
 	s := pathParts[2]
 	// string to int
@@ -92,10 +101,8 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		os.Exit(2)
 	}
+
 	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult.Items[i]))
-
-	// logPrint(issueTemplate.Execute(w, nis))
-
 }
 
 func main() {
