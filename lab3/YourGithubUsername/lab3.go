@@ -49,7 +49,7 @@ var issueTemplate = template.Must(template.New("issue").Parse(`
 `))
 
 type newIssues struct {
-	github.IssuesSearchResult
+	*github.IssuesSearchResult
 }
 
 // Call this function to print error logs
@@ -83,10 +83,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
 
 	//Hint: "isr" is "github.issuesSearchResult"
-	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	http.Handle("/", newIssues{isr})
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
