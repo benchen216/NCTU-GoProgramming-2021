@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	//舊版go
@@ -66,14 +67,15 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		/*
 			List issues (issueListTemplate) here
 		*/
-
+		logPrint(issueListTemplate.Execute(w, nis.IssuesSearchResult))
 		return
 	}
 
 	/*
 		Show issues (issueTemplate) here
 	*/
-
+	idx, _ := strconv.Atoi(pathParts[2])
+	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult.Items[idx]))
 }
 
 func main() {
@@ -83,10 +85,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+
+	new_issues := newIssues{*isr}
+
+	http.Handle("/", http.HandlerFunc(new_issues.ServeHTTP))
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
