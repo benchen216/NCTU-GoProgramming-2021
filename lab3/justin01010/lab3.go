@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+    "strconv"
 
 	//舊版go
 	//get the package by command "$go get github.com/adonovan/gopl.io/ch4/github"
@@ -49,7 +50,7 @@ var issueTemplate = template.Must(template.New("issue").Parse(`
 `))
 
 type newIssues struct {
-	github.IssuesSearchResult
+	isr github.IssuesSearchResult
 }
 
 // Call this function to print error logs
@@ -66,27 +67,34 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		/*
 			List issues (issueListTemplate) here
 		*/
-
+        logPrint(issueListTemplate.Execute(w, nis.isr))
 		return
 	}
-
+    index, err := strconv.Atoi(pathParts[2])
+    if err != nil {
+        log.Fatal("Fail to convert string to integer")
+    }
 	/*
 		Show issues (issueTemplate) here
 	*/
-
+    logPrint(issueTemplate.Execute(w, nis.isr.Items[index]))
 }
 
 func main() {
 	queryString := []string{"repo:vuejs/vue", "is:open", "label:bug"}
 	isr, err := github.SearchIssues(queryString)
 
-	if err != nil {
+    nis := newIssues {
+        isr: *isr,
+    }
+    if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+
+    http.Handle("/", nis)
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
