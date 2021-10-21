@@ -59,11 +59,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var ni newIssues = isr
-	http.Handle("/", ni.ServeHTTP)
-
-	//Hint: "isr" is "github.issuesSearchResult"
-	//http.Handle("/", ???)
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
+	var ni newIssues = *isr
+	http.Handle("/", http.HandlerFunc(ni.ServeHTTP))
+	logPrint(http.ListenAndServe(":8080", nil))
 }
