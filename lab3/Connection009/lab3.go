@@ -43,7 +43,7 @@ func logPrint(v interface{}) {
 func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
-		logPrint(issueTemplate.Execute(w, nis))
+		logPrint(issueListTemplate.Execute(w, nis))
 
 		return
 	}
@@ -59,7 +59,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var ni newIssues = *isr
+	ni := newIssues{ *isr }
 	http.Handle("/", http.HandlerFunc(ni.ServeHTTP))
 	logPrint(http.ListenAndServe(":8080", nil))
 }
