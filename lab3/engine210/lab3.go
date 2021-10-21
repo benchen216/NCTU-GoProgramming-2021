@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
+	"strconv"
 	//舊版go
 	//get the package by command "$go get github.com/adonovan/gopl.io/ch4/github"
 	//github "github.com/adonovan/gopl.io/ch4/github"
@@ -66,27 +66,32 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		/*
 			List issues (issueListTemplate) here
 		*/
-
+		logPrint(issueListTemplate.Execute(w, nis))
 		return
 	}
 
 	/*
 		Show issues (issueTemplate) here
 	*/
+	i, _ := strconv.Atoi(pathParts[2])
+	logPrint(issueTemplate.Execute(w, nis.Items[i]))
 
+	return
 }
 
 func main() {
 	queryString := []string{"repo:vuejs/vue", "is:open", "label:bug"}
 	isr, err := github.SearchIssues(queryString)
+	
+	n := newIssues{*isr}
 
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
-
+	http.Handle("/", n)
+	
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
