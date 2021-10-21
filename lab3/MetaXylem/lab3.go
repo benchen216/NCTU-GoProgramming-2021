@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
+	"strconv"
 	"gopl.io/ch4/github"
 )
 
@@ -56,7 +56,8 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		logPrint(issueListTemplate.Execute(w, nis.IssuesSearchResult))
 		return
 	}
-	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult))
+	id, _ := strconv.Atoi(pathParts[2])
+	logPrint(issueTemplate.Execute(w, *nis.Items[id]))
 }
 
 func main() {
@@ -67,5 +68,5 @@ func main() {
 		log.Fatal(err)
 	}
 	http.Handle("/", newIssues{*isr})
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe("localhost:8080", nil))
 }
