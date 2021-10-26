@@ -27,7 +27,7 @@ func main() {
 	// Notice that you can only add code in this file.
 	var n int
 	for {
-		fmt.Println("Please input the number n: ")
+		fmt.Println("Please input the number n : ")
 		fmt.Scanln(&n)
 		if n == 0 {
 			break
