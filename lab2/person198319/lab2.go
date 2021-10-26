@@ -29,6 +29,9 @@ func main() {
 	for {
 		fmt.Println("Please input the number n: ")
 		fmt.Scanln(&n)
+		if n == 0 {
+			break
+		}
 		Sum(n)
 	}
 }
