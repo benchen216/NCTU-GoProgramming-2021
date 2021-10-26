@@ -17,5 +17,5 @@ func main() {
 	fmt.Println("Golang main function executed")
 	registerCallbacks()
 
-	select {} // block the main thread forever
+	//need block the main thread forever
 }
