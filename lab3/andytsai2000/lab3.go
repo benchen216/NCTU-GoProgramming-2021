@@ -53,7 +53,7 @@ type newIssues struct {
 	github.IssuesSearchResult
 }
 
-// Call this function to print error lo
+// Call this function to print error logs
 func logPrint(v interface{}) {
 	if v != nil {
 		log.Print(v)
@@ -90,8 +90,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//http.Handle("/")
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	http.Handle("/", newIssues{*isr})
