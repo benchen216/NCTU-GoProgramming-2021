@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	//舊版go
@@ -52,7 +53,7 @@ type newIssues struct {
 	github.IssuesSearchResult
 }
 
-// Call this function to print error logs
+// Call this function to print error lo
 func logPrint(v interface{}) {
 	if v != nil {
 		log.Print(v)
@@ -66,6 +67,7 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		/*
 			List issues (issueListTemplate) here
 		*/
+		logPrint(issueListTemplate.Execute(w, nis))
 
 		return
 	}
@@ -73,6 +75,11 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	/*
 		Show issues (issueTemplate) here
 	*/
+	index, err := strconv.Atoi(pathParts[2])
+	if err != nil {
+		log.Fatal(err)
+	}
+	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult.Items[index]))
 
 }
 
@@ -83,10 +90,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+
+	//http.Handle("/")
 
 	//Hint: "isr" is "github.issuesSearchResult"
-	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	http.Handle("/", newIssues{*isr})
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
