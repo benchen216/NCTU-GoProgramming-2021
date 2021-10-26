@@ -11,6 +11,7 @@ def check(n,ans):
     chrome.find_element_by_id('value').clear()
     chrome.find_element_by_id('value').send_keys(str(n))
     chrome.find_element_by_id('check').click()
+    time.sleep(1)
     print('Your answer of '+ str(n) +' is "'+chrome.find_element_by_id('answer').get_attribute('innerHTML') +'"')
     if ans in chrome.find_element_by_id('answer').get_attribute('innerHTML'):
         print('get POINT 1')
