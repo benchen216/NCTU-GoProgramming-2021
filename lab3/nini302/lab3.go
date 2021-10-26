@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	//舊版go
@@ -49,7 +50,7 @@ var issueTemplate = template.Must(template.New("issue").Parse(`
 `))
 
 type newIssues struct {
-	github.IssuesSearchResult
+	isr github.IssuesSearchResult
 }
 
 // Call this function to print error logs
@@ -63,6 +64,7 @@ func logPrint(v interface{}) {
 func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
+		logPrint(issueListTemplate.Execute(w, nis.isr))
 		/*
 			List issues (issueListTemplate) here
 		*/
@@ -73,17 +75,24 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	/*
 		Show issues (issueTemplate) here
 	*/
+	ind, err := strconv.Atoi(pathParts[2])
+	if err != nil {
+		log.Fatal("Failed to convert string to integer")
+	}
+	logPrint(issueTemplate.Execute(w, nis.isr.Items[ind]))
 
 }
 
 func main() {
 	queryString := []string{"repo:vuejs/vue", "is:open", "label:bug"}
 	isr, err := github.SearchIssues(queryString)
-
+	var nis newIssues
+	nis.isr = *isr
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+	http.Handle("/", nis)
+	http.ListenAndServe(":8080", nil)
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
