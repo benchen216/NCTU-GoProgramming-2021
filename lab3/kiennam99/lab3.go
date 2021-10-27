@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
+    "strconv"
 	//舊版go
 	//get the package by command "$go get github.com/adonovan/gopl.io/ch4/github"
 	//github "github.com/adonovan/gopl.io/ch4/github"
@@ -60,12 +60,13 @@ func logPrint(v interface{}) {
 }
 
 // Hint: use "logPrint(issueTemplate.Execute(w, ???))" to render html
-func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (nis newIssues) ServeHTTP (w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
 		/*
 			List issues (issueListTemplate) here
 		*/
+		logPrint(issueListTemplate.Execute(w,nis))
 
 		return
 	}
@@ -73,7 +74,8 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	/*
 		Show issues (issueTemplate) here
 	*/
-
+    a,_ := strconv.Atoi(pathParts[2])
+	logPrint(issueTemplate.Execute(w,nis.Items[a]))
 }
 
 func main() {
@@ -83,10 +85,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+	nis := newIssues{
+		*isr,
+	}
+	http.Handle("/",nis)
+	
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
-	//log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
