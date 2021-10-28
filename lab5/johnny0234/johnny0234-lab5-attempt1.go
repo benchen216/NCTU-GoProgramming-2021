@@ -16,10 +16,17 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 
 	if op == "gcd" {
 		fmt.Fprintf(w, "gcd of %d and %d is %d", num1, num2, gcd(num1, num2))
+	} else if op == "add" {
+		fmt.Fprintf(w, "%d + %d = %d ", num1, num2, add(num1, num2))
+	} else if op == "sub" {
+		fmt.Fprintf(w, "%d - %d = %d ", num1, num2, sub(num1, num2))
+	} else if op == "mul" {
+		fmt.Fprintf(w, "%d * %d = %d ", num1, num2, mul(num1, num2))
+	} else if op == "div" {
+		fmt.Fprintf(w, "%d / %d = %d ", num1, num2, div(num1, num2))
 	} else {
-		fmt.Fprintf(w, "error 404")
+		fmt.Fprintf(w, "hello world!")
 	}
-
 }
 func gcd(a, b int) int {
 	for b != 0 {
@@ -29,6 +36,20 @@ func gcd(a, b int) int {
 	}
 	return a
 }
+
+func add(a, b int) int {
+	return a + b
+}
+func sub(a, b int) int {
+	return a - b
+}
+func mul(a, b int) int {
+	return a * b
+}
+func div(a, b int) int {
+	return a / b
+}
+
 func main() {
 	port := "12345"
 	if v := os.Getenv("PORT"); len(v) > 0 {
