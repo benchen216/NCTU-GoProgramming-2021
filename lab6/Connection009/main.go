@@ -8,12 +8,10 @@ import (
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
 	n := this.Int()
-	var i, j int
+	var i int
 	var ans string = "is prime."
-	for i=2; i<n; i++ {
-		for j=2; j<i; j++ {
-			if i % j == 0 { ans = "is not prime." }
-		}
+	for i=2; i<n/2; i++ {
+		if n % i == 0 { ans = "is not prime." }
 	}
 
 	js.Global().Get("answer").Set("innerHTML", ans)
@@ -29,4 +27,5 @@ func main() {
 	registerCallbacks()
 
 	//need block the main thread forever
+	select{}
 }
