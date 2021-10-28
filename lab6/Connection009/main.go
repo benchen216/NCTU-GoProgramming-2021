@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"syscall/js"
 )
 
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
-	n := js.Global().Get("value").Int()
+	n, _ := strconv.Atoi(js.Global().Get("value").Get("value").String())
 	fmt.Println("\n\n\n",n,"\n\n\n")
 	var i int
 	var ans string = "is prime."
