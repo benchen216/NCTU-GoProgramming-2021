@@ -16,7 +16,7 @@ func CheckPrime(this js.Value, i []js.Value) interface{} {
 	} else {
 		js.Global().Get("answer").Set("innerHTML", "is not prime")
 	}
-	return js.Global().Get("answer")
+	return nil
 }
 
 func registerCallbacks() {
