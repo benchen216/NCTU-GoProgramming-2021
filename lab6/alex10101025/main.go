@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 	"math/big"
-	"strconv"
 	"syscall/js"
 )
 
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
+	z := new(big.Int)
 	str := js.Global().Get("value").Get("value").String()
-	n, _ := strconv.Atoi(str)
-	if big.NewInt(int64(n)).ProbablyPrime(0) {
+	fmt.Sscan(str, z)
+	if z.ProbablyPrime(20) {
 		js.Global().Get("answer").Set("innerHTML", "is prime")
 	} else {
 		js.Global().Get("answer").Set("innerHTML", "is not prime")
