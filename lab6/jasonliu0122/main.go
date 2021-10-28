@@ -3,10 +3,23 @@ package main
 import (
 	"fmt"
 	"syscall/js"
+	"math/big"
+    "strconv"
 )
 
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
+	num_str := js.Global().Get("value").Get("value").String()
+	num, _ := strconv.ParseInt(num_str, 10, 64)
+
+
+	if big.NewInt(num).ProbablyPrime(0) {
+		js.Global().Get("answer").Set("innerHTML","is prime")
+	} else {
+		js.Global().Get("answer").Set("innerHTML","is not prime")
+	}
+
+	return nil;
 }
 
 func registerCallbacks() {
@@ -18,4 +31,5 @@ func main() {
 	registerCallbacks()
 
 	//need block the main thread forever
+	select{}
 }
