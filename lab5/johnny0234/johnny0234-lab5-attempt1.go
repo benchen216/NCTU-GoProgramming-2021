@@ -17,13 +17,13 @@ func lab5(w http.ResponseWriter, r *http.Request) {
 	if op == "gcd" {
 		fmt.Fprintf(w, "gcd of %d and %d is %d", num1, num2, gcd(num1, num2))
 	} else if op == "add" {
-		fmt.Fprintf(w, "%d + %d = %d ", num1, num2, add(num1, num2))
+		fmt.Fprintf(w, "%d + %d = %d", num1, num2, add(num1, num2))
 	} else if op == "sub" {
-		fmt.Fprintf(w, "%d - %d = %d ", num1, num2, sub(num1, num2))
+		fmt.Fprintf(w, "%d - %d = %d", num1, num2, sub(num1, num2))
 	} else if op == "mul" {
-		fmt.Fprintf(w, "%d * %d = %d ", num1, num2, mul(num1, num2))
+		fmt.Fprintf(w, "%d * %d = %d", num1, num2, mul(num1, num2))
 	} else if op == "div" {
-		fmt.Fprintf(w, "%d / %d = %d ", num1, num2, div(num1, num2))
+		fmt.Fprintf(w, "%d / %d = %d, remainder = %d", num1, num2, div(num1, num2), rem(num1, num2))
 	} else {
 		fmt.Fprintf(w, "hello world!")
 	}
@@ -48,6 +48,9 @@ func mul(a, b int) int {
 }
 func div(a, b int) int {
 	return a / b
+}
+func rem(a, b int) int {
+	return a % b
 }
 
 func main() {
