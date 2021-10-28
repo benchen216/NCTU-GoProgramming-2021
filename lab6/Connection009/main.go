@@ -29,5 +29,5 @@ func main() {
 	registerCallbacks()
 
 	//need block the main thread forever
-	select{}
+	select {}
 }
