@@ -9,10 +9,10 @@ func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
 	n := this.Int()
 	var i, j int
-	var ans string = "is not prime."
+	var ans string = "is prime."
 	for i=2; i<n; i++ {
 		for j=2; j<i; j++ {
-			if i % j == 0 { ans = "is prime." }
+			if i % j == 0 { ans = "is not prime." }
 		}
 	}
 
