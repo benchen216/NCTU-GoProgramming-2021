@@ -8,10 +8,8 @@ import (
 
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
-	input := js.Global().Get("value").Get("value").String()
-	z := new(big.Int)
-	fmt.Sscan(input, z)
-	if z.ProbablyPrime(0) {
+	input := js.Global().Get("value").Get("value").String().Int()
+	if input.ProbablyPrime(0) {
 		js.Global().Get("answer").Set("innerHTML", "is prime")
 	} else {
 		js.Global().Get("answer").Set("innerHTML", "is not prime")
