@@ -7,7 +7,8 @@ import (
 
 func CheckPrime(this js.Value, i []js.Value) interface{} {
 	/* add code here */
-	n := js.Global().Get("value").Get("value").Int()
+	n := js.Global().Get("value").Int()
+	fmt.Println("\n\n\n",n,"\n\n\n")
 	var i int
 	var ans string = "is prime."
 	for i=2; i<n/2; i++ {
