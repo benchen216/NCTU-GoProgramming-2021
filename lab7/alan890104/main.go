@@ -53,7 +53,7 @@ func addBook(c *gin.Context) {
 		}
 	}
 	bookshelf = append(bookshelf, b)
-	c.JSON(200, bookshelf[len(bookshelf)-1])
+	c.JSON(200, b)
 }
 
 func deleteBook(c *gin.Context) {
@@ -66,15 +66,26 @@ func deleteBook(c *gin.Context) {
 	}
 }
 
+func updateBook(c *gin.Context) {
+	var b Book
+	c.BindJSON(&b)
+	for i := range bookshelf {
+		if bookshelf[i].ID == b.ID {
+			bookshelf[i] = b
+		}
+	}
+}
+
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
 	r.GET("/bookshelf/:id", getBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
+	r.PUT("/bookshelf/:id", updateBook)
 	r.POST("/bookshelf", addBook)
 
-	port := "8081"
+	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
