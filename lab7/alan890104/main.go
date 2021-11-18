@@ -23,6 +23,10 @@ var bookshelf = []Book{
 	},
 }
 
+func remove(slice []Book, s int) []Book {
+	return append(slice[:s], slice[s+1:]...)
+}
+
 func getBooks(c *gin.Context) {
 	c.JSON(200, bookshelf)
 }
@@ -61,9 +65,13 @@ func deleteBook(c *gin.Context) {
 	for i := range bookshelf {
 		if bookshelf[i].ID == id {
 			c.JSON(200, bookshelf[i])
+			bookshelf = remove(bookshelf, i)
 			return
 		}
 	}
+	c.JSON(200, gin.H{
+		"message": "book not found",
+	})
 }
 
 func updateBook(c *gin.Context) {
@@ -85,7 +93,7 @@ func main() {
 	r.PUT("/bookshelf/:id", updateBook)
 	r.POST("/bookshelf", addBook)
 
-	port := "8080"
+	port := "8081"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
