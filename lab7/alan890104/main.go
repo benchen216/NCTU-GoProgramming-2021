@@ -28,7 +28,7 @@ func remove(slice []Book, s int) []Book {
 }
 
 func getBooks(c *gin.Context) {
-	c.JSON(200, bookshelf)
+	c.IndentedJSON(200, bookshelf)
 }
 
 func getBook(c *gin.Context) {
@@ -36,11 +36,11 @@ func getBook(c *gin.Context) {
 	fmt.Println(id)
 	for i := range bookshelf {
 		if bookshelf[i].ID == id {
-			c.JSON(200, bookshelf[i])
+			c.IndentedJSON(200, bookshelf[i])
 			return
 		}
 	}
-	c.JSON(200, gin.H{
+	c.IndentedJSON(200, gin.H{
 		"message": "book not found",
 	})
 }
@@ -50,26 +50,26 @@ func addBook(c *gin.Context) {
 	c.BindJSON(&b)
 	for i := range bookshelf {
 		if bookshelf[i].ID == b.ID {
-			c.JSON(200, gin.H{
+			c.IndentedJSON(200, gin.H{
 				"message": "duplicate book id",
 			})
 			return
 		}
 	}
 	bookshelf = append(bookshelf, b)
-	c.JSON(200, b)
+	c.IndentedJSON(200, b)
 }
 
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	for i := range bookshelf {
 		if bookshelf[i].ID == id {
-			c.JSON(200, bookshelf[i])
+			c.IndentedJSON(200, bookshelf[i])
 			bookshelf = remove(bookshelf, i)
 			return
 		}
 	}
-	c.JSON(200, gin.H{
+	c.IndentedJSON(200, gin.H{
 		"message": "book not found",
 	})
 }
@@ -82,6 +82,7 @@ func updateBook(c *gin.Context) {
 			bookshelf[i] = b
 		}
 	}
+	c.IndentedJSON(200, b)
 }
 
 func main() {
@@ -90,7 +91,7 @@ func main() {
 	r.GET("/bookshelf", getBooks)
 	r.GET("/bookshelf/:id", getBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/:id", updateBook)
+	r.PUT("/bookshelf/*id", updateBook)
 	r.POST("/bookshelf", addBook)
 
 	port := "8081"
