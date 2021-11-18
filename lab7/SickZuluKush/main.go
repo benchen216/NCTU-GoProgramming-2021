@@ -21,6 +21,7 @@ var bookshelf = []Book{
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, bookshelf)
 }
+
 func getBook(c *gin.Context) {
 	id := c.Param("id")
 	
@@ -33,6 +34,7 @@ func getBook(c *gin.Context) {
 	
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
+
 func addBook(c *gin.Context) {
 	var newBook Book
 	
@@ -50,6 +52,7 @@ func addBook(c *gin.Context) {
 	bookshelf = append(bookshelf, newBook)
 	c.IndentedJSON(http.StatusOK, newBook)
 }
+
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	var idx int
@@ -70,6 +73,26 @@ func deleteBook(c *gin.Context) {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 	}
 }
+
+func updateBook(c *gin.Context) {
+	id := c.Param("id")
+	var newBook Book
+	
+	if err := c.BindJSON(&newBook); err != nil {
+		return
+	}
+	
+	for i, x := range bookshelf {
+		if id == x.ID {
+			bookshelf[i] = newBook
+			c.IndentedJSON(http.StatusOK, bookshelf[i])
+			return
+		}
+	}
+	
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+}
+
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
@@ -77,6 +100,7 @@ func main() {
 	r.GET("/bookshelf/:id", getBook)
 	r.POST("/bookshelf", addBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
+	r.PUT("/bookshelf/:id", updateBook)
 
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
