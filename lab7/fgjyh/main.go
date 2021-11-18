@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ type Book struct {
 }
 
 var bookshelf = []Book{
-	{
+	Book{
 		Id:    "1",
 		Name:  "Blue Bird",
 		Pages: "500",
@@ -25,60 +26,53 @@ func getBooks(c *gin.Context) {
 }
 
 func getBook(c *gin.Context) {
-	var idx = c.Param("id")
+	id := c.Param("id")
 	for _, s := range bookshelf {
-		if s.Id == idx {
+		if s.Id == id {
 			c.IndentedJSON(200, s)
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
 }
 
 func addBook(c *gin.Context) {
-	var b Book
-	c.BindJSON(&b)
+	tempBook := Book{}
+	c.BindJSON(&tempBook)
 	for _, s := range bookshelf {
-		if s.Id == b.Id {
-			c.IndentedJSON(200, gin.H{"message": "duplicate book id"})
+		if s.Id == tempBook.Id {
+			c.IndentedJSON(404, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
-	bookshelf = append(bookshelf, b)
-	c.IndentedJSON(200, b)
+	bookshelf = append(bookshelf, tempBook)
+	c.IndentedJSON(200, tempBook)
 }
 
 func deleteBook(c *gin.Context) {
-	var idx int = 0
-	var target = c.Param("id")
-	for id, s := range bookshelf {
-		if s.Id == target {
+	id := c.Param("id")
+	for index, s := range bookshelf {
+		if s.Id == id {
 			c.IndentedJSON(200, s)
-			idx = id
-			break
-		}
-	}
-	if idx != 0 {
-		bookshelf = append(bookshelf[:idx], bookshelf[idx+1:]...)
-	} else {
-		c.IndentedJSON(200, gin.H{"message": "book not found"})
-	}
-}
-
-func modifyBook(c *gin.Context) {
-	var target = c.Param("id")
-	var b Book
-	c.BindJSON(&b)
-	for idx, _ := range bookshelf {
-		if bookshelf[idx].Id == target {
-			bookshelf[idx].Id = b.Id
-			bookshelf[idx].Name = b.Name
-			bookshelf[idx].Pages = b.Pages
-			c.IndentedJSON(200, bookshelf[idx])
+			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
+}
+
+func modifyBook(c *gin.Context) {
+	id := c.Param("id")
+	tempBook := Book{}
+	c.BindJSON(&tempBook)
+	for idx, _ := range bookshelf {
+		if bookshelf[idx].Id == id {
+			bookshelf[idx] = tempBook
+			c.IndentedJSON(http.StatusOK, bookshelf[idx])
+			return
+		}
+	}
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
 }
 
 func main() {
