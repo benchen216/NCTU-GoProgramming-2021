@@ -22,6 +22,8 @@ func addBook(c *gin.Context) {
 }
 func deleteBook(c *gin.Context) {
 }
+func updateBook(c *gin.Context) {
+}
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
