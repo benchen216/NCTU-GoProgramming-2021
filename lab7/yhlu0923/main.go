@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -26,8 +25,17 @@ var bookshelf = []Book{
 }
 
 func getBooks(c *gin.Context) {
-	fmt.Println("Using indented json")
-	c.IndentedJSON(http.StatusOK, bookshelf)
+	// fmt.Println("Using indented json")
+	str := "["
+	for i := 0; i < len(bookshelf); i++ {
+		tmp_str := " { \"id\": \"" + strconv.Itoa(bookshelf[i].ID) + "\", \"name\": \"" + bookshelf[i].NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf[i].PAGES) + "\" }"
+		str = str + tmp_str
+	}
+
+	str = str + " ]"
+
+	c.String(http.StatusOK, str)
+	// c.IndentedJSON(http.StatusOK, bookshelf)
 }
 func getBook(c *gin.Context) {
 	// parse from url
@@ -36,11 +44,14 @@ func getBook(c *gin.Context) {
 	for i := 0; i < len(bookshelf); i++ {
 		inVar, _ := strconv.Atoi(id)
 		if bookshelf[i].ID == inVar {
-			c.IndentedJSON(http.StatusOK, bookshelf[i])
+			tmp_str := "{ \"id\": \"" + strconv.Itoa(bookshelf[i].ID) + "\", \"name\": \"" + bookshelf[i].NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf[i].PAGES) + "\" }"
+			c.String(http.StatusOK, tmp_str)
+			// c.IndentedJSON(http.StatusOK, bookshelf[i])
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
+	c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
+	// c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
 func addBook(c *gin.Context) {
 	// add book into data structure
@@ -52,7 +63,8 @@ func addBook(c *gin.Context) {
 
 	for i := 0; i < len(bookshelf); i++ {
 		if bookshelf[i].ID == json.ID {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
+			c.String(http.StatusOK, "{ \"message\": \"duplicate book id\" }")
+			// c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
@@ -61,49 +73,64 @@ func addBook(c *gin.Context) {
 	bookshelf = append(bookshelf, inp)
 
 	// print in the console
-	c.IndentedJSON(http.StatusOK, inp)
+	tmp_str := "{ \"id\": \"" + strconv.Itoa(json.ID) + "\", \"name\": \"" + json.NAME + "\", \"pages\": \"" + strconv.Itoa(json.PAGES) + "\" }"
+	c.String(http.StatusOK, tmp_str)
+	// c.IndentedJSON(http.StatusOK, inp)
 }
 func deleteBook(c *gin.Context) {
+	flag := 0
 	// parse from url
 	id := c.Param("id")
+	inVar, _ := strconv.Atoi(id)
 	// find the correspond id
 	for i := 0; i < len(bookshelf); i++ {
-		inVar, _ := strconv.Atoi(id)
 		if bookshelf[i].ID == inVar {
 			// return value
-			c.IndentedJSON(http.StatusOK, bookshelf[i])
+			json := bookshelf[i]
+			tmp_str := "{ \"id\": \"" + strconv.Itoa(json.ID) + "\", \"name\": \"" + json.NAME + "\", \"pages\": \"" + strconv.Itoa(json.PAGES) + "\" }"
+			if flag == 0 {
+				c.String(http.StatusOK, tmp_str)
+			}
+			// c.IndentedJSON(http.StatusOK, bookshelf[i])
 			// remove the element
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...) // remove
-			return
+			flag = 1
+			i--
 		}
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
+	if flag == 0 {
+		c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
+	}
+	// c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
 func updateBook(c *gin.Context) {
+	// my update is update the correspond id
 	var json Book
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// parse from url
-	// id := c.Param("id")
+	id := c.Param("id")
+	inVar, _ := strconv.Atoi(id)
 	// find the correspond id
 	for i := 0; i < len(bookshelf); i++ {
-		// inVar, _ := strconv.Atoi(id)
-		if bookshelf[i].ID == json.ID {
+		if bookshelf[i].ID == inVar {
 
 			bookshelf[i].ID = json.ID
 			bookshelf[i].NAME = json.NAME
 			bookshelf[i].PAGES = json.PAGES
 
 			// print in the console
-			c.IndentedJSON(http.StatusOK, bookshelf[i])
+			tmp_str := "{ \"id\": \"" + strconv.Itoa(json.ID) + "\", \"name\": \"" + json.NAME + "\", \"pages\": \"" + strconv.Itoa(json.PAGES) + "\" }"
+			c.String(http.StatusOK, tmp_str)
+			// c.IndentedJSON(http.StatusOK, bookshelf[i])
 			return
 		}
 	}
-
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
+	c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
+	// c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
 func main() {
 	r := gin.Default()
@@ -121,6 +148,4 @@ func main() {
 	r.Run(":" + port)
 }
 
-// curl -v -X GET http://localhost:8080/bookshelf \
-//   -H 'content-type: application/json' \
-//   -d '{"fisrtname":"eric", "lastname":"lu"}'
+// https://golang-lab7.herokuapp.com/
