@@ -22,7 +22,7 @@ var bookshelf = []Book{
 }
 
 func getBooks(c *gin.Context) {
-	c.JSON(http.StatusOK, bookshelf)
+	c.IndentedJSON(http.StatusOK, bookshelf)
 }
 func getBook(c *gin.Context) {
 	type Err struct {
@@ -35,13 +35,13 @@ func getBook(c *gin.Context) {
 	flag := true
 	for _, v := range bookshelf {
 		if v.Id == ID {
-			c.JSON(http.StatusOK, v)
+			c.IndentedJSON(http.StatusOK, v)
 			flag = false
 			break
 		}
 	}
 	if flag {
-		c.JSON(http.StatusOK, err)
+		c.IndentedJSON(http.StatusOK, err)
 	}
 }
 func addBook(c *gin.Context) {
@@ -63,7 +63,7 @@ func addBook(c *gin.Context) {
 	}
 	if flag {
 		bookshelf = append(bookshelf, b)
-		c.JSON(http.StatusOK, b)
+		c.IndentedJSON(http.StatusOK, b)
 	}
 }
 func deleteBook(c *gin.Context) {
@@ -77,14 +77,14 @@ func deleteBook(c *gin.Context) {
 	flag := true
 	for i := 1; i < len(bookshelf); i++ {
 		if bookshelf[i].Id == ID {
-			c.JSON(http.StatusOK, bookshelf[i])
+			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
 			flag = false
 			break
 		}
 	}
 	if flag {
-		c.JSON(http.StatusOK, err)
+		c.IndentedJSON(http.StatusOK, err)
 	}
 }
 func main() {
