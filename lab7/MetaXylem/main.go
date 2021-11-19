@@ -38,6 +38,7 @@ func getBooks(c *gin.Context) {
 	str, _ := json.Marshal(bookshelf)
 	c.String(http.StatusOK, modifier(str))
 }
+
 func getBook(c *gin.Context) {
 	type Err struct {
 		Message string `json:"message"`
@@ -60,6 +61,7 @@ func getBook(c *gin.Context) {
 		c.String(http.StatusOK, modifier(str))
 	}
 }
+
 func addBook(c *gin.Context) {
 	type Err struct {
 		Message string `json:"message"`
@@ -84,6 +86,7 @@ func addBook(c *gin.Context) {
 		c.String(http.StatusOK, modifier(str))
 	}
 }
+
 func deleteBook(c *gin.Context) {
 	type Err struct {
 		Message string `json:"message"`
@@ -107,6 +110,7 @@ func deleteBook(c *gin.Context) {
 		c.String(http.StatusOK, modifier(str))
 	}
 }
+
 func updateBook(c *gin.Context) {
 	type Err struct {
 		Message string `json:"message"`
@@ -118,7 +122,6 @@ func updateBook(c *gin.Context) {
 	c.BindJSON(&b)
 	ID := c.Param("id")
 	flag := true
-
 	for i := 1; i < len(bookshelf); i++ {
 		if bookshelf[i].Id == ID {
 			bookshelf[i] = b
@@ -133,6 +136,7 @@ func updateBook(c *gin.Context) {
 		c.String(http.StatusOK, modifier(str))
 	}
 }
+
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
