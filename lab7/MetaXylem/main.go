@@ -25,12 +25,14 @@ var bookshelf = []Book{
 
 func modifier(v []byte) string {
 	s := string(v)
+
 	s = strings.Replace(s, "[", "[ ", -1)
 	s = strings.Replace(s, "{", "{ ", -1)
 	s = strings.Replace(s, ",", ", ", -1)
 	s = strings.Replace(s, ":", ": ", -1)
 	s = strings.Replace(s, "]", " ]", -1)
 	s = strings.Replace(s, "}", " }", -1)
+
 	return s
 }
 
@@ -46,8 +48,10 @@ func getBook(c *gin.Context) {
 	err := Err{
 		"book not found",
 	}
+
 	ID := c.Param("id")
 	flag := true
+
 	for _, v := range bookshelf {
 		if v.Id == ID {
 			str, _ := json.Marshal(v)
@@ -56,6 +60,7 @@ func getBook(c *gin.Context) {
 			break
 		}
 	}
+
 	if flag {
 		str, _ := json.Marshal(err)
 		c.String(http.StatusOK, modifier(str))
@@ -69,9 +74,11 @@ func addBook(c *gin.Context) {
 	err := Err{
 		"duplicate book id",
 	}
+
 	var b Book
 	c.BindJSON(&b)
 	flag := true
+
 	for _, v := range bookshelf {
 		if v.Id == b.Id {
 			str, _ := json.Marshal(err)
@@ -80,6 +87,7 @@ func addBook(c *gin.Context) {
 			break
 		}
 	}
+
 	if flag {
 		bookshelf = append(bookshelf, b)
 		str, _ := json.Marshal(b)
@@ -94,8 +102,10 @@ func deleteBook(c *gin.Context) {
 	err := Err{
 		"book not found",
 	}
+
 	ID := c.Param("id")
 	flag := true
+
 	for i := 1; i < len(bookshelf); i++ {
 		if bookshelf[i].Id == ID {
 			str, _ := json.Marshal(bookshelf[i])
@@ -105,6 +115,7 @@ func deleteBook(c *gin.Context) {
 			break
 		}
 	}
+
 	if flag {
 		str, _ := json.Marshal(err)
 		c.String(http.StatusOK, modifier(str))
@@ -118,10 +129,12 @@ func updateBook(c *gin.Context) {
 	err := Err{
 		"book not found",
 	}
+
 	var b Book
 	c.BindJSON(&b)
 	ID := c.Param("id")
 	flag := true
+
 	for i := 1; i < len(bookshelf); i++ {
 		if bookshelf[i].Id == ID {
 			bookshelf[i] = b
@@ -131,6 +144,7 @@ func updateBook(c *gin.Context) {
 			break
 		}
 	}
+
 	if flag {
 		str, _ := json.Marshal(err)
 		c.String(http.StatusOK, modifier(str))
