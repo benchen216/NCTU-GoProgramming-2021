@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,8 +23,20 @@ var bookshelf = []Book{
 	},
 }
 
+func modifier(v []byte) string {
+	s := string(v)
+	s = strings.Replace(s, "[", "[ ", -1)
+	s = strings.Replace(s, "{", "{ ", -1)
+	s = strings.Replace(s, ",", ", ", -1)
+	s = strings.Replace(s, ":", ": ", -1)
+	s = strings.Replace(s, "]", " ]", -1)
+	s = strings.Replace(s, "}", " }", -1)
+	return s
+}
+
 func getBooks(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, bookshelf)
+	str, _ := json.Marshal(bookshelf)
+	c.String(http.StatusOK, modifier(str))
 }
 func getBook(c *gin.Context) {
 	type Err struct {
@@ -35,13 +49,15 @@ func getBook(c *gin.Context) {
 	flag := true
 	for _, v := range bookshelf {
 		if v.Id == ID {
-			c.IndentedJSON(http.StatusOK, v)
+			str, _ := json.Marshal(v)
+			c.String(http.StatusOK, modifier(str))
 			flag = false
 			break
 		}
 	}
 	if flag {
-		c.IndentedJSON(http.StatusOK, err)
+		str, _ := json.Marshal(err)
+		c.String(http.StatusOK, modifier(str))
 	}
 }
 func addBook(c *gin.Context) {
@@ -53,17 +69,22 @@ func addBook(c *gin.Context) {
 	}
 	var b Book
 	c.BindJSON(&b)
+	if er := c.BindJSON(&b); er != nil {
+		return
+	}
 	flag := true
 	for _, v := range bookshelf {
 		if v.Id == b.Id {
-			c.JSON(http.StatusOK, err)
+			str, _ := json.Marshal(err)
+			c.String(http.StatusOK, modifier(str))
 			flag = false
 			break
 		}
 	}
 	if flag {
 		bookshelf = append(bookshelf, b)
-		c.IndentedJSON(http.StatusOK, b)
+		str, _ := json.Marshal(b)
+		c.String(http.StatusOK, modifier(str))
 	}
 }
 func deleteBook(c *gin.Context) {
@@ -77,14 +98,45 @@ func deleteBook(c *gin.Context) {
 	flag := true
 	for i := 1; i < len(bookshelf); i++ {
 		if bookshelf[i].Id == ID {
-			c.IndentedJSON(http.StatusOK, bookshelf[i])
+			str, _ := json.Marshal(bookshelf[i])
+			c.String(http.StatusOK, modifier(str))
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
 			flag = false
 			break
 		}
 	}
 	if flag {
-		c.IndentedJSON(http.StatusOK, err)
+		str, _ := json.Marshal(err)
+		c.String(http.StatusOK, modifier(str))
+	}
+}
+func updateBook(c *gin.Context) {
+	type Err struct {
+		Message string `json:"message"`
+	}
+	err := Err{
+		"book not found",
+	}
+	var b Book
+	c.BindJSON(&b)
+	if er := c.BindJSON(&b); er != nil {
+		return
+	}
+	ID := c.Param("id")
+	flag := true
+
+	for i := 1; i < len(bookshelf); i++ {
+		if bookshelf[i].Id == ID {
+			bookshelf[i] = b
+			str, _ := json.Marshal(bookshelf[i])
+			c.String(http.StatusOK, modifier(str))
+			flag = false
+			break
+		}
+	}
+	if flag {
+		str, _ := json.Marshal(err)
+		c.String(http.StatusOK, modifier(str))
 	}
 }
 func main() {
@@ -94,6 +146,7 @@ func main() {
 	r.GET("/bookshelf/:id", getBook)
 	r.POST("/bookshelf", addBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
+	r.PUT("/bookshelf/:id", updateBook)
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
