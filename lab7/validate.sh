@@ -134,7 +134,7 @@ ans=$(cat <<-END
 }
 END
 )
-curl -X PUT -H 'Content-Type: application/json' -d '{"ID":"3","NAME":"原子習慣：細微改變帶來巨大成就的實證法則","PAGES":"600"}' -o result.txt `cat app_url.txt`bookshelf/2
+curl -X PUT -H 'Content-Type: application/json' -d '{"ID":"3","NAME":"原子習慣：細微改變帶來巨大成就的實證法則","PAGES":"600"}' -o result.txt `cat app_url.txt`bookshelf/3
 if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
   echo "right ans="$ans
   echo "your ans=$(cat result.txt)"
