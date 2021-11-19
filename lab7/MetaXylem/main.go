@@ -69,9 +69,6 @@ func addBook(c *gin.Context) {
 	}
 	var b Book
 	c.BindJSON(&b)
-	if er := c.BindJSON(&b); er != nil {
-		return
-	}
 	flag := true
 	for _, v := range bookshelf {
 		if v.Id == b.Id {
@@ -119,9 +116,6 @@ func updateBook(c *gin.Context) {
 	}
 	var b Book
 	c.BindJSON(&b)
-	if er := c.BindJSON(&b); er != nil {
-		return
-	}
 	ID := c.Param("id")
 	flag := true
 
