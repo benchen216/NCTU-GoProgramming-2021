@@ -50,7 +50,9 @@ func addBook(c *gin.Context) {
 	}
 	for _, v := range bookshelf {
 		if newBook.Id == v.Id {
-			c.IndentedJSON(404, "duplicate book id")
+			c.IndentedJSON(404, gin.H{
+				"message": "duplicate book id",
+			})
 			return
 		}
 	}
@@ -67,6 +69,11 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
+
+	// error handling
+	c.IndentedJSON(404, gin.H{
+		"message": "book not found",
+	})
 }
 func updateBook(c *gin.Context) {
 	id := c.Param("id")
