@@ -134,10 +134,7 @@ func updateBook(c *gin.Context) {
 		})
 
 	} else {
-		ii, errrr := exist(bookshelf, id)
-		if errrr {
-			bookshelf = append(bookshelf[:ii], bookshelf[ii+1:]...)
-		}
+
 		bookshelf[index].ID = id
 		bookshelf[index].NAME = name
 		bookshelf[index].PAGES = pages
