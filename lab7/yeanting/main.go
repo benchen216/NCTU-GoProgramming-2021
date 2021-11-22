@@ -110,6 +110,7 @@ func updateBook(c *gin.Context) {
 		lower_i[strings.ToLower(key)] = val
 	}
 	i = lower_i
+
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	id_new, _ := strconv.Atoi(i["id"].(string))
@@ -118,16 +119,10 @@ func updateBook(c *gin.Context) {
 
 	for index, element := range bookshelf {
 		if id == element.id {
-			if i["id"].(string) == "" {
-				// remove book from bookshelf slice
-				bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
-				return
-			}
-			// remove book from bookshelf slice
-			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
-			// add the updated book back
-			book := Book{id_new, name, pages}
-			bookshelf = append(bookshelf, book)
+			// update information of book
+			bookshelf[index].id = id_new
+			bookshelf[index].name = name
+			bookshelf[index].pages = pages
 			//send the updated book information
 			c.IndentedJSON(http.StatusOK, gin.H{
 				"id": strconv.Itoa(id_new),
@@ -137,17 +132,6 @@ func updateBook(c *gin.Context) {
 			return
 		}
 	}
-	/*
-	// add the updated book back
-	book := Book{id_new, name, pages}
-	bookshelf = append(bookshelf, book)
-	//send the updated book information
-	c.IndentedJSON(http.StatusOK, gin.H{
-		"id": strconv.Itoa(id_new),
-		"name": name,
-		"pages": strconv.Itoa(pages),
-	})
-	*/
 	// Error Handling
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"message": "book not found",
