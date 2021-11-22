@@ -133,6 +133,7 @@ func updateBook(c *gin.Context) {
 			return
 		}
 	}
+	/*
 	// add the updated book back
 	book := Book{id_new, name, pages}
 	bookshelf = append(bookshelf, book)
@@ -141,6 +142,11 @@ func updateBook(c *gin.Context) {
 		"id": strconv.Itoa(id_new),
 		"name": name,
 		"pages": strconv.Itoa(pages),
+	})
+	*/
+	// Error Handling
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"message": "book not found",
 	})
 }
 func main() {
