@@ -149,7 +149,7 @@ ans=$(cat <<-END
 END
 )
 
-curl -X PUT -H 'Content-Type: application/json' -d '{"ID":"3","NAME":"原子習慣：細微改變帶來巨大成就的實證法則","PAGES":"600"}' -o result.txt `cat app_url.txt`bookshelf/2
+curl -X PUT -H 'Content-Type: application/json' -d '{"ID":"3","NAME":"原子習慣：細微改變帶來巨大成就的實證法則","PAGES":"600"}' -o result.txt `cat app_url.txt`bookshelf/3
 echo $ans > ans.txt
 DIFF=$(diff <(jq -S . result.txt) <(jq -S . ans.txt))
 if [ "$DIFF" != "" ] ; then
