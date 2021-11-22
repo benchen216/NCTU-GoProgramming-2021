@@ -21,10 +21,16 @@ var bookshelf = []Book{
 
 func getBooks(c *gin.Context) {
 	res := "[ "
-	for _, element := range bookshelf {
-		res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
-			`"name": "` + element.name + `", ` +
-			`"pages": "` + strconv.Itoa(element.pages) + `" }`
+	for index, element := range bookshelf {
+		if index != (len(bookshelf)-1) {
+			res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
+				`"name": "` + element.name + `", ` +
+				`"pages": "` + strconv.Itoa(element.pages) + `" },`
+			} else {
+			res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
+				`"name": "` + element.name + `", ` +
+				`"pages": "` + strconv.Itoa(element.pages) + `" }`
+			}
 		}
 	res += " ]"
 	res_json := []byte(res)
@@ -99,7 +105,15 @@ func deleteBook(c *gin.Context) {
 func updateBook(c *gin.Context) {
 	var i map[string]interface{}
 	_ = c.Bind(&i)
-	id, _ := strconv.Atoi(i["id"].(string))
+	lower_i := make(map[string]interface{}, len(i))
+	for key, val := range i {
+		lower_i[strings.ToLower(key)] = val
+	}
+	i = lower_i
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	id_new, _ := strconv.Atoi(i["id"].(string))
 	name := i["name"].(string)
 	pages, _ := strconv.Atoi(i["pages"].(string))
 
@@ -108,16 +122,26 @@ func updateBook(c *gin.Context) {
 			// remove book from bookshelf slice
 			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
 			// add the updated book back
-			book := Book{id, name, pages}
+			book := Book{id_new, name, pages}
 			bookshelf = append(bookshelf, book)
 			//send the updated book information
 			c.IndentedJSON(http.StatusOK, gin.H{
-				"id": id,
+				"id": strconv.Itoa(id_new),
 				"name": name,
-				"pages": pages,
+				"pages": strconv.Itoa(pages),
 			})
+			return
 		}
 	}
+	// add the updated book back
+	book := Book{id_new, name, pages}
+	bookshelf = append(bookshelf, book)
+	//send the updated book information
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"id": strconv.Itoa(id_new),
+		"name": name,
+		"pages": strconv.Itoa(pages),
+	})
 }
 func main() {
 	r := gin.Default()
