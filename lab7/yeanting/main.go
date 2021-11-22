@@ -101,6 +101,10 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
+	// Error Handling
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"message": "book not found",
+	})
 }
 func updateBook(c *gin.Context) {
 	var i map[string]interface{}
