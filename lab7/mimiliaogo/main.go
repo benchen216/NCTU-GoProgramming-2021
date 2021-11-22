@@ -44,8 +44,10 @@ func getBook(c *gin.Context) {
 }
 func addBook(c *gin.Context) {
 	var newBook Book
-	c.BindJSON(&newBook)
-	// error handling
+	
+	if err := c.BindJSON(&newBook); err != nil {
+		c.IndentedJSON(404, "error binding")
+	}
 	for _, v := range bookshelf {
 		if newBook.Id == v.Id {
 			c.IndentedJSON(404, "duplicate book id")
@@ -66,13 +68,30 @@ func deleteBook(c *gin.Context) {
 		}
 	}
 }
+func updateBook(c *gin.Context) {
+	id := c.Param("id")
+	var updateBook Book
+	if err := c.BindJSON(&updateBook); err != nil {
+		c.IndentedJSON(404, "error binding")
+	}
+	for i, v := range bookshelf {
+		if id == v.Id {
+			bookshelf[i] = updateBook
+			c.IndentedJSON(200, updateBook)
+			return
+		}
+	}
+	c.IndentedJSON(404, "no this book")
+
+}
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
 	r.GET("/bookshelf/:id", getBook)
-	r.POST("bookshelf/", addBook)
+	r.POST("/bookshelf", addBook)
 	r.DELETE("bookshelf/:id", deleteBook)
+	r.PUT("bookshelf/:id", updateBook)
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
