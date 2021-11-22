@@ -63,10 +63,11 @@ func deleteBook(c *gin.Context) {
 }
 
 func updateBook(c *gin.Context) {
+	id:=c.Param("id")
 	var b Book
 	c.BindJSON(&b)
 	for i:=0;i<len(bookshelf);i++ {
-		if b.Id==bookshelf[i].Id {
+		if id==bookshelf[i].Id {
 			bookshelf[i]=b
 			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			return
