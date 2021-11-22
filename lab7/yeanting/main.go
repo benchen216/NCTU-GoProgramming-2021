@@ -1,0 +1,132 @@
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+	"os"
+	"strconv"
+	"strings"
+)
+
+type Book struct {
+	id int
+	name string
+	pages int
+}
+
+var bookshelf = []Book{
+	// init data
+	{1, "Blue Bird", 500},
+}
+
+func getBooks(c *gin.Context) {
+	for _, element := range bookshelf {
+			c.JSON(http.StatusOK, gin.H{
+				"id": strconv.Itoa(element.id),
+				"name": element.name,
+				"pages": strconv.Itoa(element.pages),
+			})
+		}
+}
+func getBook(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	for _, element := range bookshelf {
+		if id == element.id {
+			c.JSON(http.StatusOK, gin.H{
+				"id": strconv.Itoa(element.id),
+				"name": element.name,
+				"pages": strconv.Itoa(element.pages),
+			})
+			return
+		}
+	}
+	// Error Handling
+	c.JSON(http.StatusOK, gin.H{
+		"message": "book not found",
+	})
+}
+func addBook(c *gin.Context) {
+	var i map[string]interface{}
+	_ = c.Bind(&i)
+	lower_i := make(map[string]interface{}, len(i))
+	for key, val := range i {
+		lower_i[strings.ToLower(key)] = val
+	}
+	i = lower_i
+
+	id, _ := strconv.Atoi(i["id"].(string))
+	name := i["name"].(string)
+	pages, _ := strconv.Atoi(i["pages"].(string))
+	
+	for _, element := range bookshelf {
+		if id == element.id {
+			// Error Handling
+			c.JSON(http.StatusOK, gin.H{
+				"message": "duplicate book id",
+			})
+			return
+		}
+	}
+	// add to bookshelf
+	book := Book{id, name, pages}
+	bookshelf = append(bookshelf, book)
+	// response message
+	c.JSON(http.StatusOK, gin.H{
+		"id": strconv.Itoa(id),
+		"name": name,
+		"pages": strconv.Itoa(pages),
+	})
+}
+func deleteBook(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	for index, element := range bookshelf {
+		if id == element.id {
+			//send the removing book information
+			c.JSON(http.StatusOK, gin.H{
+				"id": strconv.Itoa(element.id),
+				"name": element.name,
+				"pages": strconv.Itoa(element.pages),
+			})
+			// remove book from bookshelf slice
+			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
+		}
+	}
+}
+func updateBook(c *gin.Context) {
+	var i map[string]interface{}
+	_ = c.Bind(&i)
+	id, _ := strconv.Atoi(i["id"].(string))
+	name := i["name"].(string)
+	pages, _ := strconv.Atoi(i["pages"].(string))
+
+	for index, element := range bookshelf {
+		if id == element.id {
+			// remove book from bookshelf slice
+			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
+			// add the updated book back
+			book := Book{id, name, pages}
+			bookshelf = append(bookshelf, book)
+			//send the updated book information
+			c.JSON(http.StatusOK, gin.H{
+				"id": id,
+				"name": name,
+				"pages": pages,
+			})
+		}
+	}
+}
+func main() {
+	r := gin.Default()
+	r.RedirectFixedPath = true
+	r.GET("/bookshelf", getBooks)
+	r.GET("/bookshelf/:id", getBook)
+	r.POST("/bookshelf", addBook)
+	r.DELETE("/bookshelf/:id", deleteBook)
+	r.PUT("/bookshelf/:id", updateBook)
+
+	port := "8080"
+	if v := os.Getenv("PORT"); len(v) > 0 {
+		port = v
+	}
+	r.Run(":" + port)
+}
