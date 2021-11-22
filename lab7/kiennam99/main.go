@@ -134,7 +134,6 @@ func updateBook(c *gin.Context) {
 		})
 
 	} else {
-
 		bookshelf[index].ID = id
 		bookshelf[index].NAME = name
 		bookshelf[index].PAGES = pages
