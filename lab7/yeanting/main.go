@@ -110,7 +110,6 @@ func updateBook(c *gin.Context) {
 		lower_i[strings.ToLower(key)] = val
 	}
 	i = lower_i
-
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	id_new, _ := strconv.Atoi(i["id"].(string))
@@ -119,6 +118,11 @@ func updateBook(c *gin.Context) {
 
 	for index, element := range bookshelf {
 		if id == element.id {
+			if i["id"].(string) == "" {
+				// remove book from bookshelf slice
+				bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
+				return
+			}
 			// remove book from bookshelf slice
 			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
 			// add the updated book back
