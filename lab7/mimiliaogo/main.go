@@ -26,41 +26,41 @@ var bookshelf = []Book{
 
 func getBooks(c *gin.Context) {
 	// v_json, _ := json.Marshal(bookshelf)
-	c.JSON(200, bookshelf)
+	c.IndentedJSON(200, bookshelf)
 }
 func getBook(c *gin.Context) {
 	id :=  c.Param("id")
 	for _, v := range bookshelf {
 		if v.Id == id {
-			c.JSON(200, v)
+			c.IndentedJSON(200, v)
 			return 
 		}
 	}
 	// error handling
-	c.JSON(404, gin.H{
+	c.IndentedJSON(404, gin.H{
 		"message": "book not found",
 	})
 
 }
 func addBook(c *gin.Context) {
-	newBook := Book{}
+	var newBook Book
 	c.BindJSON(&newBook)
 	// error handling
 	for _, v := range bookshelf {
 		if newBook.Id == v.Id {
-			c.JSON(404, "duplicate book id")
+			c.IndentedJSON(404, "duplicate book id")
 			return
 		}
 	}
 	
 	bookshelf = append(bookshelf, newBook)
-	c.JSON(200, newBook)
+	c.IndentedJSON(200, newBook)
 }
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	for i, v := range bookshelf {
 		if id == v.Id {
-			c.JSON(200, v)
+			c.IndentedJSON(200, v)
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
 			return
 		}
