@@ -20,19 +20,22 @@ var bookshelf = []Book{
 }
 
 func getBooks(c *gin.Context) {
+	res := "[ "
 	for _, element := range bookshelf {
-			c.JSON(http.StatusOK, gin.H{
-				"id": strconv.Itoa(element.id),
-				"name": element.name,
-				"pages": strconv.Itoa(element.pages),
-			})
+		res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
+			`"name": "` + element.name + `", ` +
+			`"pages": "` + strconv.Itoa(element.pages) + `" }`
 		}
+	res += " ]"
+	res_json := []byte(res)
+	//c.JSON(http.StatusOK, res)
+	c.Data(http.StatusOK, "application/json", res_json)
 }
 func getBook(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	for _, element := range bookshelf {
 		if id == element.id {
-			c.JSON(http.StatusOK, gin.H{
+			c.IndentedJSON(http.StatusOK, gin.H{
 				"id": strconv.Itoa(element.id),
 				"name": element.name,
 				"pages": strconv.Itoa(element.pages),
@@ -41,7 +44,7 @@ func getBook(c *gin.Context) {
 		}
 	}
 	// Error Handling
-	c.JSON(http.StatusOK, gin.H{
+	c.IndentedJSON(http.StatusOK, gin.H{
 		"message": "book not found",
 	})
 }
@@ -61,7 +64,7 @@ func addBook(c *gin.Context) {
 	for _, element := range bookshelf {
 		if id == element.id {
 			// Error Handling
-			c.JSON(http.StatusOK, gin.H{
+			c.IndentedJSON(http.StatusOK, gin.H{
 				"message": "duplicate book id",
 			})
 			return
@@ -71,7 +74,7 @@ func addBook(c *gin.Context) {
 	book := Book{id, name, pages}
 	bookshelf = append(bookshelf, book)
 	// response message
-	c.JSON(http.StatusOK, gin.H{
+	c.IndentedJSON(http.StatusOK, gin.H{
 		"id": strconv.Itoa(id),
 		"name": name,
 		"pages": strconv.Itoa(pages),
@@ -82,13 +85,14 @@ func deleteBook(c *gin.Context) {
 	for index, element := range bookshelf {
 		if id == element.id {
 			//send the removing book information
-			c.JSON(http.StatusOK, gin.H{
+			c.IndentedJSON(http.StatusOK, gin.H{
 				"id": strconv.Itoa(element.id),
 				"name": element.name,
 				"pages": strconv.Itoa(element.pages),
 			})
 			// remove book from bookshelf slice
 			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
+			return
 		}
 	}
 }
@@ -107,7 +111,7 @@ func updateBook(c *gin.Context) {
 			book := Book{id, name, pages}
 			bookshelf = append(bookshelf, book)
 			//send the updated book information
-			c.JSON(http.StatusOK, gin.H{
+			c.IndentedJSON(http.StatusOK, gin.H{
 				"id": id,
 				"name": name,
 				"pages": pages,
