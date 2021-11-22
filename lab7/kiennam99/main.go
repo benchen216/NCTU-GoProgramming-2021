@@ -138,7 +138,6 @@ func updateBook(c *gin.Context) {
 		bookshelf[index].ID = id
 		bookshelf[index].NAME = name
 		bookshelf[index].PAGES = pages
-
 		c.IndentedJSON(200, bookshelf[index])
 	}
 }
