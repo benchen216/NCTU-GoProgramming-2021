@@ -161,6 +161,24 @@ fi
 
 ans=$(cat <<-END
 {
+    "message": "book not found"
+}
+END
+)
+
+curl -X PUT -H 'Content-Type: application/json' -d '{"NAME":"原子習慣","PAGES":"123"}' -o result.txt `cat app_url.txt`bookshelf/10
+echo $ans > ans.txt
+DIFF=$(diff <(jq -S . result.txt) <(jq -S . ans.txt))
+if [ "$DIFF" != "" ] ; then
+  echo "right ans="$ans
+  echo "your ans=$(cat result.txt)"
+  echo "wrong answer ; NO POINT"
+else
+  echo "GET POINT 1"
+fi
+
+ans=$(cat <<-END
+{
     "id": 3,
     "name": "原子習慣：細微改變帶來巨大成就的實證法則",
     "pages": "600"
