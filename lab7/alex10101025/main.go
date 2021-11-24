@@ -26,7 +26,7 @@ func getBook(c *gin.Context) {
 	Id := c.Param("id")
 	_, err := strconv.Atoi(Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id: " + Id})
 		return
 	}
 	for _, book := range bookshelf {
@@ -45,7 +45,7 @@ func addBook(c *gin.Context) {
 	newbook.Pages = c.Param("pages")
 	_, err := strconv.Atoi(newbook.Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + newbook.Id})
 		return
 	}
 	for _, oldbook := range bookshelf {
@@ -62,7 +62,7 @@ func deleteBook(c *gin.Context) {
 	Id := c.Param("id")
 	_, err := strconv.Atoi(Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + Id})
 		return
 	}
 	for idx, book := range bookshelf {
@@ -78,7 +78,7 @@ func updateBook(c *gin.Context) {
 	Id := c.Param("id")
 	_, err := strconv.Atoi(Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + Id})
 		return
 	}
 	for _, book := range bookshelf {
