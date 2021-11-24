@@ -50,7 +50,7 @@ func addBook(c *gin.Context) {
 	}
 
 	bookshelf = append(bookshelf, newbook)
-	c.IndentedJSON(http.StatusOK, newbook)
+	c.IndentedJSON(http.StatusOK, bookshelf[len(bookshelf)-1])
 }
 
 func deleteBook(c *gin.Context) {
@@ -76,7 +76,7 @@ func updateBook(c *gin.Context) {
 	for i := range bookshelf {
 		if bookshelf[i].ID == id {	
 			bookshelf[i] = book
-			c.IndentedJSON(200, updateBook)
+			c.IndentedJSON(http.StatusOK, book)
 			return
 		}
 	}
