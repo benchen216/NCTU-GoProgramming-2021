@@ -82,9 +82,6 @@ func main() {
 	r.POST("/bookshelf", addBook)
 	r.DELETE("/bookshelf/:index", deleteBook)
 	r.PUT("/bookshelf/:index", updateBook)
-
-
-
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
