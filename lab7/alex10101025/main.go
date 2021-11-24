@@ -2,8 +2,10 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+
 	//"net/http"
 	"os"
 )
@@ -15,20 +17,18 @@ type Book struct {
 	Pages string `json:"pages"`
 }
 
-var bookshelf = []Book{
-	// init data
-	{
-		Id:    "1",
-		Name:  "Blue Bird",
-		Pages: "500",
-	},
-}
+var bookshelf = []Book{{Id: "1", Name: "Blue Bird", Pages: "500"}} // init data
 
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, bookshelf)
 }
 func getBook(c *gin.Context) {
 	Id := c.Param("id")
+	_, err := strconv.Atoi(Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		return
+	}
 	for _, book := range bookshelf {
 		if book.Id == Id {
 			c.IndentedJSON(http.StatusOK, book)
@@ -43,6 +43,11 @@ func addBook(c *gin.Context) {
 	newbook.Id = c.Param("id")
 	newbook.Name = c.Param("name")
 	newbook.Pages = c.Param("pages")
+	_, err := strconv.Atoi(newbook.Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		return
+	}
 	for _, oldbook := range bookshelf {
 		if oldbook.Id == newbook.Id {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "duplicate book id"})
@@ -55,6 +60,11 @@ func addBook(c *gin.Context) {
 }
 func deleteBook(c *gin.Context) {
 	Id := c.Param("id")
+	_, err := strconv.Atoi(Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		return
+	}
 	for idx, book := range bookshelf {
 		if book.Id == Id {
 			c.IndentedJSON(http.StatusOK, book)
@@ -66,6 +76,11 @@ func deleteBook(c *gin.Context) {
 }
 func updateBook(c *gin.Context) {
 	Id := c.Param("id")
+	_, err := strconv.Atoi(Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id"})
+		return
+	}
 	for _, book := range bookshelf {
 		if book.Id == Id {
 			book.Name = c.Param("name")
