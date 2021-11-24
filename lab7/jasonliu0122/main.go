@@ -89,7 +89,7 @@ func main() {
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
 	r.GET("/bookshelf/:id", getBook)
-	r.POST("/bookshelf/", addBook)
+	r.POST("/bookshelf", addBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
 	r.PUT("/bookshelf/:id", updateBook)
 
