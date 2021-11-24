@@ -13,10 +13,6 @@ type Book struct {
 	PAGES string `json:"pages"`
 }
 
-type Message struct {
-	message string `json:"message"`
-}
-
 var bookshelf = []Book{
 	// init data
 	{"1" , "Blue Bird", "500"},
@@ -33,8 +29,7 @@ func getBook(c *gin.Context) {
 			return
 		}
 	}
-	var msg = Message{"book not found"}
-	c.IndentedJSON(http.StatusOK,msg)
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
 
 }
 func addBook(c *gin.Context) {
@@ -45,8 +40,7 @@ func addBook(c *gin.Context) {
 	}
 	for i := 0; i<len(bookshelf); i++{
 		if bookshelf[i].ID == json.ID{
-			var msg = Message{"duplicate book id"}
-			c.IndentedJSON(http.StatusOK,msg)
+			c.IndentedJSON(http.StatusOK,gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
@@ -62,8 +56,7 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
-	var msg = Message{"book not found"}
-	c.IndentedJSON(http.StatusOK,msg)
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
 }
 func updateBook(c *gin.Context) {
 	var json Book
@@ -79,8 +72,7 @@ func updateBook(c *gin.Context) {
 			return
 		}
 	}
-	var msg = Message{"book not found"}
-	c.IndentedJSON(http.StatusOK,msg)
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
 }
 func main() {
 	r := gin.Default()
