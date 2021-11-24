@@ -14,7 +14,7 @@ type Book struct {
 }
 
 type Message struct {
-	message string
+	message string `json:"message"`
 }
 
 var bookshelf = []Book{
