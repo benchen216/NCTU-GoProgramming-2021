@@ -30,7 +30,6 @@ func getBook(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"},)
-
 }
 func addBook(c *gin.Context) {
 	var json Book
@@ -88,4 +87,3 @@ func main() {
 	}
 	r.Run(":" + port)
 }
-        
