@@ -37,20 +37,20 @@ func getBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 func addBook(c *gin.Context) {
-	var book Book
+	var newbook Book
 
-	if err := c.BindJSON(&book); err != nil {
+	if err := c.BindJSON(&newbook); err != nil {
 		c.IndentedJSON(http.StatusNotFound, "error")
 	}
 	for _, v := range bookshelf {
-		if book.ID == v.ID {
+		if newbook.ID == v.ID {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
 
-	bookshelf = append(bookshelf, book)
-	c.IndentedJSON(http.StatusOK, book)
+	bookshelf = append(bookshelf, newbook)
+	c.IndentedJSON(http.StatusOK, newbook)
 }
 
 func deleteBook(c *gin.Context) {
