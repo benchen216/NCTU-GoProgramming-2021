@@ -26,7 +26,7 @@ func getBook(c *gin.Context) {
 	Id := c.Param("id")
 	_, err := strconv.Atoi(Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id: " + Id})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id is not a number"})
 		return
 	}
 	for _, book := range bookshelf {
@@ -40,12 +40,13 @@ func getBook(c *gin.Context) {
 }
 func addBook(c *gin.Context) {
 	var newbook Book
-	newbook.Id = c.Param("id")
-	newbook.Name = c.Param("name")
-	newbook.Pages = c.Param("pages")
-	_, err := strconv.Atoi(newbook.Id)
+	err := c.BindJSON(&newbook)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + newbook.Id})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error"})
+	}
+	_, err = strconv.Atoi(newbook.Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id is not a number"})
 		return
 	}
 	for _, oldbook := range bookshelf {
@@ -62,7 +63,7 @@ func deleteBook(c *gin.Context) {
 	Id := c.Param("id")
 	_, err := strconv.Atoi(Id)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + Id})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id is not a number"})
 		return
 	}
 	for idx, book := range bookshelf {
@@ -76,16 +77,20 @@ func deleteBook(c *gin.Context) {
 }
 func updateBook(c *gin.Context) {
 	Id := c.Param("id")
-	_, err := strconv.Atoi(Id)
+	var newbook Book
+	err := c.BindJSON(&newbook)
 	if err != nil {
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "wrong id" + Id})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error"})
+	}
+	_, err = strconv.Atoi(Id)
+	if err != nil {
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id is not a number"})
 		return
 	}
-	for _, book := range bookshelf {
+	for idx, book := range bookshelf {
 		if book.Id == Id {
-			book.Name = c.Param("name")
-			book.Pages = c.Param("pages")
-			c.IndentedJSON(http.StatusOK, book)
+			bookshelf[idx] = newbook
+			c.IndentedJSON(http.StatusOK, newbook)
 			return
 		}
 	}
