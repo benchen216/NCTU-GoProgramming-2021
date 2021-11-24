@@ -29,7 +29,7 @@ func getBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"},)
 
 }
 func addBook(c *gin.Context) {
@@ -40,7 +40,7 @@ func addBook(c *gin.Context) {
 	}
 	for i := 0; i<len(bookshelf); i++{
 		if bookshelf[i].ID == json.ID{
-			c.IndentedJSON(http.StatusOK,gin.H{"message": "duplicate book id"})
+			c.IndentedJSON(http.StatusOK,gin.H{"message": "duplicate book id"},)
 			return
 		}
 	}
@@ -56,7 +56,7 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"},)
 }
 func updateBook(c *gin.Context) {
 	var json Book
@@ -72,7 +72,7 @@ func updateBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK,gin.H{"message": "book not found"},)
 }
 func main() {
 	r := gin.Default()
