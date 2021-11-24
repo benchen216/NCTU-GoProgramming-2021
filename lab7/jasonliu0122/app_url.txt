@@ -1,1 +1,1 @@
- https://golang-0717015.herokuapp.com
+ https://golang-0717015.herokuapp.com/
