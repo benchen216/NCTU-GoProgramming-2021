@@ -115,13 +115,25 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 	}
 }
 
-func ResetDBTable(db *sql.DB) {
+func rs(db *sql.DB) {
 	if _, err := db.Exec("DROP TABLE IF EXISTS bookshelf"); err != nil {
 		return
 	}
 	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS bookshelf (id SERIAL PRIMARY KEY, name VARCHAR(100), pages VARCHAR(10))"); err != nil {
 		return
 	}
+}
+
+func ResetDBTable(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if _, err := db.Exec("DROP TABLE IF EXISTS bookshelf"); err != nil {
+			return
+		}
+		if _, err := db.Exec("CREATE TABLE IF NOT EXISTS bookshelf (id SERIAL PRIMARY KEY, name VARCHAR(100), pages VARCHAR(10))"); err != nil {
+			return
+		}
+	}
+
 }
 
 func main() {
@@ -138,11 +150,12 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening database: %q", err)
 	}
-	ResetDBTable(db)
+	rs(db)
 
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks(db))
+	r.GET("/reset", ResetDBTable(db))
 	// [TODO] other method
 	r.GET("/bookshelf/:id", getBook(db))
 	r.POST("/bookshelf", addBook(db))
