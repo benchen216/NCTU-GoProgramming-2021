@@ -8,82 +8,81 @@ import (
 )
 
 type Book struct {
-	Id    string `json:"id"`
-	Name  string `json:"name"`
-	Pages string `json:"pages"`
+	// write your own struct
+	ID    string `json:"id"`
+	NAME  string `json:"name"`
+	PAGES string `json:"pages"`
 }
 
 var bookshelf = []Book{
-	{
-		Id:    "1",
-		Name:  "Blue Bird",
-		Pages: "500",
-	},
+	{"1",
+		"Blue Bird",
+		"500"},
 }
 
 func getBooks(c *gin.Context) {
-	c.IndentedJSON(200, bookshelf)
+	c.IndentedJSON(http.StatusOK, bookshelf)
 }
-
 func getBook(c *gin.Context) {
-	id := c.Param("id")
-	for _, s := range bookshelf {
-		if s.Id == id {
-			c.IndentedJSON(200, s)
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			c.IndentedJSON(http.StatusOK, bookshelf[j])
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
-
 func addBook(c *gin.Context) {
-	tempBook := Book{}
-	c.BindJSON(&tempBook)
-	for _, s := range bookshelf {
-		if s.Id == tempBook.Id {
-			c.IndentedJSON(200, gin.H{"message": "duplicate book id"})
+	var json Book
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	for i := 0; i < len(bookshelf); i++ {
+		if bookshelf[i].ID == json.ID {
+			c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
-	bookshelf = append(bookshelf, tempBook)
-	c.IndentedJSON(200, tempBook)
+	bookshelf = append(bookshelf, json)
+	c.IndentedJSON(http.StatusOK, json)
 }
-
 func deleteBook(c *gin.Context) {
-	id := c.Param("id")
-	for index, s := range bookshelf {
-		if s.Id == id {
-			c.IndentedJSON(200, s)
-			bookshelf = append(bookshelf[:index], bookshelf[index+1:]...)
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			c.IndentedJSON(http.StatusOK, bookshelf[j])
+			bookshelf = append(bookshelf[:j], bookshelf[j+1:]...)
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
-
-func modifyBook(c *gin.Context) {
-	id := c.Param("id")
-	tempBook := Book{}
-	c.BindJSON(&tempBook)
-	for idx, _ := range bookshelf {
-		if bookshelf[idx].Id == id {
-			bookshelf[idx] = tempBook
-			c.IndentedJSON(http.StatusOK, bookshelf[idx])
+func updateBook(c *gin.Context) {
+	var json Book
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			bookshelf[j] = json
+			c.IndentedJSON(http.StatusOK, json)
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 }
-
 func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
-	r.GET("/bookshelf/:id", getBook)
+	r.GET("/bookshelf/:index", getBook)
 	r.POST("/bookshelf", addBook)
-	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/*id", modifyBook)
-
+	r.DELETE("/bookshelf/:index", deleteBook)
+	r.PUT("/bookshelf/:index", updateBook)
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
