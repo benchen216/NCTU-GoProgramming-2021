@@ -50,12 +50,16 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "id is not a number"})
 		}
 		var book Book
+		numrows := 0
 		for rows.Next() {
+			numrows += 1
 			rows.Scan(&book.Id, &book.Name, &book.Pages)
 			c.IndentedJSON(http.StatusOK, book)
 			return
 		}
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		if numrows == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		}
 	}
 }
 
@@ -82,42 +86,46 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//rows, err := db.Query("?????????????????????????", ??, ??, ??)
-		Id := c.Param("id")
 		var newbook Book
 		err := c.BindJSON(&newbook)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error1"})
 		}
-		rows, err := db.Query("UPDATE bookshelf SET name=$2,pages=$3 WHERE id=$1 RETURNING *", Id, newbook.Name, newbook.Pages)
+		rows, err := db.Query("UPDATE bookshelf SET name=$2,pages=$3 WHERE id=$1 RETURNING *", c.Param("id"), newbook.Name, newbook.Pages)
 		defer rows.Close()
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error2"})
 		}
+		numrows := 0
 		for rows.Next() {
+			numrows += 1
 			rows.Scan(&newbook.Id, &newbook.Name, &newbook.Pages)
 			c.IndentedJSON(http.StatusOK, newbook)
-			return
 		}
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		if numrows == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		}
 	}
 }
 
 func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		Id := c.Param("id")
-		rows, err := db.Query("DELETE FROM bookshelf WHERE id=$1 RETURNING *", Id)
+		rows, err := db.Query("DELETE FROM bookshelf WHERE id=$1 RETURNING *", c.Param("id"))
 		defer rows.Close()
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error"})
 			return
 		}
 		var book Book
+		numrows := 0
 		for rows.Next() {
+			numrows += 1
 			rows.Scan(&book.Id, &book.Name, &book.Pages)
 			c.IndentedJSON(http.StatusOK, book)
-			return
 		}
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		if numrows == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		}
 	}
 }
 
