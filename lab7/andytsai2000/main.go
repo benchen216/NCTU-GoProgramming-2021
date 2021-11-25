@@ -34,7 +34,7 @@ func getBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func addBook(c *gin.Context) {
@@ -53,7 +53,7 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func updateBook(c *gin.Context) {
@@ -67,7 +67,7 @@ func updateBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func main() {
