@@ -8,9 +8,9 @@ import (
 )
 
 type Book struct {
-	Id    string `json:"Id"`
-	Name  string `json:"Name"`
-	Pages string `json:"Pages"`
+	Id    string `json:"id"`
+	Name  string `json:"name"`
+	Pages string `json:"pages"`
 }
 
 var bookshelf = []Book{
