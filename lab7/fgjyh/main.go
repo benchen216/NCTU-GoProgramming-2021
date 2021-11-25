@@ -10,7 +10,7 @@ import (
 type Book struct {
 	Id    string `json:"id"`
 	Name  string `json:"name"`
-	Pages string `json:"pages"`
+	Pages string `json:"pages"` //
 }
 
 var bookshelf = []Book{
