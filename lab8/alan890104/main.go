@@ -66,7 +66,9 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 func addBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var post Book
-		c.Bind(&post)
+		if err := c.Bind(&post); err != nil {
+			return
+		}
 		db.QueryRow("INSERT INTO bookshelf VALUES (?,?,?) RETURNING id", post.Id, post.Name, post.Pages).
 			Scan(&post.Id)
 		c.IndentedJSON(http.StatusOK, post)
@@ -77,7 +79,9 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 		var post Book
-		c.Bind(&post)
+		if err := c.Bind(&post); err != nil {
+			return
+		}
 
 		err := db.QueryRow("UPDATE bookshelf SET name=?, pages=? WHERE id=? RETURNING *", post.Name, post.Pages, id).
 			Scan(&post.Id, &post.Name, &post.Pages)
