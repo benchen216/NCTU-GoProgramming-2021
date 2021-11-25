@@ -25,6 +25,7 @@ func atoi(str string) int {
 	p, _ := strconv.Atoi(str)
 	return p
 }
+
 func getBooks(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rows, err := db.Query("SELECT * FROM bookshelf")
@@ -49,6 +50,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		}
 	}
 }
+
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rows, err := db.Query("SELECT * FROM bookshelf WHERE id=$1", atoi(c.Param("id")))
@@ -168,7 +170,7 @@ func main() {
 
 	r := gin.Default()
 	r.RedirectFixedPath = true
-	
+
 	r.GET("/bookshelf", getBooks(db))
 	r.GET("/bookshelf/:id", getBook(db))
 	r.POST("/bookshelf", addBook(db))
