@@ -168,6 +168,7 @@ func main() {
 
 	r := gin.Default()
 	r.RedirectFixedPath = true
+	
 	r.GET("/bookshelf", getBooks(db))
 	r.GET("/bookshelf/:id", getBook(db))
 	r.POST("/bookshelf", addBook(db))
