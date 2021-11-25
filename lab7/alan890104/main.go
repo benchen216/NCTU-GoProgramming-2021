@@ -26,9 +26,9 @@ var bookshelf = []Book{
 	},
 }
 
-func remove(slice []Book, s int) []Book {
-	return append(slice[:s], slice[s+1:]...)
-}
+// func remove(slice []Book, s int) []Book {
+// 	return append(slice[:s], slice[s+1:]...)
+// }
 
 func getBooks(c *gin.Context) {
 	mux.Lock()
@@ -76,11 +76,11 @@ func deleteBook(c *gin.Context) {
 	for i := range bookshelf {
 		if bookshelf[i].ID == id {
 			c.IndentedJSON(200, bookshelf[i])
-			bookshelf = remove(bookshelf, i)
+			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{
+	c.IndentedJSON(404, gin.H{
 		"message": "book not found",
 	})
 }
@@ -88,14 +88,17 @@ func deleteBook(c *gin.Context) {
 func updateBook(c *gin.Context) {
 	mux.Lock()
 	defer mux.Unlock()
+	id := c.Param("id")
 	var b Book
 	c.BindJSON(&b)
 	for i := range bookshelf {
-		if bookshelf[i].ID == b.ID {
+		if bookshelf[i].ID == id {
 			bookshelf[i] = b
+			c.IndentedJSON(200, bookshelf[i])
+			return
 		}
 	}
-	c.IndentedJSON(200, b)
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
 }
 
 func main() {
@@ -105,7 +108,7 @@ func main() {
 	r.GET("/bookshelf", getBooks)
 	r.GET("/bookshelf/:id", getBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/*id", updateBook)
+	r.PUT("/bookshelf/:id", updateBook)
 	r.POST("/bookshelf", addBook)
 
 	port := "8081"
