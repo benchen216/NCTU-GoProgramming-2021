@@ -17,6 +17,7 @@ type Book struct {
 	Name  string `json:"name"`
 	Pages string `json:"pages"`
 }
+
 type Err struct {
 	Message string `json:"message"`
 }
