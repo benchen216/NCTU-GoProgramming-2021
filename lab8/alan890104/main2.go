@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -14,24 +15,29 @@ import (
 type Book struct {
 	// write your own struct
 	// id's type is int
-	Id    int    `json:"id" binding:"required"`
-	Name  string `json:"name" binding:"required"`
-	Pages string `json:"page" binding:"required"`
+	Id    int    `json:"id" form:"id"`
+	Name  string `json:"name" form:"name"`
+	Pages string `json:"pages" form:"pages"`
 }
 
 func getBooks(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		/* [TODO] get all books data*/
-		rows, _ := db.Query("SELECT * FROM bookshelf")
+		var books []Book
+		rows, err := db.Query("SELECT * FROM bookshelf")
+		if err != nil {
+			log.Println(err)
+		}
 
 		/* [TODO] scan the data one by one*/
 		defer rows.Close()
-		var books []Book
 		for rows.Next() {
 			var b Book
 			rows.Scan(&b.Id, &b.Name, &b.Pages)
 			books = append(books, b)
 		}
+
+		log.Println(books)
 
 		//[TODO]send all data or error handling
 		c.IndentedJSON(http.StatusOK, books)
@@ -40,50 +46,49 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 }
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+		id, _ := strconv.Atoi(c.Param("id"))
 		/* [TODO] get all books data*/
-		rows, _ := db.Query("SELECT * FROM bookshelf WHERE id=?", id)
-
-		/* [TODO] scan the data one by one*/
-		defer rows.Close()
-		var books []Book
-		for rows.Next() {
-			var b Book
-			rows.Scan(&b.Id, &b.Name, &b.Pages)
-			books = append(books, b)
-		}
+		var books Book
+		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", id).Scan(
+			&books.Id, &books.Name, &books.Pages,
+		)
 
 		//[TODO]send all data or error handling
-		if len(books) == 0 {
+		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 		} else {
 			c.IndentedJSON(http.StatusOK, books)
 		}
-
 	}
 }
 
 func addBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var post Book
-		if err := c.Bind(&post); err != nil {
+		if err := c.BindJSON(&post); err != nil {
+			log.Println(err.Error())
 			return
 		}
-		db.QueryRow("INSERT INTO bookshelf VALUES (?,?,?) RETURNING id", post.Id, post.Name, post.Pages).
+		err := db.QueryRow("INSERT INTO bookshelf VALUES (DEFAULT, $1, $2) RETURNING id", post.Name, post.Pages).
 			Scan(&post.Id)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		c.IndentedJSON(http.StatusOK, post)
 	}
 }
 
 func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+		id, _ := strconv.Atoi(c.Param("id"))
 		var post Book
-		if err := c.Bind(&post); err != nil {
+		if err := c.BindJSON(&post); err != nil {
+			log.Println(err.Error())
 			return
 		}
 
-		err := db.QueryRow("UPDATE bookshelf SET name=?, pages=? WHERE id=? RETURNING *", post.Name, post.Pages, id).
+		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETURNING *", post.Name, post.Pages, id).
 			Scan(&post.Id, &post.Name, &post.Pages)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
@@ -97,9 +102,9 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 
 func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+		id, _ := strconv.Atoi(c.Param("id"))
 		var ret Book
-		err := db.QueryRow("DELETE FROM bookshelf WHERE id=? RETURNING *", id).Scan(&ret.Id, &ret.Name, &ret.Pages)
+		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING *", id).Scan(&ret.Id, &ret.Name, &ret.Pages)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
 				"message": "book not found",
@@ -140,8 +145,8 @@ func main() {
 	r.GET("/bookshelf", getBooks(db))
 	// [TODO] other method
 	r.GET("/bookshelf/:id", getBook(db))
-	r.POST("/bookshelf/", addBook(db))
-	r.PUT("/boolshelf/:id", updateBook(db))
+	r.POST("/bookshelf", addBook(db))
+	r.PUT("/bookshelf/:id", updateBook(db))
 	r.DELETE("/bookshelf/:id", deleteBook(db))
 
 	r.Run(":" + port)
