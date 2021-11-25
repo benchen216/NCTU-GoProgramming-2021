@@ -43,6 +43,7 @@ func addBook(c *gin.Context) {
 	for i := range bookshelf {
 		if bookshelf[i].Id == book.Id {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "duplicate book id"})
+			return
 		}
 	}
 	bookshelf = append(bookshelf, book)
