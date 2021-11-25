@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,107 +14,126 @@ import (
 type Book struct {
 	// write your own struct
 	// id's type is int
-	Id    int    `json:"id" form:"id"`
-	Name  string `json:"name" form:"name"`
-	Pages string `json:"pages" form:"pages"`
+	ID   int    `json:"id"`
+	NAME string `json:"name"`
+	PAGE string `json:"pages"`
 }
 
 func getBooks(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		/* [TODO] get all books data*/
-		var books []Book
 		rows, err := db.Query("SELECT * FROM bookshelf")
 		if err != nil {
-			log.Println(err)
+			log.Fatalf("%q", err)
+			return
 		}
-
-		/* [TODO] scan the data one by one*/
 		defer rows.Close()
+
+		var bookshelf []Book
 		for rows.Next() {
-			var b Book
-			rows.Scan(&b.Id, &b.Name, &b.Pages)
-			books = append(books, b)
+			var book Book
+			if err := rows.Scan(&book.ID, &book.NAME, &book.PAGE); err != nil {
+				log.Fatalf("%q", err)
+				return
+			}
+
+			bookshelf = append(bookshelf, book)
 		}
 
-		log.Println(books)
+		if err = rows.Err(); err != nil {
+			log.Fatalf("%q", err)
+			return
+		}
 
-		//[TODO]send all data or error handling
-		c.IndentedJSON(http.StatusOK, books)
-
+		if len(bookshelf) == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		} else {
+			c.IndentedJSON(http.StatusOK, bookshelf)
+		}
 	}
 }
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		/* [TODO] get all books data*/
-		var books Book
-		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", id).Scan(
-			&books.Id, &books.Name, &books.Pages,
-		)
-
-		//[TODO]send all data or error handling
-		if err != nil {
-			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
-		} else {
-			c.IndentedJSON(http.StatusOK, books)
+		var book Book
+		if err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1",
+			c.Param("id")).Scan(&book.ID, &book.NAME, &book.PAGE); err != nil {
+			if err == sql.ErrNoRows {
+				c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+			} else {
+				log.Fatalf("%q", err)
+			}
+			return
 		}
+
+		c.IndentedJSON(http.StatusOK, book)
 	}
 }
 
 func addBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var post Book
-		if err := c.BindJSON(&post); err != nil {
-			log.Println(err.Error())
+		var newBook Book
+		if err := c.BindJSON(&newBook); err != nil {
 			return
 		}
-		err := db.QueryRow("INSERT INTO bookshelf VALUES (DEFAULT, $1, $2) RETURNING id", post.Name, post.Pages).
-			Scan(&post.Id)
+
+		err := db.QueryRow("INSERT INTO bookshelf VALUES(DEFAULT, $1, $2) RETURNING id",
+			newBook.NAME, newBook.PAGE).Scan(&newBook.ID)
+
 		if err != nil {
-			log.Println(err)
+			log.Fatalf("%q", err)
 			return
 		}
-		c.IndentedJSON(http.StatusOK, post)
+
+		c.IndentedJSON(http.StatusOK, newBook)
 	}
 }
 
 func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		var post Book
-		if err := c.BindJSON(&post); err != nil {
-			log.Println(err.Error())
+		var book Book
+		if err := c.BindJSON(&book); err != nil {
 			return
 		}
 
-		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETURNING *", post.Name, post.Pages, id).
-			Scan(&post.Id, &post.Name, &post.Pages)
+		id := -1
+		err := db.QueryRow("UPDATE bookshelf SET name = $2, pages = $3 WHERE id = $1 RETURNING id",
+			c.Param("id"), book.NAME, book.PAGE).Scan(&id)
+
 		if err != nil {
-			c.IndentedJSON(http.StatusNotFound, gin.H{
-				"message": "book not found",
-			})
-		} else {
-			c.IndentedJSON(http.StatusOK, post)
+			if err == sql.ErrNoRows {
+				c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+			} else {
+				log.Fatalf("%q", err)
+			}
+			return
 		}
+
+		book.ID = id
+		c.IndentedJSON(http.StatusOK, book)
+
 	}
 }
 
 func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		var ret Book
-		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING *", id).Scan(&ret.Id, &ret.Name, &ret.Pages)
+		var book Book
+
+		err := db.QueryRow("DELETE FROM bookshelf WHERE id = $1 RETURNING *",
+			c.Param("id")).Scan(&book.ID, &book.NAME, &book.PAGE)
+
 		if err != nil {
-			c.IndentedJSON(http.StatusNotFound, gin.H{
-				"message": "book not found",
-			})
-		} else {
-			c.IndentedJSON(http.StatusOK, ret)
+			if err == sql.ErrNoRows {
+				c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+			} else {
+				log.Fatalf("%q", err)
+			}
+			return
 		}
+
+		c.IndentedJSON(http.StatusOK, book)
 	}
 }
 
-func rs(db *sql.DB) {
+func ResetDBTable(db *sql.DB) {
 	if _, err := db.Exec("DROP TABLE IF EXISTS bookshelf"); err != nil {
 		return
 	}
@@ -124,21 +142,8 @@ func rs(db *sql.DB) {
 	}
 }
 
-func ResetDBTable(db *sql.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if _, err := db.Exec("DROP TABLE IF EXISTS bookshelf"); err != nil {
-			return
-		}
-		if _, err := db.Exec("CREATE TABLE IF NOT EXISTS bookshelf (id SERIAL PRIMARY KEY, name VARCHAR(100), pages VARCHAR(10))"); err != nil {
-			return
-		}
-	}
-
-}
-
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Cannot Load env")
 		//Do nothing
 	}
 	port := "8080"
@@ -150,17 +155,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening database: %q", err)
 	}
-	rs(db)
+	ResetDBTable(db)
 
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks(db))
-	r.GET("/reset", ResetDBTable(db))
 	// [TODO] other method
 	r.GET("/bookshelf/:id", getBook(db))
 	r.POST("/bookshelf", addBook(db))
-	r.PUT("/bookshelf/:id", updateBook(db))
 	r.DELETE("/bookshelf/:id", deleteBook(db))
+	r.PUT("/bookshelf/:id", updateBook(db))
 
 	r.Run(":" + port)
 }
