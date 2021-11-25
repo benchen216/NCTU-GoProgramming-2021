@@ -1,4 +1,4 @@
-module NCTU-GoProgramming-2021/lab7/andytsai2000
+module NCTU-GoProgramming-2021
 
 go 1.17
 
