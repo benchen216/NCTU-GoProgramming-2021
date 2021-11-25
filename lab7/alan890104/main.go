@@ -1,18 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
 	"os"
-	"sync"
 
 	"github.com/gin-gonic/gin"
 )
 
-var mux sync.Mutex
-
 type Book struct {
-	// write your own struct
-	ID    string `json:"id"`
+	Id    string `json:"id"`
 	Name  string `json:"name"`
 	Pages string `json:"pages"`
 }
@@ -20,98 +16,76 @@ type Book struct {
 var bookshelf = []Book{
 	// init data
 	{
-		ID:    "1",
+		Id:    "1",
 		Name:  "Blue Bird",
 		Pages: "500",
 	},
 }
 
-// func remove(slice []Book, s int) []Book {
-// 	return append(slice[:s], slice[s+1:]...)
-// }
-
 func getBooks(c *gin.Context) {
-	mux.Lock()
-	defer mux.Unlock()
-	c.IndentedJSON(200, bookshelf)
+	c.IndentedJSON(http.StatusOK, bookshelf)
 }
 
 func getBook(c *gin.Context) {
-	mux.Lock()
-	defer mux.Unlock()
-	id := c.Param("id")
-	fmt.Println(id)
+	Id := c.Param("Id")
 	for i := range bookshelf {
-		if bookshelf[i].ID == id {
-			c.IndentedJSON(200, bookshelf[i])
+		if bookshelf[i].Id == Id {
+			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{
-		"message": "book not found",
-	})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func addBook(c *gin.Context) {
-	mux.Lock()
-	defer mux.Unlock()
-	var b Book
-	c.BindJSON(&b)
+	var book Book
+	c.BindJSON(&book)
 	for i := range bookshelf {
-		if bookshelf[i].ID == b.ID {
-			c.IndentedJSON(200, gin.H{
-				"message": "duplicate book id",
-			})
+		if bookshelf[i].Id == book.Id {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
-	bookshelf = append(bookshelf, b)
-	c.IndentedJSON(200, b)
+	bookshelf = append(bookshelf, book)
+	c.IndentedJSON(http.StatusOK, bookshelf[len(bookshelf)-1])
 }
 
 func deleteBook(c *gin.Context) {
-	mux.Lock()
-	defer mux.Unlock()
-	id := c.Param("id")
+	Id := c.Param("Id")
 	for i := range bookshelf {
-		if bookshelf[i].ID == id {
-			c.IndentedJSON(200, bookshelf[i])
+		if bookshelf[i].Id == Id {
+			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
 			return
 		}
 	}
-	c.IndentedJSON(404, gin.H{
-		"message": "book not found",
-	})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func updateBook(c *gin.Context) {
-	mux.Lock()
-	defer mux.Unlock()
-	id := c.Param("id")
-	var b Book
-	c.BindJSON(&b)
+	var book Book
+	Id := c.Param("Id")
+	c.BindJSON(&book)
 	for i := range bookshelf {
-		if bookshelf[i].ID == id {
-			bookshelf[i] = b
-			c.IndentedJSON(200, bookshelf[i])
+		if bookshelf[i].Id == Id {
+			bookshelf[i] = book
+			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			return
 		}
 	}
-	c.IndentedJSON(404, gin.H{"message": "book not found"})
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 }
 
 func main() {
-	mux = sync.Mutex{}
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
-	r.GET("/bookshelf/:id", getBook)
-	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/:id", updateBook)
+	r.GET("/bookshelf/:Id", getBook)
 	r.POST("/bookshelf", addBook)
+	r.DELETE("/bookshelf/:Id", deleteBook)
+	r.PUT("/bookshelf/:Id", updateBook)
 
-	port := "8081"
+	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
