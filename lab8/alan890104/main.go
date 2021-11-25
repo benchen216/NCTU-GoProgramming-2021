@@ -40,7 +40,13 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		log.Println(books)
 
 		//[TODO]send all data or error handling
-		c.IndentedJSON(http.StatusOK, books)
+		if len(books) == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{
+				"message": "book not found",
+			})
+		} else {
+			c.IndentedJSON(http.StatusOK, books)
+		}
 
 	}
 }
