@@ -31,18 +31,14 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		var bookshelf = []Book{}
 		for rows.Next() {
 			var book Book
-			err := rows.Scan(&book.Id, &book.Name, &book.Pages)
+			rows.Scan(&book.Id, &book.Name, &book.Pages)
 			bookshelf = append(bookshelf, book)
-			if err != nil {
-				c.IndentedJSON(http.StatusNotFound, gin.H{"message": "error2"})
-			}
 		}
 		if len(bookshelf) == 0 {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
-			return
+		} else {
+			c.IndentedJSON(http.StatusOK, bookshelf)
 		}
-		c.IndentedJSON(http.StatusOK, bookshelf)
-
 		//[TODO]send all data or error handling
 	}
 }
