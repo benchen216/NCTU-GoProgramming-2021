@@ -1,14 +1,4 @@
-#!/bin/bash
 
-test_path="${BASH_SOURCE[0]}"
-solution_path="$(realpath .)"
-tmp_dir=$(mktemp -d -t lab7-XXXXXXXXXX)
-
-echo "working directory: $tmp_dir"
-cd $tmp_dir
-
-#rm -rf *
-cp $solution_path/app_url.txt .
 ans=$(cat <<-END
 [
     {
@@ -176,8 +166,3 @@ if [ "$(echo $ans)" != "$(cat result.txt)" ] ; then
 else
   echo "GET POINT 1"
 fi
-
-echo "deleting working directory $tmp_dir"
-rm -rf $tmp_dir
-
-exit 0
