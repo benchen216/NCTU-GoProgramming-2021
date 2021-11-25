@@ -58,7 +58,7 @@ func deleteBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
 }
 
 func modifyBook(c *gin.Context) {
@@ -72,7 +72,7 @@ func modifyBook(c *gin.Context) {
 			return
 		}
 	}
-	c.IndentedJSON(200, gin.H{"message": "book not found"})
+	c.IndentedJSON(404, gin.H{"message": "book not found"})
 }
 
 func main() {
@@ -82,7 +82,7 @@ func main() {
 	r.GET("/bookshelf/:id", getBook)
 	r.POST("/bookshelf", addBook)
 	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/*id", modifyBook)
+	r.PUT("/bookshelf/id", modifyBook)
 
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
