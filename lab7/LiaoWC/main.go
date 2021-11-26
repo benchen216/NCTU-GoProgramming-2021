@@ -50,7 +50,7 @@ func addBook(c *gin.Context) {
 
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
-	for i:=0;i<len(bookshelf);i++ {
+	for i := 0; i < len(bookshelf); i++ {
 		if bookshelf[i].ID == id {
 			c.IndentedJSON(http.StatusOK, bookshelf[i])
 			bookshelf = append(bookshelf[:i], bookshelf[i+1:]...)
