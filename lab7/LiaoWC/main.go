@@ -13,7 +13,6 @@ type Book struct {
 	PAGES string `json:"pages"`
 }
 
-
 var bookshelf = []Book{
 	// init data
 	{ID: "1", NAME: "Blue Bird", PAGES: "500"},
@@ -22,6 +21,7 @@ var bookshelf = []Book{
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, bookshelf)
 }
+
 func getBook(c *gin.Context) {
 	for _, book := range bookshelf {
 		if book.ID == c.Param("id") {
@@ -34,10 +34,7 @@ func getBook(c *gin.Context) {
 }
 func addBook(c *gin.Context) {
 	var submit Book
-	if err := c.ShouldBindJSON(&submit); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.ShouldBindJSON(&submit)
 	for _, book := range bookshelf {
 		if book.ID == submit.ID {
 			c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
@@ -48,7 +45,6 @@ func addBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, submit)
 	return
 }
-
 
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
@@ -64,10 +60,7 @@ func deleteBook(c *gin.Context) {
 }
 func updateBook(c *gin.Context) {
 	var submit Book
-	if err := c.ShouldBindJSON(&submit); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	c.ShouldBindJSON(&submit)
 	id := c.Param("id")
 	for i := 0; i < len(bookshelf); i++ {
 		if bookshelf[i].ID == id {
