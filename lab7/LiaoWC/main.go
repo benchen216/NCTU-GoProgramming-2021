@@ -47,6 +47,7 @@ func addBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, submit)
 	return
 }
+
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	for i:=0;i<len(bookshelf);i++ {
