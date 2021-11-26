@@ -48,6 +48,7 @@ func addBook(c *gin.Context) {
 	return
 }
 
+
 func deleteBook(c *gin.Context) {
 	id := c.Param("id")
 	for i := 0; i < len(bookshelf); i++ {
