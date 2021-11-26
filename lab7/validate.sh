@@ -9,6 +9,12 @@ cd $tmp_dir
 
 #rm -rf *
 cp $solution_path/app_url.txt .
+
+# No idea why my original bookshelf always has 2 books when running GitHub workflow but this doesn't happen
+# when running at local.
+curl -X DELETE `cat app_url.txt`bookshelf/2
+
+
 ans=$(cat <<-END
 [
     {
