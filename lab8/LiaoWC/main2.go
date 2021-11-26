@@ -165,7 +165,6 @@ func ResetDBTable(db *sql.DB) {
 
 func main() {
 
-
 	if err := godotenv.Load(); err != nil {
 		//Do nothing
 	}
