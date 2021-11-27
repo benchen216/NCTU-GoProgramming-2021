@@ -53,11 +53,12 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		return_results := return_rows(rows)
 		if len(return_results) == 0 {
 			c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
+			return
 		}
 
 		str := "["
 		for i := 0; i < len(return_results); i++ {
-			tmp_str := " { \"id\": \"" + strconv.Itoa(return_results[i].ID) + "\", \"name\": \"" + return_results[i].NAME + "\", \"pages\": \"" + strconv.Itoa(return_results[i].PAGES) + "\" }"
+			tmp_str := " { \"id\": " + strconv.Itoa(return_results[i].ID) + ", \"name\": \"" + return_results[i].NAME + "\", \"pages\": \"" + strconv.Itoa(return_results[i].PAGES) + "\" }"
 			str = str + tmp_str
 		}
 
@@ -82,7 +83,7 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 		}
 
 		bookshelf := return_results[0]
-		tmp_str := "{ \"id\": \"" + strconv.Itoa(bookshelf.ID) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		tmp_str := "{ \"id\": " + strconv.Itoa(bookshelf.ID) + ", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
 		c.String(http.StatusOK, tmp_str)
 	}
 }
@@ -112,7 +113,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 		checkErr(err)
 
 		bookshelf := book_from_json
-		tmp_str := "{ \"id\": \"" + strconv.Itoa(lastInsertId) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		tmp_str := "{ \"id\": " + strconv.Itoa(lastInsertId) + ", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
 		c.String(http.StatusOK, tmp_str)
 	}
 }
@@ -142,7 +143,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 		checkErr(err)
 
 		bookshelf := book_from_json
-		tmp_str := "{ \"id\": \"" + strconv.Itoa(inVar) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		tmp_str := "{ \"id\": " + strconv.Itoa(inVar) + ", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
 		c.String(http.StatusOK, tmp_str)
 	}
 }
@@ -169,7 +170,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 		checkErr(err)
 
 		bookshelf := return_results[0]
-		tmp_str := "{ \"id\": \"" + strconv.Itoa(bookshelf.ID) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		tmp_str := "{ \"id\": " + strconv.Itoa(bookshelf.ID) + ", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
 		c.String(http.StatusOK, tmp_str)
 	}
 }
