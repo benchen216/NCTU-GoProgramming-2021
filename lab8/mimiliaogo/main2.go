@@ -111,9 +111,6 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, _ :=  strconv.Atoi(c.Param("id"))
 		var deletedBook Book
-		if err := c.BindJSON(&deletedBook); err != nil {
-			c.IndentedJSON(http.StatusBadRequest, "error binding")
-		}
 		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING *", id).Scan(&deletedBook.Id, &deletedBook.Name, &deletedBook.Pages)
 		if err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{
