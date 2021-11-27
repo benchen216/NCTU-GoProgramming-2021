@@ -29,4 +29,4 @@
   go-tests = true
   unused-packages = true
 [metadata.heroku]
-  root-package = "main"
+  root-package = "main2"

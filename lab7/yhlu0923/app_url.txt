@@ -1,1 +1,1 @@
-https://golang-lab7.herokuapp.com/
+https://my-golang-lab.herokuapp.com/

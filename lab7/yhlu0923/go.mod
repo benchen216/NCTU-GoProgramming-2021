@@ -1,8 +1,12 @@
-module lab-copy/lab7
+module lab-copy/lab8
 
 go 1.17
 
-require github.com/gin-gonic/gin v1.7.4
+require (
+	github.com/gin-gonic/gin v1.7.4
+	github.com/joho/godotenv v1.4.0
+	github.com/lib/pq v1.10.4
+)
 
 require (
 	github.com/gin-contrib/sse v0.1.0 // indirect
