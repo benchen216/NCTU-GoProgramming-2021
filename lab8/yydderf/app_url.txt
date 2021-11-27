@@ -1,1 +1,1 @@
-https://yydderf-golang-lab8.herokuapp.com/
+https://yydderf-lab8.herokuapp.com/
