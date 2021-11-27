@@ -50,13 +50,19 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 
 		// [TODO] scan the data one by one
 		defer rows.Close()
-
 		return_results := return_rows(rows)
 		if len(return_results) == 0 {
-			// c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
+			c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
 		}
-		c.IndentedJSON(http.StatusOK, return_results)
+
+		str := "["
+		for i := 0; i < len(return_results); i++ {
+			tmp_str := " { \"id\": \"" + strconv.Itoa(return_results[i].ID) + "\", \"name\": \"" + return_results[i].NAME + "\", \"pages\": \"" + strconv.Itoa(return_results[i].PAGES) + "\" }"
+			str = str + tmp_str
+		}
+
+		str = str + " ]"
+		c.String(http.StatusOK, str)
 	}
 }
 func getBook(db *sql.DB) gin.HandlerFunc {
@@ -69,13 +75,15 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 		checkErr(err)
 
 		defer rows.Close()
-
 		return_results := return_rows(rows)
 		if len(return_results) == 0 {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
+			c.String(http.StatusOK, "{ \"message\": \"book not found\" }")
 			return
 		}
-		c.IndentedJSON(http.StatusOK, return_results[0])
+
+		bookshelf := return_results[0]
+		tmp_str := "{ \"id\": \"" + strconv.Itoa(bookshelf.ID) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		c.String(http.StatusOK, tmp_str)
 	}
 }
 
@@ -87,20 +95,25 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		// duplicate book
-		rows, err := db.Query("SELECT * FROM bookshelf WHERE id=$1", book_from_json.ID)
-		checkErr(err)
-		defer rows.Close()
-		return_results := return_rows(rows)
-		if len(return_results) != 0 {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
-			return
-		}
+		// // duplicate book
+		// rows, err := db.Query("SELECT * FROM bookshelf WHERE id=$1", book_from_json.ID)
+		// checkErr(err)
+		// defer rows.Close()
+		// return_results := return_rows(rows)
+		// if len(return_results) != 0 {
+		// 	c.String(http.StatusOK, "{ \"message\": \"duplicate book id\" }")
+		// 	return
+		// }
 		// add book
-		rows, err = db.Query("INSERT INTO bookshelf (id, name, pages) VALUES ($1, $2, $3)", book_from_json.ID, book_from_json.NAME, book_from_json.PAGES)
+
+		lastInsertId := 0
+		err := db.QueryRow("INSERT INTO bookshelf (name, pages) VALUES ($1, $2) RETURNING id", book_from_json.NAME, book_from_json.PAGES).Scan(&lastInsertId)
+		// rows, err = db.Query("INSERT INTO bookshelf (name, pages) VALUES ($1, $2)", book_from_json.NAME, book_from_json.PAGES)
 		checkErr(err)
-		defer rows.Close()
-		c.IndentedJSON(http.StatusOK, book_from_json)
+
+		bookshelf := book_from_json
+		tmp_str := "{ \"id\": \"" + strconv.Itoa(lastInsertId) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		c.String(http.StatusOK, tmp_str)
 	}
 }
 
@@ -112,8 +125,11 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		id := c.Param("id")
+		inVar, _ := strconv.Atoi(id)
 		// duplicate book
-		rows, err := db.Query("SELECT * FROM bookshelf WHERE id=$1", book_from_json.ID)
+		rows, err := db.Query("SELECT * FROM bookshelf WHERE id=$1", inVar)
 		checkErr(err)
 		defer rows.Close()
 		return_results := return_rows(rows)
@@ -122,9 +138,12 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		_, err = db.Query("UPDATE bookshelf SET name=$2, pages=$3 WHERE id=$1", book_from_json.ID, book_from_json.NAME, book_from_json.PAGES)
+		_, err = db.Query("UPDATE bookshelf SET name=$2, pages=$3 WHERE id=$1", inVar, book_from_json.NAME, book_from_json.PAGES)
 		checkErr(err)
-		c.IndentedJSON(http.StatusOK, book_from_json)
+
+		bookshelf := book_from_json
+		tmp_str := "{ \"id\": \"" + strconv.Itoa(inVar) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		c.String(http.StatusOK, tmp_str)
 	}
 }
 
@@ -146,9 +165,12 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		c.IndentedJSON(http.StatusOK, return_results[0])
-		_, err = db.Query("DELETE FROM bookshelf WHERE ID=$1", inVar)
+		_, err = db.Query("DELETE FROM bookshelf WHERE id=$1", inVar)
 		checkErr(err)
+
+		bookshelf := return_results[0]
+		tmp_str := "{ \"id\": \"" + strconv.Itoa(bookshelf.ID) + "\", \"name\": \"" + bookshelf.NAME + "\", \"pages\": \"" + strconv.Itoa(bookshelf.PAGES) + "\" }"
+		c.String(http.StatusOK, tmp_str)
 	}
 }
 
