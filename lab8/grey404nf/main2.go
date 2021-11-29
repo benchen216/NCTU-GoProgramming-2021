@@ -72,7 +72,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 		id:=c.Param("id")
 		var b Book
 		c.BindJSON(&b)
-		row := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$1 RETURNING id",b.Name, b.Pages, id)
+		row := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETURNING id",b.Name, b.Pages, id)
 		row.Scan(&b.Id)
 		
 		if b.Id==0 {
