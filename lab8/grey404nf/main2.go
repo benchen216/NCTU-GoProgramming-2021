@@ -33,7 +33,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 			rows.Scan(&b.Id ,&b.Name ,&b.Pages)
 			bookshelf=append(bookshelf, b)
 		}
-
+		
 		//[TODO]send all data or error handling
 		if len(bookshelf)==0 {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
