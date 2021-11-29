@@ -34,6 +34,10 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 			rows.Scan(&id ,&name ,&pages)
 			bookshelf_list = append(bookshelf_list, Book{id, name, pages})
 		}
+		if len(bookshelf_list) == 0 {
+			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+			return
+		}
 		//[TODO]send all data or error handling
 		c.IndentedJSON(200, bookshelf_list)
 	}
