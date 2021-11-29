@@ -6,16 +6,25 @@ import (
 	"os"
 	"fmt"
 	"net/http"
-
+	"strconv"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 type Book struct {
-	ID    string `json:"id"`
+	ID    int `json:"id"`
 	Name  string `json:"name"`
 	Pages string `json:"pages"`
+}
+
+func sti(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		log.Fatal("Convert string to int error")
+		return -1
+	}
+	return i
 }
 
 func getBooks(db *sql.DB) gin.HandlerFunc {
@@ -32,7 +41,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		var id, name, pages string
 		for rows.Next() {
 			rows.Scan(&id ,&name ,&pages)
-			bookshelf_list = append(bookshelf_list, Book{id, name, pages})
+			bookshelf_list = append(bookshelf_list, Book{sti(id), name, pages})
 		}
 		if len(bookshelf_list) == 0 {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
@@ -53,7 +62,7 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, Book{id, name, pages})
+		c.IndentedJSON(http.StatusOK, Book{sti(id), name, pages})
 	}
 }
 
@@ -81,7 +90,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Unknown error"})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, Book{id, name, pages})
+		c.IndentedJSON(http.StatusOK, Book{sti(id), name, pages})
 	}
 }
 
@@ -108,7 +117,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "Unknown error"})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, Book{id, name, pages})
+		c.IndentedJSON(http.StatusOK, Book{sti(id), name, pages})
 	}
 }
 
@@ -123,7 +132,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 			return
 		}
-		c.IndentedJSON(http.StatusOK, Book{id, name, pages})
+		c.IndentedJSON(http.StatusOK, Book{sti(id), name, pages})
 	}
 }
 
