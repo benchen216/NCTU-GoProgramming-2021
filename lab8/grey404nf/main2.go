@@ -121,7 +121,7 @@ func main() {
 		log.Fatalf("Error opening database: %q", err)
 	}
 	ResetDBTable(db)
-
+	
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks(db))
@@ -130,7 +130,7 @@ func main() {
 	r.POST("/bookshelf", addBook(db))
 	r.PUT("/bookshelf/:id", updateBook(db))
 	r.DELETE("/bookshelf/:id", deleteBook(db))
-
-
+	
+	
 	r.Run(":" + port)
 }
