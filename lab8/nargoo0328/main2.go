@@ -14,7 +14,7 @@ import (
 type Book struct {
 	// write your own struct
 	// id's type is int
-	ID string `json:"id"`
+	ID int `json:"id"`
 	NAME string `json:"name"`
 	PAGES string `json:"pages"`
 }
