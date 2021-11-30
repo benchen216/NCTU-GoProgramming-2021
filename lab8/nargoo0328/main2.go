@@ -115,13 +115,11 @@ func main() {
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
 	}
-
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatalf("Error opening database: %q", err)
 	}
 	ResetDBTable(db)
-
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks(db))
