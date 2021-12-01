@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export PATH=$PATH:/usr/bin/go/bin
 test_path="${BASH_SOURCE[0]}"
 solution_path="$(realpath .)"
 tmp_dir=$(mktemp -d -t lab9-XXXXXXXXXX)
