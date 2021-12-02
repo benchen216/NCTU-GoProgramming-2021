@@ -66,7 +66,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		db.QueryRow("INSERT INTO bookshelf VALUES (DEFAULT, $1, $2)", book.Name, book.Pages)
+		db.QueryRow("INSERT INTO bookshelf VALUES ($1, $2, $3)", book.Id, book.Name, book.Pages)
 
 		c.IndentedJSON(http.StatusOK, book)
 	}
@@ -104,7 +104,7 @@ func ResetDBTable(db *sql.DB) {
 	if _, err := db.Exec("DROP TABLE IF EXISTS bookshelf"); err != nil {
 		return
 	}
-	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS bookshelf (id SERIAL PRIMARY KEY, name VARCHAR(100), pages VARCHAR(10))"); err != nil {
+	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS bookshelf (id INT, name VARCHAR(100), pages VARCHAR(10))"); err != nil {
 		return
 	}
 }
