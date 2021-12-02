@@ -66,7 +66,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		db.QueryRow("INSERT INTO bookshelf VALUES ($1, $2, $3)", book.Id, book.Name, book.Pages)
+		db.QueryRow("INSERT INTO bookshelf VALUES (DEFAULT, $1, $2)", book.Name, book.Pages)
 
 		c.IndentedJSON(http.StatusOK, book)
 	}
