@@ -42,9 +42,9 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		index := c.Param("id")
+		id := c.Param("id")
 		book := Book{}
-		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", index).Scan(&book.Id, &book.Name, &book.Pages)
+		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", id).Scan(&book.Id, &book.Name, &book.Pages)
 
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
@@ -65,10 +65,11 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 
 func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		id := c.Param("id")
 		var book Book
 		c.BindJSON(&book)
 
-		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETRUNING id", book.Name, book.Pages, book.Id).Scan(&book.Id)
+		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETRUNING id", book.Name, book.Pages, id).Scan(&book.Id)
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
 			return
@@ -79,10 +80,11 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 
 func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		id := c.Param("id")
 		var book Book
 		c.BindJSON(&book)
 
-		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETRUNING id", book.Id).Scan(&book.Id)
+		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETRUNING id", id).Scan(&book.Id)
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
 			return
