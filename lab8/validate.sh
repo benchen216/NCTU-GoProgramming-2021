@@ -7,8 +7,6 @@ tmp_dir=$(mktemp -d -t lab8-XXXXXXXXXX)
 echo "working directory: $tmp_dir"
 cd $tmp_dir
 
-curl -o result.txt `cat app_url.txt`bookshelf/reset
-
 #rm -rf *
 cp $solution_path/app_url.txt .
 ans=$(cat <<-END
@@ -17,6 +15,7 @@ ans=$(cat <<-END
 }
 END
 )
+curl -o result.txt `cat app_url.txt`bookshelf/reset > /dev/null 2>&1
 curl -o result.txt `cat app_url.txt`bookshelf
 echo $ans > ans.txt
 DIFF=$(diff <(jq -S . result.txt) <(jq -S . ans.txt))
