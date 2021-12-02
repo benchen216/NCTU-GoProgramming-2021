@@ -68,7 +68,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 		var book Book
 		c.BindJSON(&book)
 
-		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETRUNING *", book.Name, book.Pages, book.Id).Scan()
+		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETRUNING id", book.Name, book.Pages, book.Id).Scan(&book.Id)
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
 			return
@@ -82,7 +82,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 		var book Book
 		c.BindJSON(&book)
 
-		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETRUNING *", book.Id).Scan()
+		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETRUNING id", book.Id).Scan(&book.Id)
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
 			return
