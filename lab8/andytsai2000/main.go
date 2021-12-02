@@ -119,10 +119,10 @@ func main() {
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks(db))
 	// [TODO] other method
-	r.GET("/bookshelf/:Id", getBook(db))
+	r.GET("/bookshelf/:id", getBook(db))
 	r.POST("/bookshelf", addBook(db))
-	r.DELETE("/bookshelf/:Id", deleteBook(db))
-	r.PUT("/bookshelf/:Id", updateBook(db))
+	r.DELETE("/bookshelf/:id", deleteBook(db))
+	r.PUT("/bookshelf/:id", updateBook(db))
 
 	r.Run(":" + port)
 }
