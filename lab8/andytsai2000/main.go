@@ -58,16 +58,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var book Book
 		c.BindJSON(&book)
-
-		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", book.Id).Scan()
-
-		if err == nil {
-			c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "duplicate book id"})
-			return
-		}
-
 		db.QueryRow("INSERT INTO bookshelf VALUES (DEFAULT,$1,$2) RETURNING id", book.Name, book.Pages).Scan(&book.Id)
-
 		c.IndentedJSON(http.StatusOK, book)
 	}
 }
