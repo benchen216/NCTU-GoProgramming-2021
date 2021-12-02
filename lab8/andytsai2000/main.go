@@ -103,6 +103,13 @@ func ResetDBTable(db *sql.DB) {
 	}
 }
 
+func reset(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ResetDBTable(db)
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "reset complete !"})
+	}
+}
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		//Do nothing
@@ -126,6 +133,9 @@ func main() {
 	r.POST("/bookshelf", addBook(db))
 	r.DELETE("/bookshelf/:id", deleteBook(db))
 	r.PUT("/bookshelf/:id", updateBook(db))
+
+	//reset
+	r.GET("/bookshelf/reset", reset(db))
 
 	r.Run(":" + port)
 }
