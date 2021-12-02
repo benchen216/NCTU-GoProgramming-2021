@@ -60,7 +60,7 @@ func (System) CountCyberWarriors(articles PTTArticles){
 	count := make(map[string]CyberWarrior)
 	ip_list := []string{}
 	for _,article := range articles.Articles{
-		if article.Ip=="None"{
+		if article.Ip=="None"|| article.Article.Author==""{
 			continue
 		}
 		cw_value,ok := count[article.Ip]
