@@ -42,7 +42,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		index := c.Param("index")
+		index := c.Param("id")
 		book := Book{}
 		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", index).Scan(&book.Id, &book.Name, &book.Pages)
 
