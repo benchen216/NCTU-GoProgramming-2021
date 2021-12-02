@@ -41,11 +41,11 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 				res := "[ "
 				for index, element := range Books {
 					if index != (len(Books)-1) {
-						res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
+						res = res + `{ "id": ` + strconv.Itoa(element.id) + `, ` +
 							`"name": "` + element.name + `", ` +
 							`"pages": "` + element.pages + `" },`
 						} else {
-						res = res + `{ "id": "` + strconv.Itoa(element.id) + `", ` +
+						res = res + `{ "id": ` + strconv.Itoa(element.id) + `, ` +
 							`"name": "` + element.name + `", ` +
 							`"pages": "` + element.pages + `" }`
 						}
@@ -87,7 +87,7 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 			})
 		} else{
 			c.IndentedJSON(http.StatusOK, gin.H{
-				"id": strconv.Itoa(book.id),
+				"id": book.id,
 				"name": book.name,
 				"pages": book.pages,
 			})
@@ -122,7 +122,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 		}
 		// response message
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"id": strconv.Itoa(book.id),
+			"id": book.id,
 			"name": book.name,
 			"pages": book.pages,
 		})
@@ -164,7 +164,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 		} else {
 			//send the updated book information
 			c.IndentedJSON(http.StatusOK, gin.H{
-				"id": strconv.Itoa(book.id),
+				"id": book.id,
 				"name": book.name,
 				"pages": book.pages,
 			})
@@ -195,7 +195,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 		} else {
 			//send the removing book information
 			c.IndentedJSON(http.StatusOK, gin.H{
-				"id": strconv.Itoa(book.id),
+				"id": book.id,
 				"name": book.name,
 				"pages": book.pages,
 			})
