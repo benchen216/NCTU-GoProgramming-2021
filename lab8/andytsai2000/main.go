@@ -18,8 +18,17 @@ type Book struct {
 	Pages string `json:"pages"`
 }
 
+var RUN = false
+
 func getBooks(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		/*
+			if !RUN {
+				ResetDBTable(db)
+				RUN = true
+			}
+		*/
+
 		/* [TODO] get all books data */
 		rows, _ := db.Query("SELECT * FROM bookshelf")
 
