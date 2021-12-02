@@ -75,7 +75,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 			c.IndentedJSON(http.StatusOK, book)
 			return
 		}
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found", "error": err})
 	}
 }
 
