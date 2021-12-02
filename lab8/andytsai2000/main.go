@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -65,7 +66,7 @@ func addBook(db *sql.DB) gin.HandlerFunc {
 
 func updateBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+		id, _ := strconv.Atoi(c.Param("id"))
 		var book Book
 		c.BindJSON(&book)
 
@@ -80,7 +81,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 
 func deleteBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.Param("id")
+		id, _ := strconv.Atoi(c.Param("id"))
 		var book Book
 		c.BindJSON(&book)
 
