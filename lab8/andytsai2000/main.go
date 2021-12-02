@@ -85,7 +85,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 		var book Book
 		c.BindJSON(&book)
 
-		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING id", id).Scan(&book.Id)
+		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING *", id).Scan(&book.Id, &book.Name, &book.Pages)
 		if err == nil {
 			c.IndentedJSON(http.StatusOK, book)
 			return
