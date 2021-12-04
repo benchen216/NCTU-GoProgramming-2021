@@ -47,11 +47,13 @@ func (System) CountCyberWarriors(ptt_articles PTTArticles) {
 	cyber_num, _ := strconv.Atoi(os.Args[1])
 	var data = map[string]map[string]bool{}
 	for _, v := range ptt_articles.Articles {
-		if _, ok := data[v.Ip]; ok { 
-			data[v.Ip][v.Author] = true
-		} else {
-			data[v.Ip] = make(map[string]bool)
-			data[v.Ip][v.Author] = true
+		if v.Author != "" {
+			if _, ok := data[v.Ip]; ok { 
+				data[v.Ip][v.Author] = true
+			} else {
+				data[v.Ip] = make(map[string]bool)
+				data[v.Ip][v.Author] = true
+			}
 		}
 	}
 	// sort ip
