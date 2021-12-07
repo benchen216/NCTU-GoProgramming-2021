@@ -86,7 +86,10 @@ func (s System) CountCyberWarriors(Articles PTTArticles) {
 
 	for i := range s.PTTCyberWarriors {
 		accountsLen := len(s.PTTCyberWarriors[i].Accounts)
+
 		if accountsLen > IP_USER_NUM {
+			sort.Strings(s.PTTCyberWarriors[i].Accounts)
+
 			fmt.Printf("%+v, total: %+v\n", s.PTTCyberWarriors[i].Ip, accountsLen)
 			fmt.Print("[", strings.Join(s.PTTCyberWarriors[i].Accounts, ", "), "]\n")
 		}
