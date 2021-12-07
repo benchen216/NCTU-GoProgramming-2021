@@ -52,7 +52,7 @@ func (System) CountCyberWarriors(ptt PTTArticles) {
 	var ips []string
 	
 	for i:=0;i<len(ptt.Articles);i++ {
-		if ptt.Articles[i].Ip!="None" {
+		if ptt.Articles[i].Ip!="None" && ptt.Articles[i].Author!="" {
 			tmp:=ipM[ptt.Articles[i].Ip]
 			
 			flag:=0
