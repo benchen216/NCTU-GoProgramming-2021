@@ -51,7 +51,7 @@ func (System) CountCyberWarriors(ptt PTTArticles) {
 	ip_list := make(map[string]data)
 	ans := []string{}
 	for _, post := range ptt.Articles {
-		if post.Ip == "None" {
+		if post.Ip == "None" || post.Author == "" {
 			continue
 		}
 		usr := ip_list[post.Ip]

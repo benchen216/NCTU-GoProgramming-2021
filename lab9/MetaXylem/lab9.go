@@ -8,7 +8,7 @@ import (
 
 func main() {
 	cwSystem := cw.System{}
-	fmt.Println(cwSystem)
+	fmt.Print(cwSystem)
 
 
 	PTTArticles := cwSystem.LoadPTT("./data/ptt.json")
