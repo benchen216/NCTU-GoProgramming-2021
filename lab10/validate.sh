@@ -2,18 +2,18 @@
 
 test_path="${BASH_SOURCE[0]}"
 solution_path="$(realpath .)"
-tmp_dir=$(mktemp -d -t lab3-XXXXXXXXXX)
+tmp_dir=$(mktemp -d -t lab10-XXXXXXXXXX)
 
 echo "working directory: $tmp_dir"
 cd $tmp_dir
 
 #rm -rf *
-cp $solution_path/lab3.go .
-result=$(go run lab3.go 2>&1) ; ret=$?
+cp $solution_path/lab10.go .
+result=$(go run lab10.go 2>&1) ; ret=$?
 if [ $ret -ne 0 ] ; then
-  echo "\"go run lab3.go\" fails ; NO POINT"
+  echo "\"go run lab10.go\" fails ; NO POINT"
 else
-  echo "\"go run lab3.go\" output: \"$result\""
+  echo "\"go run lab10.go\" output: \"$result\""
   ans=$(python3 -c 'print("沒夾到喔！\n"*50)')
   if [ "$ans" != "$result" ] ; then
     echo "wrong answer ; NO POINT"
