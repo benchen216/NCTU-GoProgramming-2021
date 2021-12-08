@@ -11,16 +11,16 @@ var handStatus string
 var mux sync.Mutex
 
 func hand() {
-	//mux.Lock()
+	mux.Lock()
 	handStatus = "in"
 	time.Sleep(time.Millisecond * 200)
 	handStatus = "out"
 	wg.Done()
-	//mux.Unlock()
+	mux.Unlock()
 }
 
 func door() {
-	//mux.Lock()
+	mux.Lock()
 	doorStatus = "close"
 	time.Sleep(time.Millisecond * 200)
 	if handStatus == "in" {
@@ -30,7 +30,7 @@ func door() {
 	}
 	doorStatus = "open"
 	wg.Done()
-	//mux.Unlock()
+	mux.Unlock()
 }
 
 var wg sync.WaitGroup
