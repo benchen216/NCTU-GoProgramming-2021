@@ -1,0 +1,52 @@
+name: lab10
+
+on:
+  push:
+    branches:
+      - '**lab10**'
+  pull_request:
+    branches:
+      - lab10
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+
+      fail-fast: false
+
+    steps:
+
+      - name: setup
+        run: |
+          echo "${HOME}/opt/conda/bin" >> $GITHUB_PATH
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_REF
+          echo ${{ github.event.pull_request.head.ref }}
+          echo ${{ github.event.pull_request.head }}
+          echo ${{ github.event.pull_request.user.login }}
+          echo ${{ github.event.pull_request.head.user.login }}
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: dependency (ubuntu)
+        if: matrix.os != 'macos-latest'
+        run: |
+          sudo apt update
+          sudo apt install wget
+          wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
+          sudo rm -rf /usr/bin/go
+          sudo tar -C /usr/bin -xzf go1.17.1.linux-amd64.tar.gz
+          export PATH=$PATH:/usr/bin/go/bin
+      - name: grade
+        run: |
+          export PATH=$PATH:/usr/bin/go/bin
+          username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
+          echo "cd lab10/$username"
+          cd lab10/$username
+          bash ../validate.sh
