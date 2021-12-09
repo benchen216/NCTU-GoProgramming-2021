@@ -1,20 +1,15 @@
 package main
 
 import (
-	"fmt"
-
-	// [TODO] set your module name, go mod init my_module->MOUDULE_NAME
-	"<MOUDULE_NAME>/cw"
+	"NCTU-GoProgramming-2021/lab9/andytsai2000/cw"
 )
 
 func main() {
-	cwSystem := cw.System{}
+	cwSystem := cw.New()
 
 	PTTArticles := cwSystem.LoadPTT("./data/ptt.json")
-	fmt.Printf("%+v\n", PTTArticles.Articles[0])
+	cwSystem.CountCyberWarriors(PTTArticles)
 
 	FBArticles := cwSystem.LoadFB("./data/fb.json")
-	fmt.Printf("%+v\n", FBArticles.Articles[0])
-	
-	fmt.Println(cwSystem)
+	cwSystem.CountKeyWord(PTTArticles, FBArticles)
 }
