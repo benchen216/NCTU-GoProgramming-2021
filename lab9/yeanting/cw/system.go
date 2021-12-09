@@ -48,6 +48,7 @@ func (sys System) String() string {
 	for _, ele := range rv2 {
 		rv += ele
 	}
+	rv = strings.TrimSuffix(rv, "\n")
 	return rv
 }
 
@@ -109,7 +110,7 @@ func (sys System) CountKeyWord() []string {
 			}
 		}
 		for key, val := range a_cnt {
-			if val > sys.KEYWORD_COUNT {
+			if val >= sys.KEYWORD_COUNT {
 				sys.Keyw_count[ele] = append(sys.Keyw_count[ele], key)
 			}
 		}
