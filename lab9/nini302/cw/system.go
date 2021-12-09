@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -21,8 +22,21 @@ type System struct {
 	// you can add some data type if you like
 }
 
-func (System) String() string {
-	return "There's nothing here."
+func (s System) String() string {
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
+		os.Exit(1)
+	}
+	PTTArticles := s.LoadPTT("./data/ptt.json")
+	FBArticles := s.LoadFB("./data/fb.json")
+
+	userNumber, _ := strconv.Atoi(os.Args[1])
+	keyNumber, _ := strconv.Atoi(os.Args[2])
+
+	s.CountCyberWarriors(PTTArticles, userNumber)
+	s.CountKeyWord(PTTArticles, FBArticles, keyNumber)
+
+	return ""
 }
 
 func (System) LoadPTT(url string) PTTArticles {
