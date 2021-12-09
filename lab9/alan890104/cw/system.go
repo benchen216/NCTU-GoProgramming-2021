@@ -10,19 +10,14 @@ import (
 	"strings"
 )
 
-type System struct {
-	// you can add some data type if you like
-}
-
 func checkErr(e error) {
 	if e != nil {
 		fmt.Println(e.Error())
 	}
 }
 
-type pair struct {
-	Ip     string
-	Author string
+type System struct {
+	// you can add some data type if you like
 }
 
 func (s System) String() string {
@@ -33,11 +28,11 @@ func (s System) String() string {
 	PTTArticles := s.LoadPTT("./data/ptt.json")
 	FBArticles := s.LoadFB("./data/fb.json")
 
-	usr_num, _ := strconv.Atoi(os.Args[1])
-	key_num, _ := strconv.Atoi(os.Args[2])
+	userNumber, _ := strconv.Atoi(os.Args[1])
+	keyNumber, _ := strconv.Atoi(os.Args[2])
 
-	s.CountCyberWarriors(PTTArticles, usr_num)
-	s.CountKeyWord(PTTArticles, FBArticles, key_num)
+	s.CountCyberWarriors(PTTArticles, userNumber)
+	s.CountKeyWord(PTTArticles, FBArticles, keyNumber)
 
 	return ""
 }
@@ -56,55 +51,60 @@ func (System) LoadFB(url string) FBArticles {
 	return articles
 }
 
-func (System) CountCyberWarriors(ptt PTTArticles, usr_num int) {
-	mymap := make(map[pair]int)
+type user struct {
+	Ip     string
+	Author string
+}
+
+func (System) CountCyberWarriors(ptt PTTArticles, userNumber int) {
+	countUser := make(map[user]int)
 	for _, d := range ptt.Articles {
-		mymap[pair{d.Ip, d.Author}]++
+		countUser[user{d.Ip, d.Author}]++
 	}
-	mymap_2 := make(map[string][]string)
-	for i, _ := range mymap {
+	AuthorsSameIp := make(map[string][]string)
+	for i, _ := range countUser {
 		if i.Author != "" {
-			mymap_2[i.Ip] = append(mymap_2[i.Ip], i.Author)
+			AuthorsSameIp[i.Ip] = append(AuthorsSameIp[i.Ip], i.Author)
 		}
 	}
-	order := []string{}
-	for i, j := range mymap_2 {
-		if len(j) > usr_num && i != "None" {
-			order = append(order, i)
+	IPs := []string{}
+	for i, j := range AuthorsSameIp {
+		if len(j) > userNumber && i != "None" {
+			IPs = append(IPs, i)
 		}
 	}
-	sort.Strings(order)
-	for _, i := range order {
-		j := mymap_2[i]
-		sort.Strings(j)
-		fmt.Print(i, ", total: ", len(j), "\n")
-		fmt.Print("[", strings.Join(j, ", "), "]")
+	sort.Strings(IPs)
+	for _, ip := range IPs {
+		authors := AuthorsSameIp[ip]
+		sort.Strings(authors)
+		fmt.Print(ip, ", total: ", len(authors), "\n")
+		fmt.Print("[", strings.Join(authors, ", "), "]")
 		fmt.Println("")
 	}
 }
 
-func (s System) CountKeyWord(ptt PTTArticles, fb FBArticles, key_num int) {
-	for _, i := range os.Args[3:] {
-		mymap := make(map[string]int)
+func (s System) CountKeyWord(ptt PTTArticles, fb FBArticles, keyNumber int) {
+	for _, key := range os.Args[3:] {
+		count := make(map[string]int)
 		for _, d := range ptt.Articles {
-			if strings.Contains(d.Article_title, i) {
-				mymap[d.Author]++
+			if strings.Contains(d.Article_title, key) {
+				count[d.Author]++
 			}
 		}
 		for _, d := range fb.Articles {
-			if strings.Contains(d.Article_title, i) {
-				mymap[d.Author]++
+			if strings.Contains(d.Article_title, key) {
+				count[d.Author]++
 			}
 		}
-		names := []string{}
-		for i, j := range mymap {
-			if j > key_num {
-				names = append(names, i)
+		authors := []string{}
+		for key, j := range count {
+			if j > keyNumber {
+				authors = append(authors, key)
 			}
 		}
-		sort.Strings(names)
-		fmt.Print(i, ", total: ", len(names), "\n")
-		fmt.Print("[", strings.Join(names, ", "), "]")
+		sort.Strings(authors)
+		fmt.Print(key, ", total: ", len(authors), "\n")
+		fmt.Print("[", strings.Join(authors, ", "), "]")
 		fmt.Println("")
 	}
 }
