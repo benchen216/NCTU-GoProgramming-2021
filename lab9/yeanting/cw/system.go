@@ -77,7 +77,9 @@ func (sys System) CountCyberWarriors() []string {
 			}
 		}
 		if exist == 0 {
-			sys.IP_count[ele.Ip] = append(sys.IP_count[ele.Ip], ele.Article.Author)
+			if ele.Article.Author != ""{
+				sys.IP_count[ele.Ip] = append(sys.IP_count[ele.Ip], ele.Article.Author)
+			}
 		}
 	}
 	var keys []string
