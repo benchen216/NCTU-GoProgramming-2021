@@ -5,9 +5,14 @@ import (
 
 	// [TODO] set your module name, go mod init my_module->MOUDULE_NAME
 	"nini/cw"
+	"os"
 )
 
 func main() {
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
+		os.Exit(1)
+	}
 	cwSystem := cw.System{}
 
 	PTTArticles := cwSystem.LoadPTT("./data/ptt.json")

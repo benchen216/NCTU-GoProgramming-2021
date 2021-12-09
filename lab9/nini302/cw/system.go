@@ -17,26 +17,11 @@ func checkErr(e error) {
 }
 
 type System struct {
-	Ip     string
-	Author string
 	// you can add some data type if you like
 }
 
-func (s System) String() string {
-	if len(os.Args) < 4 {
-		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
-		os.Exit(1)
-	}
-	PTTArticles := s.LoadPTT("./data/ptt.json")
-	FBArticles := s.LoadFB("./data/fb.json")
-
-	userNumber, _ := strconv.Atoi(os.Args[1])
-	keyNumber, _ := strconv.Atoi(os.Args[2])
-
-	s.CountCyberWarriors(PTTArticles, userNumber)
-	s.CountKeyWord(PTTArticles, FBArticles, keyNumber)
-
-	return ""
+func (System) String() string {
+	return "There's nothing here."
 }
 
 func (System) LoadPTT(url string) PTTArticles {
@@ -53,57 +38,118 @@ func (System) LoadFB(url string) FBArticles {
 	return articles
 }
 
-func (s System) CountCyberWarriors(PTA PTTArticles, usr_num int) {
-	mymap := make(map[System]int)
+type Users struct {
+	n     int
+	users []string
+}
 
-	for _, d := range PTA.Articles {
-		mymap[System{d.Ip, d.Author}]++
-	}
-	my_map := make(map[string][]string)
-	for i, _ := range mymap {
-		if i.Author != "" {
-			my_map[i.Ip] = append(my_map[i.Ip], i.Author)
+func (System) CountCyberWarriors(ptt PTTArticles) {
+	n, _ := strconv.Atoi(os.Args[1])
+	ipM := make(map[string]Users)
+	var ips []string
+
+	for i := 0; i < len(ptt.Articles); i++ {
+		if ptt.Articles[i].Ip != "None" && ptt.Articles[i].Author != "" {
+			tmp := ipM[ptt.Articles[i].Ip]
+
+			flag := 0
+			for j := 0; j < tmp.n; j++ {
+				if ptt.Articles[i].Author == tmp.users[j] {
+					flag = 1
+					break
+				}
+			}
+
+			if flag == 0 {
+				tmp.n++
+				tmp.users = append(tmp.users, ptt.Articles[i].Author)
+				ipM[ptt.Articles[i].Ip] = tmp
+
+				if tmp.n == n+1 {
+					ips = append(ips, ptt.Articles[i].Ip)
+				}
+			}
 		}
 	}
-	order := []string{}
-	for i, j := range my_map {
-		if len(j) > usr_num && i != "None" {
-			order = append(order, i)
+
+	sort.Strings(ips)
+
+	for i := 0; i < len(ips); i++ {
+		tmp := ipM[ips[i]]
+		fmt.Printf("%s, total: %d\n", ips[i], tmp.n)
+		sort.Strings(tmp.users)
+		fmt.Printf("[")
+		for j := 0; j < len(tmp.users); j++ {
+			if j != 0 {
+				fmt.Printf(", ")
+			}
+			fmt.Printf("%s", tmp.users[j])
 		}
-	}
-	sort.Strings(order)
-	for _, i := range order {
-		j := my_map[i]
-		sort.Strings(j)
-		fmt.Print(i, ", total: ", len(j), "\n")
-		fmt.Print("[", strings.Join(j, ", "), "]")
-		fmt.Println("")
+		fmt.Printf("]\n")
 	}
 }
 
-func (s System) CountKeyWord(PTA PTTArticles, FB FBArticles, key_num int) {
-	for _, i := range os.Args[3:] {
-		mymap := make(map[string]int)
-		for _, e := range PTA.Articles {
-			if strings.Contains(e.Article_title, i) {
-				mymap[e.Author]++
-			}
-		}
-		for _, e := range FB.Articles {
-			if strings.Contains(e.Article_title, i) {
-				mymap[e.Author]++
-			}
-		}
-		names := []string{}
-		for i, j := range mymap {
-			if j > key_num {
-				names = append(names, i)
-			}
-		}
-		sort.Strings(names)
-		fmt.Print(i, ",total:", len(names), "\n")
-		fmt.Print("[", strings.Join(names, ","), "]")
-		fmt.Println("")
+func (System) CountKeyWord(ptt PTTArticles, fb FBArticles) {
+	n, _ := strconv.Atoi(os.Args[2])
+	keyword := os.Args[3:]
+	authorM := make(map[string]map[string]int)
+	var authors [][]string
+	for i := 0; i < len(keyword); i++ {
+		authors = append(authors, make([]string, 0))
 	}
 
+	for i := 0; i < len(ptt.Articles); i++ {
+		for j := 0; j < len(keyword); j++ {
+			if strings.Contains(ptt.Articles[i].Article_title, keyword[j]) {
+				var tmp []int
+
+				for k := 0; k < len(keyword); k++ {
+					tmp = append(tmp, authorM[ptt.Articles[i].Author][keyword[k]])
+				}
+				tmp[j]++
+				authorM[ptt.Articles[i].Author] = make(map[string]int)
+				for k := 0; k < len(keyword); k++ {
+					authorM[ptt.Articles[i].Author][keyword[k]] = tmp[k]
+				}
+
+				if tmp[j] == n+1 {
+					authors[j] = append(authors[j], ptt.Articles[i].Author)
+				}
+			}
+		}
+	}
+
+	for i := 0; i < len(fb.Articles); i++ {
+		for j := 0; j < len(keyword); j++ {
+			if strings.Contains(fb.Articles[i].Article_title, keyword[j]) {
+				var tmp []int
+
+				for k := 0; k < len(keyword); k++ {
+					tmp = append(tmp, authorM[fb.Articles[i].Author][keyword[k]])
+				}
+				tmp[j]++
+				authorM[fb.Articles[i].Author] = make(map[string]int)
+				for k := 0; k < len(keyword); k++ {
+					authorM[fb.Articles[i].Author][keyword[k]] = tmp[k]
+				}
+
+				if tmp[j] == n+1 {
+					authors[j] = append(authors[j], fb.Articles[i].Author)
+				}
+			}
+		}
+	}
+
+	for i := 0; i < len(keyword); i++ {
+		fmt.Printf("%s, total: %d\n", keyword[i], len(authors[i]))
+		sort.Strings(authors[i])
+		fmt.Printf("[")
+		for j := 0; j < len(authors[i]); j++ {
+			if j != 0 {
+				fmt.Printf(", ")
+			}
+			fmt.Printf("%s", authors[i][j])
+		}
+		fmt.Printf("]\n")
+	}
 }
