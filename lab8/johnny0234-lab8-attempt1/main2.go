@@ -18,10 +18,20 @@ type Book struct {
 	Pages string `json:"pages"`
 }
 
+var RUN = false
+
 func getBooks(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		/*
+			if !RUN {
+				ResetDBTable(db)
+				RUN = true
+			}
+		*/
+
 		/* [TODO] get all books data */
 		rows, _ := db.Query("SELECT * FROM bookshelf")
+
 		/* [TODO] scan the data one by one */
 		bookshelf := []Book{}
 		defer rows.Close()
@@ -30,6 +40,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 			rows.Scan(&book.Id, &book.Name, &book.Pages)
 			bookshelf = append(bookshelf, book)
 		}
+
 		//[TODO]send all data or error handling
 		if len(bookshelf) != 0 {
 			c.IndentedJSON(http.StatusOK, bookshelf)
@@ -38,6 +49,7 @@ func getBooks(db *sql.DB) gin.HandlerFunc {
 		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "book not found"})
 	}
 }
+
 func getBook(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
@@ -100,6 +112,13 @@ func ResetDBTable(db *sql.DB) {
 	}
 }
 
+func reset(db *sql.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ResetDBTable(db)
+		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "reset complete !"})
+	}
+}
+
 func main() {
 	if err := godotenv.Load(); err != nil {
 		//Do nothing
@@ -128,11 +147,4 @@ func main() {
 	r.GET("/bookshelf/reset", reset(db))
 
 	r.Run(":" + port)
-}
-
-func reset(db *sql.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		ResetDBTable(db)
-		c.IndentedJSON(http.StatusNotFound, gin.H{"message": "reset complete !"})
-	}
 }
