@@ -92,7 +92,7 @@ func (System) CountCyberWarriors(ptt PTTArticles) {
 func (System) CountKeyWord(ptt PTTArticles, fb FBArticles) {
 	n, _ := strconv.Atoi(os.Args[2])
 	keyword := os.Args[3:]
-	authorM := make(map[string]map[string]int)
+	Authors := make(map[string]map[string]int)
 	var authors [][]string
 	for i := 0; i < len(keyword); i++ {
 		authors = append(authors, make([]string, 0))
@@ -104,12 +104,12 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles) {
 				var tmp []int
 
 				for k := 0; k < len(keyword); k++ {
-					tmp = append(tmp, authorM[ptt.Articles[i].Author][keyword[k]])
+					tmp = append(tmp, Authors[ptt.Articles[i].Author][keyword[k]])
 				}
 				tmp[j]++
-				authorM[ptt.Articles[i].Author] = make(map[string]int)
+				Authors[ptt.Articles[i].Author] = make(map[string]int)
 				for k := 0; k < len(keyword); k++ {
-					authorM[ptt.Articles[i].Author][keyword[k]] = tmp[k]
+					Authors[ptt.Articles[i].Author][keyword[k]] = tmp[k]
 				}
 
 				if tmp[j] == n+1 {
@@ -125,12 +125,12 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles) {
 				var tmp []int
 
 				for k := 0; k < len(keyword); k++ {
-					tmp = append(tmp, authorM[fb.Articles[i].Author][keyword[k]])
+					tmp = append(tmp, Authors[fb.Articles[i].Author][keyword[k]])
 				}
 				tmp[j]++
-				authorM[fb.Articles[i].Author] = make(map[string]int)
+				Authors[fb.Articles[i].Author] = make(map[string]int)
 				for k := 0; k < len(keyword); k++ {
-					authorM[fb.Articles[i].Author][keyword[k]] = tmp[k]
+					Authors[fb.Articles[i].Author][keyword[k]] = tmp[k]
 				}
 
 				if tmp[j] == n+1 {
