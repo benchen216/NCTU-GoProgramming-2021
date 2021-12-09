@@ -34,11 +34,11 @@ func (System) LoadFB(url string) FBArticles {
 	return articles
 }
 
-/* [TODO]
 func (System) CountCyberWarriors() {
 
 }
 
+/* [TODO]
 func (System) CountKeyWord(){
 
 }
