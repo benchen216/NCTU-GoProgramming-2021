@@ -67,6 +67,7 @@ func (System) LoadFB(url string) FBArticles {
 }
 
 func (sys System) CountCyberWarriors() []string {
+	var rv []string  // return value
 	for _, ele := range sys.PTT.Articles {
 		exist := 0
 		for _, val := range sys.IP_count[ele.Ip] {
@@ -79,17 +80,21 @@ func (sys System) CountCyberWarriors() []string {
 			sys.IP_count[ele.Ip] = append(sys.IP_count[ele.Ip], ele.Article.Author)
 		}
 	}
-	var rv []string  // return value
-	for key, val := range sys.IP_count {
-		if key == "None"{
+	var keys []string
+	for k := range sys.IP_count {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		if k == "None"{
 			continue
 		}
-		if len(val) > sys.IP_USER_NUM {
-			sort.Strings(val)
-			cnt := strconv.Itoa(len(val))
+		if len(sys.IP_count[k]) > sys.IP_USER_NUM {
+			sort.Strings(sys.IP_count[k])
+			cnt := strconv.Itoa(len(sys.IP_count[k]))
 			rv = append(rv, 
-				key + ", total: " + cnt + "\n" + 
-				"[" + strings.Join(val, ", ") + "]" + "\n")
+				k + ", total: " + cnt + "\n" + 
+				"[" + strings.Join(sys.IP_count[k], ", ") + "]" + "\n")
 		}
 	}
 	return rv
