@@ -10,6 +10,8 @@ var doorStatus string
 var handStatus string
 
 func hand() {
+	lock.Lock()
+	defer lock.Unlock()
 	handStatus = "in"
 	time.Sleep(time.Millisecond * 200)
 	handStatus = "out"
@@ -17,6 +19,8 @@ func hand() {
 }
 
 func door() {
+	lock.Lock()
+	defer lock.Unlock()
 	doorStatus = "close"
 	time.Sleep(time.Millisecond * 200)
 	if handStatus == "in" {
@@ -29,6 +33,7 @@ func door() {
 }
 
 var wg sync.WaitGroup
+var lock sync.Mutex
 
 func main() {
 	for i := 0; i < 50; i++ {
