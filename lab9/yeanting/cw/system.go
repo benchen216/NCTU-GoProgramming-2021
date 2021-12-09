@@ -84,7 +84,7 @@ func (sys System) CountCyberWarriors() []string {
 		if key == "None"{
 			continue
 		}
-		if len(val) >= sys.IP_USER_NUM {
+		if len(val) > sys.IP_USER_NUM {
 			sort.Strings(val)
 			cnt := strconv.Itoa(len(val))
 			rv = append(rv, 
@@ -110,7 +110,7 @@ func (sys System) CountKeyWord() []string {
 			}
 		}
 		for key, val := range a_cnt {
-			if val >= sys.KEYWORD_COUNT {
+			if val > sys.KEYWORD_COUNT {
 				sys.Keyw_count[ele] = append(sys.Keyw_count[ele], key)
 			}
 		}
