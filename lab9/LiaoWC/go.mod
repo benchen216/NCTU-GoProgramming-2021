@@ -1,3 +1,3 @@
-module MyLab9
+module kkk
 
 go 1.17

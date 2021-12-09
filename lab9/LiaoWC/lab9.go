@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./cw"
+	"kkk/cw"
 
 	"fmt"
 	"log"
