@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
 
 	"github.com/go-ping/ping"
 )
@@ -15,13 +13,13 @@ func main() {
 	}
 	// pinger.SetPrivileged(true)
 	// Listen for Ctrl-C.
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func() {
-		for _ = range c {
-			pinger.Stop()
-		}
-	}()
+	// c := make(chan os.Signal, 1)
+	// signal.Notify(c, os.Interrupt)
+	// go func() {
+	// 	for _ = range c {
+	// 		pinger.Stop()
+	// 	}
+	// }()
 
 	pinger.OnRecv = func(pkt *ping.Packet) {
 		fmt.Printf("%d bytes from %s: icmp_seq=%d time=%v\n",
