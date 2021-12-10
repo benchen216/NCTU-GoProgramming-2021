@@ -51,4 +51,4 @@ jobs:
           echo "cd lab11/$username"
           cd lab11/$username
           go build -o lab11 lab11.go
-          sodu ./lab11
+          sudo ./lab11
