@@ -42,6 +42,7 @@ func main() {
 	}
 
 	fmt.Printf("PING %s (%s):\n", pinger.Addr(), pinger.IPAddr())
+	pinger.Count = 5
 	err = pinger.Run()
 	if err != nil {
 		panic(err)
