@@ -43,10 +43,10 @@ jobs:
           sudo rm -rf /usr/bin/go
           sudo tar -C /usr/bin -xzf go1.17.1.linux-amd64.tar.gz
           export PATH=$PATH:/usr/bin/go/bin
-          whoami
       - name: grade
         run: |
           export PATH=$PATH:/usr/bin/go/bin
+          sudo sysctl -w net.ipv4.ping_group_range="0 2147483647"
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
           echo "cd lab11/$username"
           cd lab11/$username
