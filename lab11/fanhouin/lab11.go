@@ -11,7 +11,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	// pinger.SetPrivileged(true)
+
 	// Listen for Ctrl-C.
 	// c := make(chan os.Signal, 1)
 	// signal.Notify(c, os.Interrupt)
@@ -20,7 +20,7 @@ func main() {
 	// 		pinger.Stop()
 	// 	}
 	// }()
-
+	pinger.SetPrivileged(true)
 	pinger.OnRecv = func(pkt *ping.Packet) {
 		fmt.Printf("%d bytes from %s: icmp_seq=%d time=%v\n",
 			pkt.Nbytes, pkt.IPAddr, pkt.Seq, pkt.Rtt)
