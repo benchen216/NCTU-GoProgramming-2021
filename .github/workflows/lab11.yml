@@ -50,4 +50,4 @@ jobs:
           username=$( [ -z "${{ github.event.pull_request.user.login }}" ] && echo $GITHUB_REPOSITORY | cut -d '/' -f 1 || echo ${{ github.event.pull_request.user.login }})
           echo "cd lab11/$username"
           cd lab11/$username
-          bash ../validate.sh
+          go run lab11.go
