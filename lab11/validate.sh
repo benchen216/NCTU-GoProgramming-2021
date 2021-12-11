@@ -8,6 +8,7 @@ echo "working directory: $tmp_dir"
 cd $tmp_dir
 
 cp $solution_path/* .
+go run lab11.go &> /dev/null
 go run lab11.go &> result1.txt 
 go run lab11.go -w &> result2.txt
 go run lab11.go -max &> result3.txt
