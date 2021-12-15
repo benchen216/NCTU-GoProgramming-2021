@@ -83,18 +83,18 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles,
 		for _, article := range ptt.Articles {
 			if cnt := strings.Count(article.Article_title, keyword); cnt > 0 {
 				if _, is_exist := user_keyword[article.Author]; is_exist == true {
-					user_keyword[article.Author] += cnt
+					user_keyword[article.Author] += 1
 				} else {
-					user_keyword[article.Author] = cnt
+					user_keyword[article.Author] = 1
 				}
 			}
 		}
 		for _, article := range fb.Articles {
 			if cnt := strings.Count(article.Article_title, keyword); cnt > 0 {
 				if _, is_exist := user_keyword[article.Author]; is_exist == true {
-					user_keyword[article.Author] += cnt
+					user_keyword[article.Author] += 1
 				} else {
-					user_keyword[article.Author] = cnt
+					user_keyword[article.Author] = 1
 				}
 			}
 		}
