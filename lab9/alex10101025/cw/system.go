@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -17,29 +18,44 @@ func checkErr(e error) {
 
 type System struct {
 	// you can add some data type if you like
+	IP_USER_NUM   int
+	KEYWORD_COUNT int
+	KEYWORDS      []string
+	Ptt           PTTArticles
+	Fb            FBArticles
 }
 
-func (System) String() string {
-	return "There's nothing here."
+func (cw System) String() string {
+	if len(os.Args) <= 3 {
+		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
+		os.Exit(1)
+	}
+	cw.IP_USER_NUM, _ = strconv.Atoi(os.Args[1])
+	cw.KEYWORD_COUNT, _ = strconv.Atoi(os.Args[2])
+	cw.KEYWORDS = os.Args[3:]
+	a := cw.CountCyberWarriors()
+	b := cw.CountKeyWord()
+	return a + b
+	//return "There's nothing here."
 }
 
-func (System) LoadPTT(url string) PTTArticles {
+func (cw System) LoadPTT(url string) PTTArticles {
 	var articles PTTArticles
 	jsonBlob, _ := ioutil.ReadFile(url)
 	checkErr(json.Unmarshal(jsonBlob, &articles))
 	return articles
 }
 
-func (System) LoadFB(url string) FBArticles {
+func (cw System) LoadFB(url string) FBArticles {
 	var articles FBArticles
 	jsonBlob, _ := ioutil.ReadFile(url)
 	checkErr(json.Unmarshal(jsonBlob, &articles))
 	return articles
 }
 
-func (System) CountCyberWarriors(ptt PTTArticles, IP_USER_NUM int) string {
+func (cw System) CountCyberWarriors() string {
 	ip_user := make(map[string]map[string]bool) //ip name
-	for _, article := range ptt.Articles {
+	for _, article := range cw.Ptt.Articles {
 		if article.Ip == "None" {
 			continue
 		}
@@ -55,7 +71,7 @@ func (System) CountCyberWarriors(ptt PTTArticles, IP_USER_NUM int) string {
 	sort.Strings(sorted_ip)
 	ret := ""
 	for _, ip := range sorted_ip {
-		if len(ip_user[ip]) > IP_USER_NUM {
+		if len(ip_user[ip]) > cw.IP_USER_NUM {
 			ret += ip + ", total: " + strconv.Itoa(len(ip_user[ip])) + "\n["
 			var authors []string
 			for author, _ := range ip_user[ip] {
@@ -75,12 +91,11 @@ func (System) CountCyberWarriors(ptt PTTArticles, IP_USER_NUM int) string {
 	return ret
 }
 
-func (System) CountKeyWord(ptt PTTArticles, fb FBArticles,
-	KEYWORD_COUNT int, KEYWORDS []string) string {
+func (cw System) CountKeyWord() string {
 	ret := ""
-	for _, keyword := range KEYWORDS {
+	for _, keyword := range cw.KEYWORDS {
 		user_keyword := make(map[string]int)
-		for _, article := range ptt.Articles {
+		for _, article := range cw.Ptt.Articles {
 			if cnt := strings.Count(article.Article_title, keyword); cnt > 0 {
 				if _, is_exist := user_keyword[article.Author]; is_exist == true {
 					user_keyword[article.Author] += 1
@@ -89,7 +104,7 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles,
 				}
 			}
 		}
-		for _, article := range fb.Articles {
+		for _, article := range cw.Fb.Articles {
 			if cnt := strings.Count(article.Article_title, keyword); cnt > 0 {
 				if _, is_exist := user_keyword[article.Author]; is_exist == true {
 					user_keyword[article.Author] += 1
@@ -100,7 +115,7 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles,
 		}
 		var sorted_users []string
 		for user, cnt := range user_keyword {
-			if cnt > KEYWORD_COUNT {
+			if cnt > cw.KEYWORD_COUNT {
 				sorted_users = append(sorted_users, user)
 			}
 		}
