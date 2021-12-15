@@ -56,7 +56,7 @@ func (System) CountCyberWarriors(ptt PTTArticles, IP_USER_NUM int) string {
 	ret := ""
 	for _, ip := range sorted_ip {
 		if len(ip_user[ip]) > IP_USER_NUM {
-			ret += ip + ", total: " + strconv.Itoa(len(ip_user[ip])) + "\n"
+			ret += ip + ", total: " + strconv.Itoa(len(ip_user[ip])) + "\n["
 			var authors []string
 			for author, _ := range ip_user[ip] {
 				authors = append(authors, author)
