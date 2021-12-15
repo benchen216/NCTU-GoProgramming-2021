@@ -56,7 +56,7 @@ func (cw System) LoadFB(url string) FBArticles {
 func (cw System) CountCyberWarriors() string {
 	ip_user := make(map[string]map[string]bool) //ip name
 	for _, article := range cw.Ptt.Articles {
-		if article.Ip == "None" {
+		if article.Ip == "None" || article.Author == "" {
 			continue
 		}
 		if _, is_exist := ip_user[article.Ip]; is_exist == false {
