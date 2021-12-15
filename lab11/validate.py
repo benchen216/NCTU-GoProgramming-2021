@@ -44,6 +44,7 @@ ans5 = '''1. 姓名: 張燕光, 網站: http://cial.csie.ncku.edu.tw/
 9. 姓名: 黃崇明, 網站: http://www.mmnetlab.csie.ncku.edu.tw/
 10. 姓名: 黃宗立, 網站: http://myweb.ncku.edu.tw/~islab62524/
 
+
 '''
 
 ans6 = '''1. 姓名: 張燕光, 網站: http://cial.csie.ncku.edu.tw/
@@ -138,9 +139,9 @@ cmd_list = ['-1',
 'go run lab11.go -w',
 'go run lab11.go -max',
 'go run lab11.go -max 5',
-'go run lab11.go -w ncku',
-'go run lab11.go -w ncku -max 3',
-'go run lab11.go -max 100 -w ncku',
+'go run lab11.go -w ntu',
+'go run lab11.go -w ntu -max 3',
+'go run lab11.go -max 100 -w ntu',
 'go run lab11.go -max 30 -w ptt']
 count = 0
 def remove_rn(arr):
@@ -149,9 +150,9 @@ def remove_rn(arr):
     return arr
 
 for i in range(1,9):
-    with open('result' + str(i) + '.txt') as f:
+    with open('result' + str(i) + '.txt','r',encoding='utf-8') as f:
         result = f.read()
-        usage_string = re.findall(r'Usage.*?:', result)
+        usage_string = re.findall(r'Usage of.*:+', result)
         try:
             result = result.replace(usage_string[0], 'Usage of:')
         except:
