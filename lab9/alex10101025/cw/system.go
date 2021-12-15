@@ -108,7 +108,7 @@ func (System) CountKeyWord(ptt PTTArticles, fb FBArticles,
 		ret += keyword + ", total: " + strconv.Itoa(len(sorted_users)) + "\n["
 		for i, user := range sorted_users {
 			ret += user
-			if i != len(sorted_users) {
+			if i != len(sorted_users)-1 {
 				ret += ", "
 			}
 		}
