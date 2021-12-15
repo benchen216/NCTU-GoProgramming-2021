@@ -138,9 +138,9 @@ cmd_list = ['-1',
 'go run lab11.go -w',
 'go run lab11.go -max',
 'go run lab11.go -max 5',
-'go run lab11.go -w ntu',
-'go run lab11.go -w ntu -max 3',
-'go run lab11.go -max 100 -w ntu',
+'go run lab11.go -w ncku',
+'go run lab11.go -w ncku -max 3',
+'go run lab11.go -max 100 -w ncku',
 'go run lab11.go -max 30 -w ptt']
 count = 0
 def remove_rn(arr):
