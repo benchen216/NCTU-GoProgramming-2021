@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+
 	"github.com/gocolly/colly"
 )
 
@@ -34,6 +35,6 @@ func main() {
 	})
 
 	c.Visit("https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html")
-	// c.Visit("https://www.csie.ntu.edu.tw/members/teacher.php?mclass1=110")
+	// c.Visit("https://www.csie.ncku.edu.tw/ncku_csie/depmember/teacher")
 	c.Wait()
 }
