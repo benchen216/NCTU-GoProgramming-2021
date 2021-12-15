@@ -44,7 +44,6 @@ ans5 = '''1. 姓名: 張燕光, 網站: http://cial.csie.ncku.edu.tw/
 9. 姓名: 黃崇明, 網站: http://www.mmnetlab.csie.ncku.edu.tw/
 10. 姓名: 黃宗立, 網站: http://myweb.ncku.edu.tw/~islab62524/
 
-
 '''
 
 ans6 = '''1. 姓名: 張燕光, 網站: http://cial.csie.ncku.edu.tw/
