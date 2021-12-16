@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/gocolly/colly"
@@ -27,9 +26,8 @@ func init() {
 
 func main() {
 	flag.Parse()
-	if flag.NFlag() < 2 {
+	if flag.NFlag() < 1 {
 		flag.PrintDefaults()
-		os.Exit(2)
 	}
 	if MaxPrint > 45 {
 		MaxPrint = 45
@@ -70,7 +68,7 @@ func main() {
 					web = "NULL"
 				}
 			}
-			fmt.Println(idx + ". 名字: " + name + ", 網站: " + web)
+			fmt.Println(idx + ". 姓名: " + name + ", 網站: " + web)
 		})
 		c.Visit("https://www.csie.ncku.edu.tw/ncku_csie/depmember/teacher")
 	}
