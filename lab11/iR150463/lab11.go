@@ -19,6 +19,15 @@ func init() {
 
 func main() {
 	flag.Parse()
+	if flag.NFlag() == 0 {
+		flag.PrintDefaults()
+		return
+	}
+
+	if maxInfo > 45 {
+		maxInfo = 45
+	}
+
 	c := colly.NewCollector()
 
 	if web == "ptt" {
@@ -26,7 +35,7 @@ func main() {
 		c.OnHTML(".push", func(e *colly.HTMLElement) {
 			if infoCount <= maxInfo {
 				fmt.Printf(strconv.Itoa(infoCount) + ". ")
-				fmt.Printf("姓名: " + e.ChildText(".f3.hl.push-userid") + ", ")
+				fmt.Printf("名字: " + e.ChildText(".f3.hl.push-userid") + ", ")
 				fmt.Printf("留言" + e.ChildText(".f3.push-content") + ", ")
 				fmt.Printf("時間: " + e.ChildText(".push-ipdatetime"))
 				fmt.Println()
