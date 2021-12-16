@@ -34,7 +34,7 @@ func main() {
 		c.Visit("https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html")
 	} else if website == "ncku" {
 		c.OnHTML(".teacherInfo", func(e *colly.HTMLElement) {
-			if e.Index >= max_size {
+			if e.Index >= max_size || e.Index >= 45 {
 				return
 			}
 			href := "NULL"
