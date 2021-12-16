@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -21,13 +22,13 @@ func init() {
 }
 
 func ptt(c *colly.Collector){
-	c.OnHTML("div[class='bbs-screen bbs-content']", func(e *colly.HTMLElement) {
+	c.OnHTML("div[id='main-content']", func(e *colly.HTMLElement) {
 		e.ForEach("div[class='push']",func(i int, e *colly.HTMLElement){
 			if i >= max {
 				return
 			}
 			fmt.Printf( strconv.Itoa(i+1)+". 名字: " + e.ChildText(".push-userid"))
-			fmt.Printf( ", 留言" + e.ChildText(".push-content"))
+			fmt.Printf( ", 留言%s", e.ChildText(".push-content"))
 			fmt.Printf( ", 時間: " + e.ChildText(".push-ipdatetime") + "\n")
 		
 		})
@@ -79,3 +80,6 @@ func main() {
 
 	c.Wait()
 }
+
+
+
