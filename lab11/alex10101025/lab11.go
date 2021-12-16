@@ -28,6 +28,7 @@ func main() {
 	flag.Parse()
 	if flag.NFlag() < 1 {
 		flag.PrintDefaults()
+		return
 	}
 	if MaxPrint > 45 {
 		MaxPrint = 45
@@ -61,7 +62,7 @@ func main() {
 			idx := strconv.Itoa(e.Index + 1)
 			name := e.ChildText(".content_title2")
 			hrefs := e.ChildAttrs("a", "href")
-			web := ""
+			web := "NULL"
 			if len(hrefs) > 1 {
 				web = hrefs[1]
 				if web == "" {
