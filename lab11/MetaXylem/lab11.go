@@ -37,9 +37,12 @@ func main() {
 			if e.Index >= max_size {
 				return
 			}
-			href := e.ChildAttrs("a", "href")[1]
-			if href == "" {
-				href = "NULL"
+			href := "NULL"
+			if len(e.ChildAttrs("a", "href")) > 1 {
+				href = e.ChildAttrs("a", "href")[1]
+				if href == "" {
+					href = "NULL"
+				}
 			}
 			fmt.Print(e.Index+1, ". 姓名: ", e.ChildText(".content_title2"), ", 網站: ", href, "\n")
 		})
