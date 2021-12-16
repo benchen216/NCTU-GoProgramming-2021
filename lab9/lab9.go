@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	// [TODO] set your module name, go mod init my_module->MOUDULE_NAME
-	"<MOUDULE_NAME>/cw"
+	"aaa/cw"
 )
 
 func main() {
@@ -15,6 +15,6 @@ func main() {
 
 	FBArticles := cwSystem.LoadFB("./data/fb.json")
 	fmt.Printf("%+v\n", FBArticles.Articles[0])
-	
+
 	fmt.Println(cwSystem)
 }
