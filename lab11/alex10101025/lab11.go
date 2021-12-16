@@ -31,7 +31,9 @@ func main() {
 		flag.PrintDefaults()
 		os.Exit(2)
 	}
-
+	if MaxPrint > 45 {
+		MaxPrint = 45
+	}
 	c := colly.NewCollector()
 
 	// c.OnHTML("div#topbar.bbs-content > a#logo", func(e *colly.HTMLElement) {
@@ -50,7 +52,7 @@ func main() {
 			name := e.ChildText(".f3.hl.push-userid")
 			msg := e.ChildText(".f3.push-content")
 			time := e.ChildText(".push-ipdatetime")
-			fmt.Println(idx + ". 名字: " + name + ", 留言: " + msg + ", 時間: " + time)
+			fmt.Println(idx + ". 名字: " + name + ", 留言" + msg + ", 時間: " + time)
 		})
 		c.Visit("https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html")
 	} else if WebPage == "ncku" {
