@@ -29,7 +29,7 @@ func main() {
 			if e.Index >= max_size {
 				return
 			}
-			fmt.Print(e.Index+1, ". 名字： ", e.ChildText(".f3.hl.push-userid"), ", 留言", e.ChildText(".f3.push-content"), ", 時間： ", e.ChildText(".push-ipdatetime"), "\n")
+			fmt.Print(e.Index+1, ". 名字: ", e.ChildText(".f3.hl.push-userid"), ", 留言", e.ChildText(".f3.push-content"), ", 時間: ", e.ChildText(".push-ipdatetime"), "\n")
 		})
 		c.Visit("https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html")
 	} else if website == "ncku" {
@@ -41,7 +41,7 @@ func main() {
 			if href == "" {
 				href = "NULL"
 			}
-			fmt.Print(e.Index+1, ". 姓名： ", e.ChildText(".content_title2"), ", 網站： ", href, "\n")
+			fmt.Print(e.Index+1, ". 姓名: ", e.ChildText(".content_title2"), ", 網站: ", href, "\n")
 		})
 		c.Visit("https://www.csie.ncku.edu.tw/ncku_csie/depmember/teacher")
 	}
