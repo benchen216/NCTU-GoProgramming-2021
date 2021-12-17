@@ -13,13 +13,18 @@ var website string;
 func init() {
 	// Define the other flags here
 	// flag.IntVar()
-	flag.IntVar(&max_num, "max", 4, "help message for flagname")
-	flag.StringVar(&website, "w", "ptt", "help message for flagname")
+	flag.IntVar(&max_num, "max", 10, "MAX Printing")
+	flag.StringVar(&website, "w", "ptt", "Web page")
+
 }
 
 func main() {
 	flag.Parse()
-	// flag.PrintDefaults()
+	if flag.NFlag() == 0 {
+		flag.PrintDefaults()
+		return
+	}
+
 
 	c := colly.NewCollector()
 
