@@ -51,6 +51,7 @@ func main() {
 	flag.Parse()
 	if flag.NFlag() == 0 {
 		flag.PrintDefaults()
+        return
 	}
 	c := colly.NewCollector()
 
