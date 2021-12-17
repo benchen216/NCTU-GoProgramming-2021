@@ -13,7 +13,7 @@ var website string;
 func init() {
 	// Define the other flags here
 	// flag.IntVar()
-	flag.IntVar(&max_num, "max", 10, "MAX Printing")
+	flag.IntVar(&max_num, "max", 10, "Max Printing")
 	flag.StringVar(&website, "w", "ptt", "Web page")
 
 }
