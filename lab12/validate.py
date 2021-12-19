@@ -12,7 +12,7 @@ import re
 def check(inpu,ans,the_chrome):
     the_chrome.find_element_by_id('chat_input').send_keys(inpu)
     the_chrome.find_element_by_id('chat_input').send_keys(Keys.ENTER)
-    time.sleep(1)
+    time.sleep(3)
     print('Your answer of '+ inpu +' is "'+the_chrome.find_element_by_xpath("(//b)[last()]").get_attribute('innerText') +'"')
     pattern = re.compile(f".*: {ans}")
 
@@ -33,7 +33,7 @@ def check(inpu,ans,the_chrome):
     return point
 
 #from webdriver_manager.chrome import ChromeDriverManager
-time.sleep(5)
+time.sleep(3)
 options = Options()
 options.headless = True
 options.add_argument('--disable-gpu')
@@ -41,7 +41,7 @@ options.add_argument('--no-sandbox') # https://stackoverflow.com/a/45846909
 options.add_argument('--disable-dev-shm-usage') # https://stackoverflow.com/a/50642913
 chrome = Chrome(executable_path=ChromeDriverManager().install(),options=options)
 chrome2 = Chrome(executable_path=ChromeDriverManager().install(),options=options)
-
+time.sleep(5)
 #"/usr/lib/chromium-browser/chromedriver",
 #ChromeDriverManager(version="83.0.4103.39").install()
 chrome.get(f"http://0.0.0.0:8899")
