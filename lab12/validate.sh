@@ -16,6 +16,8 @@ chromium --version
 chromedriver --version
 go run lab12.go & 
 curl --retry-connrefused --retry 4 --connect-timeout 5 http://0.0.0.0:8899 --verbose
+wget 0.0.0.0:8899
+cat index.html
 python3  $solution_path/../validate.py
 
 echo "deleting working directory $tmp_dir"
