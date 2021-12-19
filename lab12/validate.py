@@ -12,7 +12,7 @@ import re
 def check(inpu,ans,the_chrome):
     the_chrome.find_element_by_id('chat_input').send_keys(inpu)
     the_chrome.find_element_by_id('chat_input').send_keys(Keys.ENTER)
-    time.sleep(1)
+    time.sleep(3)
     print('Your answer of '+ inpu +' is "'+the_chrome.find_element_by_xpath("(//b)[last()]").get_attribute('innerText') +'"')
     pattern = re.compile(f".*: {ans}")
 
@@ -33,7 +33,7 @@ def check(inpu,ans,the_chrome):
     return point
 
 #from webdriver_manager.chrome import ChromeDriverManager
-time.sleep(5)
+time.sleep(10)
 options = Options()
 options.headless = True
 options.add_argument('--disable-gpu')
