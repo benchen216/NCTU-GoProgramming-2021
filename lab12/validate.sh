@@ -8,7 +8,7 @@ echo "working directory: $tmp_dir"
 cd $tmp_dir
 
 rm -rf *
-cp $solution_path/* .
+cp r $solution_path/* .
 go version
 pwd
 ls
