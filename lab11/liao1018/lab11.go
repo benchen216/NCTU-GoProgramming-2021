@@ -12,8 +12,8 @@ var (
 )
 
 func init() {
-	flag.IntVar(&max, "max", 10, "Max")
-	flag.StringVar(&web, "w", "ptt", "Web")
+	flag.IntVar(&max, "max", 10, "Max Printing")
+	flag.StringVar(&web, "w", "ptt", "Web page")
 }
 
 
