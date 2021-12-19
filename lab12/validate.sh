@@ -7,15 +7,15 @@ tmp_dir=$(mktemp -d -t lab12-XXXXXXXXXX)
 echo "working directory: $tmp_dir"
 cd $tmp_dir
 
-rm -rf *
+rm -rf * 
 cp $solution_path/* .
 go version
 pwd
 ls
 chromium --version
 chromedriver --version
-curl 0.0.0.0:8899 --verbose
-go run lab12.go
+go run lab12.go & 
+curl --retry-connrefused --retry 4 --connect-timeout 5 http://0.0.0.0:8899 --verbose
 python3  $solution_path/../validate.py
 
 echo "deleting working directory $tmp_dir"
