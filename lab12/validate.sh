@@ -15,7 +15,8 @@ ls
 chromium --version
 chromedriver --version
 curl 0.0.0.0:8899 --verbose
-go run lab12.go & python3  $solution_path/../validate.py
+go run lab12.go
+python3  $solution_path/../validate.py
 
 echo "deleting working directory $tmp_dir"
 rm -rf $tmp_dir
