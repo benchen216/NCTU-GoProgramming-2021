@@ -8,23 +8,24 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from webdriver_manager.chrome import ChromeDriverManager 
 from selenium.webdriver.common.keys import Keys
 import re
+from selenium.webdriver.common.by import By
 
 def check(inpu,ans,the_chrome):
-    the_chrome.find_element_by_id('chat_input').send_keys(inpu)
-    the_chrome.find_element_by_id('chat_input').send_keys(Keys.ENTER)
+    the_chrome.find_element(By.ID,'chat_input').send_keys(inpu)
+    the_chrome.find_element(By.ID,'chat_input').send_keys(Keys.ENTER)
     time.sleep(3)
-    print('Your answer of '+ inpu +' is "'+the_chrome.find_element_by_xpath("(//b)[last()]").get_attribute('innerText') +'"')
+    print('Your answer of '+ inpu +' is "'+the_chrome.find_element(By.XPATH,"(//b)[last()]").get_attribute('innerText') +'"')
     pattern = re.compile(f".*: {ans}")
 
     point = 0 
 
-    if pattern.match(chrome.find_element_by_xpath("(//b)[last()]").get_attribute('innerText')):
+    if pattern.match(chrome.find_element(By.XPATH,"(//b)[last()]").get_attribute('innerText')):
         print('get POINT 1')
         point+=1
     else:
         print('wrong answer for browser1')
 
-    if pattern.match(chrome2.find_element_by_xpath("(//b)[last()]").get_attribute('innerText')):
+    if pattern.match(chrome2.find_element(By.XPATH,"(//b)[last()]").get_attribute('innerText')):
         print('get POINT 1')
         point+=1
     else:
