@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+	"os"
 
 	"github.com/gocolly/colly"
 )
@@ -21,8 +22,11 @@ func main() {
 	w:=flag.String("w", "ptt", "Web page")
 	
 	flag.Parse()
-	flag.PrintDefaults()
-
+	if flag.NFlag()==0{
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
+	
 	c := colly.NewCollector()
 	
 	var s [1000][3]string
