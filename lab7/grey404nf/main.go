@@ -39,6 +39,7 @@ func getBook(c *gin.Context) {
 
 func addBook(c *gin.Context) {
 	var b Book
+	
 	c.BindJSON(&b)
 	for i:=0;i<len(bookshelf);i++ {
 		if b.Id==bookshelf[i].Id {
