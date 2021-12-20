@@ -55,8 +55,8 @@ func main() {
 			cnt1++
 		})
 		
-		c.OnHTML("div#tab1 > table > tbody > tr > td > p > a", func(e *colly.HTMLElement) {
-			s[cnt2][1]=e.Attr("href")
+		c.OnHTML("div#tab1 > table > tbody > tr > td > p", func(e *colly.HTMLElement) {
+			s[cnt2][1]=e.ChildAttr("p > a", "href")
 			cnt2++
 		})
 		
@@ -73,8 +73,8 @@ func main() {
 		for i:=0;i<*max;i++ {
 			s[i][0]=strings.ReplaceAll(s[i][0], " ", "")
 			//s[i][1]=strings.ReplaceAll(s[i][1], " ", "")
-			s[i][2]=strings.ReplaceAll(s[i][2], " ", "")
-			fmt.Printf("%d. 名字: %s, 留言%s, 時間: %s", i+1, s[i][0], s[i][1], s[i][2])
+			//s[i][2]=strings.ReplaceAll(s[i][2], " ", "")
+			fmt.Printf("%d. 名字: %s, 留言%s, 時間:%s", i+1, s[i][0], s[i][1], s[i][2])
 		}
 	} else if *w=="ncku" {
 		for i:=0;i<*max;i++ {
