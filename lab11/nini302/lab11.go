@@ -14,7 +14,7 @@ var (
 
 func init() {
 	flag.IntVar(&max, "max", 10, "Max Printing") // Define the other flags here
-	flag.StringVar(&web, "w", "ptt", "Web")      // flag.IntVar()
+	flag.StringVar(&web, "w", "ptt", "Web page") // flag.IntVar()
 }
 func ppt(c *colly.Collector) {
 	c.OnHTML("div#main-content", func(e *colly.HTMLElement) {
