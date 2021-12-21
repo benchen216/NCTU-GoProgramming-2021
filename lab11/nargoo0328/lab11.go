@@ -36,27 +36,14 @@ func main() {
 			})
 			c.Visit("https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html")
 		}else{
-			c.OnHTML(".teacherInfo", func(e *colly.HTMLElement) {
-				if index>max_output{
-					return
-				}
-				name := e.ChildText(".content_title2")
-				temp := e.ChildAttrs("a","href")
-				url := "NULL"
-				if len(temp)>=2 && temp[1]!=""{
-					url = temp[1]
-				}
-				fmt.Printf("%d. 姓名: %s, 網站: %s\n",index,name,url)
-				index++
-			})
 			c.OnHTML("div", func(e *colly.HTMLElement) {
 				if e.Attr("id")=="tab1"{
-					e.ForEach("teacherInfo", func(_ int,elem *colly.HTMLElement) {
+					e.ForEach("td.teacherInfo", func(_ int,f *colly.HTMLElement) {
 						if index>max_output{
 							return
 						}
-						name := e.ChildText(".content_title2")
-						temp := e.ChildAttrs("a","href")
+						name := f.ChildText(".content_title2")
+						temp := f.ChildAttrs("a","href")
 						url := "NULL"
 						if len(temp)>=2 && temp[1]!=""{
 							url = temp[1]
