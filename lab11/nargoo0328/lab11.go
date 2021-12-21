@@ -49,6 +49,23 @@ func main() {
 				fmt.Printf("%d. 姓名: %s, 網站: %s\n",index,name,url)
 				index++
 			})
+			c.OnHTML("div", func(e *colly.HTMLElement) {
+				if e.Attr("id")=="tab1"{
+					e.ForEach("teacherInfo", func(_ int,elem *colly.HTMLElement) {
+						if index>max_output{
+							return
+						}
+						name := e.ChildText(".content_title2")
+						temp := e.ChildAttrs("a","href")
+						url := "NULL"
+						if len(temp)>=2 && temp[1]!=""{
+							url = temp[1]
+						}
+						fmt.Printf("%d. 姓名: %s, 網站: %s\n",index,name,url)
+						index++
+					})
+				}
+			})
 			c.Visit("https://www.csie.ncku.edu.tw/ncku_csie/depmember/teacher")
 		}
 		c.Wait()
