@@ -23,7 +23,7 @@ func ppt(c *colly.Collector) {
 				return
 			}
 			fmt.Printf("%d. 名字: %s, ", i+1, e.ChildText(".push-userid"))
-			fmt.Printf("留言%s ", e.ChildText(".push-content"))
+			fmt.Printf("留言%s, ", e.ChildText(".push-content"))
 			fmt.Printf("時間: %s\n", e.ChildText(".push-ipdatetime"))
 		})
 	})
@@ -36,7 +36,7 @@ func ncku(c *colly.Collector) {
 			}
 			fmt.Printf("%d. 姓名: %s, ", i+1, h.ChildText("span.content_title2 > a"))
 
-			link := h.ChildAttr("p.infop > a", "herf")
+			link := h.ChildAttr("p.infop > a", "href")
 			if link == "" {
 				link = "NULL"
 			}
