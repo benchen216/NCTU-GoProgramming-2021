@@ -52,20 +52,16 @@ func main() {
 	} else {
 		var t_name []string
 		var t_web []string
-
-		c.OnHTML("span[class='content_title2'] > a", func(e *colly.HTMLElement) {
-			t_name = append(t_name, e.Text)
-		})
 	
-		c.OnHTML(".infop > a", func(e *colly.HTMLElement) {
-			tmp := e.Attr("href")
-			if tmp[0] == ' ' {
-				if strings.Replace(tmp, " ", "", -1) == "" {
-					t_web = append(t_web, " NULL")
-				} else {
-					t_web = append(t_web, tmp)
-				}
+		c.OnHTML(".teacherInfo", func(e *colly.HTMLElement) {
+			name := e.ChildText("span[class='content_title2'] > a")
+			t_name = append(t_name, name)
+			tmp := e.ChildAttr("p.infop > a", "href")
+			if tmp == "" {
+				t_web = append(t_web, "NULL")
+				return
 			}
+			t_web = append(t_web, tmp)
 		})
 		
 		c.Visit("https://www.csie.ncku.edu.tw/ncku_csie/depmember/teacher")
@@ -75,7 +71,7 @@ func main() {
 			if t_name[0] == t_name[i] && i != 0 {
 				return
 			}
-			fmt.Printf("%d. 姓名: %s, 網站:%s\n", (i+1), t_name[i], t_web[i])
+			fmt.Printf("%d. 姓名: %s, 網站: %s\n", (i+1), t_name[i], t_web[i])
 		}
 	}
 	
