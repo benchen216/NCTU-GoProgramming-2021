@@ -34,10 +34,10 @@ func main() {
 		var infoCount = 1
 		c.OnHTML(".push", func(e *colly.HTMLElement) {
 			if infoCount <= maxInfo {
-				fmt.Printf(strconv.Itoa(infoCount) + ". ")
-				fmt.Printf("名字: " + e.ChildText(".f3.hl.push-userid") + ", ")
-				fmt.Printf("留言" + e.ChildText(".f3.push-content") + ", ")
-				fmt.Printf("時間: " + e.ChildText(".push-ipdatetime"))
+				fmt.Print(strconv.Itoa(infoCount) + ". ")
+				fmt.Print("名字: " + e.ChildText(".f3.hl.push-userid") + ", ")
+				fmt.Print("留言" + e.ChildText(".f3.push-content") + ", ")
+				fmt.Print("時間: " + e.ChildText(".push-ipdatetime"))
 				fmt.Println()
 				infoCount++
 			} else {
@@ -51,12 +51,12 @@ func main() {
 		c.OnHTML(".teacherInfo", func(e *colly.HTMLElement) {
 			if infoCount <= maxInfo {
 				if len(e.ChildAttrs("a", "href")) > 1 && e.ChildAttrs("a", "href")[1] != "" {
-					fmt.Printf(strconv.Itoa(infoCount) + ". ")
-					fmt.Printf("姓名: " + e.ChildText(".content_title2") + ", ")
+					fmt.Print(strconv.Itoa(infoCount) + ". ")
+					fmt.Print("姓名: " + e.ChildText(".content_title2") + ", ")
 					fmt.Println("網站: " + e.ChildAttrs("a", "href")[1])
 				} else {
-					fmt.Printf(strconv.Itoa(infoCount) + ". ")
-					fmt.Printf("姓名: " + e.ChildText(".content_title2") + ", ")
+					fmt.Print(strconv.Itoa(infoCount) + ". ")
+					fmt.Print("姓名: " + e.ChildText(".content_title2") + ", ")
 					fmt.Println("網站: " + "NULL")
 				}
 				infoCount++
