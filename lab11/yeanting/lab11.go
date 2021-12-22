@@ -19,6 +19,7 @@ func main() {
 	flag.Parse()
 	if flag.NFlag() == 0 || flag.NArg()>0 {
 		flag.PrintDefaults()
+		return
 	}
 
 	c := colly.NewCollector()
@@ -42,6 +43,9 @@ func main() {
 		c.Wait()
 
 		for i:=0; i<max; i=i+1 {
+			if len(userid) == i {
+				return
+			}
 			fmt.Printf("%d. 名字: %s, 留言%s, 時間:%s\n", (i+1), userid[i], content[i], time[i])
 		}
 
@@ -68,6 +72,9 @@ func main() {
 		c.Wait()
 
 		for i:=0; i<max; i=i+1 {
+			if t_name[0] == t_name[i] && i != 0 {
+				return
+			}
 			fmt.Printf("%d. 姓名: %s, 網站:%s\n", (i+1), t_name[i], t_web[i])
 		}
 	}
