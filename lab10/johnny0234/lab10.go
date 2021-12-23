@@ -11,7 +11,7 @@ var handStatus string
 
 func hand() {
 	handStatus = "in"
-	time.Sleep(time.Millisecond * 200)
+	time.Sleep(time.Millisecond * 2)
 	handStatus = "out"
 	wg.Done()
 }
