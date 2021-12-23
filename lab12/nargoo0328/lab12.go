@@ -91,19 +91,39 @@ func InitObservable(dirty_talk , sensitive_name []string) {
 		}
 		return true
 	}).Map(func(_ context.Context, i interface{}) (interface{}, error) {
-		str := string([]rune(i.(string)))
+		str := i.(string)
+		chat_index := strings.Index(i.(string),"表示:")
+		chat := []rune(i.(string))
+		chat_raw :=chat[chat_index+4:]
+		chat_content := string(chat_raw)
 		for _,name := range sensitive_name{
-			if strings.Contains(str,name){
-				chat_index := strings.Index(i.(string),"表示:")
-				chat := []rune(i.(string))
-				chat_content :=string(chat[chat_index+4:])
-				pos_2 := strings.Index(chat_content,name)
+			chat = []rune(str)
+			if strings.Contains(chat_content,name){
+				// log.Println(name)
+				raw_name := []rune(name)
+				pos_2 := check_substrings(chat_raw,raw_name)
+				// log.Println(chat_index,pos_2)
 				str = string(chat[:chat_index+4+pos_2+1])+"*"+string(chat[chat_index+4+pos_2+2:])
 			}
 		}
 		return str,nil
 	})
 
+}
+
+func check_substrings(str1 , str2 []rune) int{
+	log.Println(len(str1),len(str2))
+	for i:=0;i<=len(str1)-1-len(str2);i++{
+		for j,char := range str2{
+			if str1[i+j] != char{
+				break
+			}
+			if j==len(str2)-1{
+				return i
+			}
+		}
+	}
+	return -1
 }
 
 func readfile(file_name string) [] string{
