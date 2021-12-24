@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-
+	"strings"
+	"context"
 	"github.com/gorilla/websocket"
 	"github.com/reactivex/rxgo/v2"
+	"io/ioutil"
 )
 
 type client chan<- string // an outgoing message channel
@@ -86,6 +88,33 @@ func InitObservable() {
 		...
 	})
 	*/
+	word_file , _ := ioutil.ReadFile("dirtytalk.txt")
+	name_file , _ := ioutil.ReadFile("sensitive_name.txt")
+
+	word_list := strings.Split(string(word_file),"\n")
+	name_list := strings.Split(string(name_file),"\n")
+
+
+	ObservableMsg = ObservableMsg.Filter(func(msg interface{}) bool {
+		for word := range word_list {
+			if strings.Contains(msg.(string), word_list[word]) {
+				return false
+			}
+		}
+		return true
+	}).Map(func(_ context.Context, msg interface{}) (interface{}, error) {
+		newMsg := msg.(string)
+
+		for name := range name_list {
+			if strings.Contains(newMsg, name_list[name]) {			
+				change := name_list[name][:3] +"*"+ name_list[name][6:]
+				newMsg = strings.Replace(newMsg, name_list[name],change, -1)
+			}
+		}
+
+		return newMsg, nil
+	})
+
 }
 
 func main() {
