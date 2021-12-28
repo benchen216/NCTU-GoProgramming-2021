@@ -16,8 +16,8 @@ func init() {
 
 func main() {
 	// var w = flag.String("w", "https://www.ptt.cc/bbs/Stock/M.1610102078.A.16E.html", "Website to crawl")
-	var w = flag.String("w", "ptt", "Web page (default \"ptt\")")
-	var max = flag.Int("max", 10, "Max Printing (default 10)")
+	var w = flag.String("w", "ptt", "Web page")
+	var max = flag.Int("max", 10, "Max Printing")
 	flag.Parse()
 
 	argc := len(os.Args)
