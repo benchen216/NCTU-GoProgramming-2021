@@ -121,10 +121,9 @@ func InitObservable() {
 		i_str, _ := i.(string)
 		for index, value := range sensitive_name {
 			if (strings.Contains(i_str, index)) {
-				ans_str := strings.Replace(i_str, index, value, -1)
-				return ans_str, nil
+				i_str = strings.Replace(i_str, index, value, -1)
 			}
-		}
+		}  
 		return i_str, nil
 	})
 	
