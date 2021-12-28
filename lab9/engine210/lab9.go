@@ -11,11 +11,11 @@ import (
 func main() {
 	cwSystem := cw.System{}
 
-	cwSystem.LoadPTT("../data/ptt.json")
+	cwSystem.LoadPTT("data/ptt.json")
 	// PTTArticles := cwSystem.LoadPTT("../data/ptt.json")
 	// fmt.Printf("%+v\n", PTTArticles.Articles[0])
 
-	cwSystem.LoadFB("../data/fb.json")
+	cwSystem.LoadFB("data/fb.json")
 	// FBArticles := cwSystem.LoadFB("../data/fb.json")
 	// fmt.Printf("%+v\n", FBArticles.Articles[0])
 	if len(os.Args) < 4 {
