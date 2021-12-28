@@ -1,8 +1,12 @@
 package main
 
 import (
+	"bufio"
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/reactivex/rxgo/v2"
@@ -78,14 +82,52 @@ func wshandle(w http.ResponseWriter, r *http.Request) {
 		messages <- rxgo.Of(who + " 表示: " + string(msg))
 	}
 }
+func readlines(filename string) map[string]string {
+	ret := make(map[string]string)
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
 
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		//  fmt.Println(scanner.Text())
+		s := scanner.Text()
+		censored := []rune(s)
+		censored[1] = '*'
+		ret[scanner.Text()] = string(censored)
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return ret
+}
 func InitObservable() {
-	/* 參考
-	ObservableMsg = ObservableMsg.Filter(...) ... {
-	}).Map(...) {
-		...
+
+	dirtytalk := readlines("dirtytalk.txt")
+	sensitive_name := readlines("sensitive_name.txt")
+
+	ObservableMsg = ObservableMsg.Filter(func(i interface{}) bool {
+		i_str, _ := i.(string)
+		for index, _ := range dirtytalk {
+			if strings.Contains(i_str, index) {
+				return false
+			}
+		}
+		return true
+
+	}).Map(func(_ context.Context, i interface{}) (interface{}, error) {
+		i_str, _ := i.(string)
+		for index, value := range sensitive_name {
+			if strings.Contains(i_str, index) {
+				i_str = strings.Replace(i_str, index, value, -1)
+			}
+		}
+		return i_str, nil
 	})
-	*/
+
 }
 
 func main() {
