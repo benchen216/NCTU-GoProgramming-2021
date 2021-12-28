@@ -48,11 +48,13 @@ func (s *System) CountCyberWarriors(ip_user_num int) {
 
 	for _, v := range s.ptt_articles.Articles {
 		_, found := ip_map[v.Ip]
-		if found {
-			ip_map[v.Ip][v.Author] = struct{}{}
-		} else {
-			ip_map[v.Ip] = make(map[string]struct{})
-			ip_map[v.Ip][v.Author] = struct{}{}
+		if v.Author != "" && v.Author != " " {
+			if found {
+				ip_map[v.Ip][v.Author] = struct{}{}
+			} else {
+				ip_map[v.Ip] = make(map[string]struct{})
+				ip_map[v.Ip][v.Author] = struct{}{}
+			}
 		}
 	}
 	var keys []string
@@ -86,10 +88,12 @@ func (s *System) CountKeyWord(keyword_count int, keywords []string) {
 		for _, keyword := range keywords {
 			if strings.Contains(v.Article_title, keyword) {
 				_, found := keyword_map[keyword][v.Author]
-				if found {
-					keyword_map[keyword][v.Author] += 1
-				} else {
-					keyword_map[keyword][v.Author] = 1
+				if v.Author != "" && v.Author != " " {
+					if found {
+						keyword_map[keyword][v.Author] += 1
+					} else {
+						keyword_map[keyword][v.Author] = 1
+					}
 				}
 			}
 		}
@@ -98,15 +102,25 @@ func (s *System) CountKeyWord(keyword_count int, keywords []string) {
 		for _, keyword := range keywords {
 			if strings.Contains(v.Article_title, keyword) {
 				_, found := keyword_map[keyword][v.Author]
-				if found {
-					keyword_map[keyword][v.Author] += 1
-				} else {
-					keyword_map[keyword][v.Author] = 1
+				if v.Author != "" && v.Author != " " {
+					if found {
+						keyword_map[keyword][v.Author] += 1
+					} else {
+						keyword_map[keyword][v.Author] = 1
+					}
 				}
 			}
 		}
 	}
 
+	// var keys []string
+	// for k, _ := range keyword_map {
+	// 	keys = append(keys, k)
+	// }
+	// sort.Strings(keys)
+
+	// for _, k := range keys {
+	// 	v := keyword_map[k]
 	for k, v := range keyword_map {
 		fmt.Printf("%s, ", k)
 		var l []string
