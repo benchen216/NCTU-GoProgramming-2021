@@ -59,7 +59,7 @@ func main() {
 				fmt.Printf("%d. ", i)
 				fmt.Printf("名字: %s, ", e.ChildText(".push-userid"))
 				fmt.Printf("留言%s, ", e.ChildText(".push-content"))
-				fmt.Printf("時間:%s\n", e.ChildText(".push-ipdatetime"))
+				fmt.Printf("時間: %s\n", e.ChildText(".push-ipdatetime"))
 				i += 1
 			})
 		})
