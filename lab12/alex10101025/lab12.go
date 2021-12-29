@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -101,11 +100,8 @@ func InitObservable() {
 		map_chr := []rune("*")
 		for _, name := range names {
 			if strings.Contains(map_name, name) {
-				fmt.Println(name)
-				fmt.Println(map_name)
 				uni_name := []rune(name)
 				uni_name[1] = map_chr[0]
-				fmt.Println(string(uni_name))
 				map_name = strings.Replace(map_name, name, string(uni_name), -1)
 			}
 		}
