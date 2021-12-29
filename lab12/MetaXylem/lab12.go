@@ -1,8 +1,13 @@
 package main
 
 import (
+	"bufio"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/reactivex/rxgo/v2"
@@ -80,12 +85,47 @@ func wshandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitObservable() {
-	/* 參考
-	ObservableMsg = ObservableMsg.Filter(...) ... {
-	}).Map(...) {
-		...
+	file_swear, _ := os.Open("dirtytalk.txt")
+	file_name, _ := os.Open("sensitive_name.txt")
+	defer file_swear.Close()
+	defer file_name.Close()
+
+	dirtytalk := []string{}
+	names := []string{}
+
+	buf := bufio.NewScanner(file_swear)
+	for buf.Scan() {
+		str := buf.Text()
+		dirtytalk = append(dirtytalk, str)
+	}
+
+	buf = bufio.NewScanner(file_name)
+	for buf.Scan() {
+		str := buf.Text()
+		names = append(names, str)
+	}
+
+	ObservableMsg = ObservableMsg.Filter(func(i interface{}) bool {
+		for _, v := range dirtytalk {
+			if strings.Contains(i.(string), v) {
+				fmt.Println(v)
+				return false
+			}
+		}
+		return true
+	}).Map(func(_ context.Context, i interface{}) (interface{}, error) {
+		str := i.(string)
+		for _, v := range names {
+			if strings.Contains(str, v) {
+				tmp := v[0:3] + "*"
+				if len(v) > 2 {
+					tmp += v[6:]
+				}
+				str = strings.Replace(str, v, tmp, -1)
+			}
+		}
+		return str, nil
 	})
-	*/
 }
 
 func main() {
