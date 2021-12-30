@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/reactivex/rxgo/v2"
@@ -86,6 +90,27 @@ func InitObservable() {
 		...
 	})
 	*/
+	dirtyWord, _ := ioutil.ReadFile("dirtytalk.txt")
+	sensitiveName, _ := ioutil.ReadFile("sensitive_name.txt")
+	dirtyList := strings.Split(string(dirtyWord), "\n")
+	sensitiveList := strings.Split(string(sensitiveName), "\n")
+
+	ObservableMsg = ObservableMsg.Filter(func(msg interface{}) bool {
+		smsg := fmt.Sprintf("%v", msg)
+		for _, i := range dirtyList {
+			if strings.Contains(smsg, i) {
+				return false
+			}
+		}
+		return true
+	}).Map(func(_ context.Context, msg interface{}) (interface{}, error) {
+		smsg := fmt.Sprintf("%v", msg)
+		for _, i := range sensitiveList {
+			j := i[:3] + "*" + i[6:]
+			smsg = strings.Replace(smsg, i, j, -1)
+		}
+		return smsg, nil
+	})
 }
 
 func main() {
