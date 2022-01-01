@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"<MOUDULE_NAME>/cw"
+	"yydderf/cw"
 )
 
 func main() {
