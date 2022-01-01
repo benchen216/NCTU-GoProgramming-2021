@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"strings"
+	"strconv"
     "sort"
-    "strings"
 )
 
 func checkErr(e error) {
@@ -15,11 +17,15 @@ func checkErr(e error) {
 }
 
 type System struct {
-    ip_acc map[string]map[string]bool
+	// you can add some data type if you like
 }
 
 func (System) String() string {
-	return "There's nothing here."
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
+		os.Exit(1)
+	}
+	return ""
 }
 
 func (System) LoadPTT(url string) PTTArticles {
@@ -36,73 +42,93 @@ func (System) LoadFB(url string) FBArticles {
 	return articles
 }
 
-func (s *System) CountCyberWarriors(ptt PTTArticles, num int) {
-    s.ip_acc = map[string]map[string]bool{}
-    for _, article := range ptt.Articles {
-        tmp_ip := article.Ip
-        tmp_author := article.Article.Author
-        if s.ip_acc[tmp_ip] == nil {
-            s.ip_acc[tmp_ip] = map[string]bool{}
-        }
-        if _, ok := s.ip_acc[tmp_ip][tmp_author]; !ok {
-            s.ip_acc[tmp_ip][tmp_author] = true
-        }
-    }
-    delete(s.ip_acc, "None")
-    ips := make([]string, 0, len(s.ip_acc))
-    for ip := range s.ip_acc {
-        ips = append(ips, ip)
-    }
-    sort.Strings(ips)
-    for i := 0; i < len(s.ip_acc); i++ {
-        ip := ips[i]
-        authors := s.ip_acc[ips[i]]
-        if len(authors) > num {
-            author_list := make([]string, 0, len(authors))
-            fmt.Printf("%s, total: %d\n", ip, len(authors))
-            for k, _ := range authors {
-                author_list = append(author_list, k)
-            }
-            sort.Strings(author_list)
-            output := "[" + strings.Join(author_list, `, `) + "]"
-            fmt.Println(output)
-        }
-    }
-    return
+type data struct {
+	id []string
 }
 
-func (s *System) CountKeyWord(ptt PTTArticles, fb FBArticles, cnt int, keywords []string){
-    // db establishment
-    data := map[string][]string{}
-    var count int
-    for _, article := range ptt.Articles {
-        tmp_author := article.Article.Author
-        tmp_title := article.Article.Article_title
-        data[tmp_author] = append(data[tmp_author], tmp_title)
-    }
-    for _, article := range fb.Articles {
-        tmp_author := article.Article.Author
-        tmp_title := article.Article.Article_title
-        data[tmp_author] = append(data[tmp_author], tmp_title)
-    }
-    // loop through all the keywords
-    for _, keyword := range keywords {
-        usr_art := []string{}
-        for usr, articles := range data {
-            count = 0
-            for _, article := range articles {
-                if strings.Contains(article, keyword) == true {
-                    count += 1
-                }
-            }
-            if count > cnt {
-                usr_art = append(usr_art, usr)
-            }
-        }
-        sort.Strings(usr_art)
-        fmt.Printf("%s, total: %d\n", keyword, len(usr_art))
-        output := "[" + strings.Join(usr_art, `, `) + "]"
-        fmt.Println(output)
-    }
-    return
+func (System) CountCyberWarriors(ptt PTTArticles) {
+	counts, _ := strconv.Atoi(os.Args[1])
+	ip := make(map[string]data)
+	ans := []string{}
+	for _, post := range ptt.Articles {
+		if post.Ip == "None" || post.Author == "" {
+			continue
+		}
+		usr := ip[post.Ip]
+		chk := true
+		for _, id := range usr.id {
+			if id == post.Author {
+				chk = false
+				break
+			}
+		}
+		if chk {
+			usr.id = append(usr.id, post.Author)
+			ip[post.Ip] = usr
+			if len(ip[post.Ip].id) == counts+1 {
+				ans = append(ans, post.Ip)
+			}
+		}
+	}
+	sort.Strings(ans)
+	for _, val := range ans {
+		fmt.Printf("%s, total: %d\n", val, len(ip[val].id))
+		sort.Strings(ip[val].id)
+		fmt.Printf("[%s", ip[val].id[0])
+		if len(ip[val].id) > 1 {
+			for _, i := range ip[val].id[1:] {
+				fmt.Printf(", %s", i)
+			}
+		}
+		fmt.Printf("]\n")
+	}
 }
+
+func (System) CountKeyWord(fb FBArticles, ptt PTTArticles) {
+	counts, _ := strconv.Atoi(os.Args[2])
+	keyword := os.Args[3:]
+	datas := make(map[string]map[string]int)
+	ans := make(map[string]data)
+	for _, k := range keyword {
+		datas[k] = make(map[string]int)
+	}
+	for _, post := range ptt.Articles {
+		for _, k := range keyword {
+			if strings.Contains(post.Article_title, k) {
+				datas[k][post.Author] += 1
+				if datas[k][post.Author] == counts+1 {
+					tmp := ans[k]
+					tmp.id = append(tmp.id, post.Author)
+					ans[k] = tmp
+				}
+			}
+		}
+	}
+	for _, post := range fb.Articles {
+		for _, k := range keyword {
+			if strings.Contains(post.Article_title, k) {
+				datas[k][post.Author] += 1
+				if datas[k][post.Author] == counts+1 {
+					tmp := ans[k]
+					tmp.id = append(tmp.id, post.Author)
+					ans[k] = tmp
+				}
+			}
+		}
+	}
+	for _, k := range keyword {
+		fmt.Printf("%s, total: %d\n", k, len(ans[k].id))
+		sort.Strings(ans[k].id)
+		fmt.Printf("[")
+		if len(ans[k].id) > 0 {
+			fmt.Printf("%s", ans[k].id[0])
+		}
+		if len(ans[k].id) > 1 {
+			for _, i := range ans[k].id[1:] {
+				fmt.Printf(", %s", i)
+			}
+		}
+		fmt.Printf("]\n")
+	}
+}
+
