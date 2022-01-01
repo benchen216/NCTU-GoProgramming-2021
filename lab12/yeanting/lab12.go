@@ -106,18 +106,23 @@ func InitObservable() {
 		}
 		fileScanner := bufio.NewScanner(f_sen)
 		var stp_string string
+		r_value := []rune(i.(string))
+		change := false
 		for fileScanner.Scan() {
 			stp_string = strings.Replace(fileScanner.Text(), "\n", "", -1)
 			if strings.Contains(i.(string), stp_string) {
+				change = true
 				idx := strings.Index(i.(string), stp_string)
 				temp := []byte(i.(string))[0:idx]
 				rune_idx := len([]rune(string(temp)))
-				r_value := []rune(i.(string))
 				r_value[rune_idx+1] = '*'
-				return string(r_value), nil
 			}
 		}
-		return i.(string), nil
+		if change {
+			return string(r_value), nil
+		} else {
+			return i.(string), nil
+		}
 	})
 }
 
