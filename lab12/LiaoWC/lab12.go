@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/reactivex/rxgo/v2"
@@ -80,12 +83,43 @@ func wshandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func InitObservable() {
-	/* 參考
-	ObservableMsg = ObservableMsg.Filter(...) ... {
-	}).Map(...) {
-		...
+	// Read dirtytalk.txt
+	dirtytalk_data, err := os.ReadFile("./dirtytalk.txt")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	dirtytalk := strings.Split(string(dirtytalk_data), "\n")
+	// Read sensitive_name.tx
+	sensitive_data, err := os.ReadFile("./sensitive_name.txt")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	sensitive := strings.Split(string(sensitive_data), "\n")
+	//
+	ObservableMsg = ObservableMsg.Filter(func(i interface{}) bool {
+		input := i.(string)
+		for _, str := range dirtytalk {
+			if strings.Contains(input, str) {
+				return false
+			}
+		}
+		return true
+	}).Map(func(_ context.Context, i interface{}) (interface{}, error) {
+		input := i.(string)
+		for _, str := range sensitive {
+			revisedStr := str
+			if len(revisedStr) > 1 {
+				revisedStr = string([]rune(str)[:1]) + "*" + string([]rune(str)[2:])
+			} else {
+				log.Fatalln("unexpected")
+			}
+			if strings.Contains(input, str) {
+				input = strings.Replace(input, str, revisedStr, -1)
+			}
+		}
+		return input, nil
 	})
-	*/
+
 }
 
 func main() {
