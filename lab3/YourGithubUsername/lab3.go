@@ -15,6 +15,7 @@ import (
 	//go mod init whatever_you_like (在Lab4資料夾下開mod)
 	//go mod tidy   (或 go get gopl.io/ch4/github)
 	"gopl.io/ch4/github"
+	"strconv"
 )
 
 var issueListTemplate = template.Must(template.New("issueList").Parse(`
@@ -67,12 +68,16 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			List issues (issueListTemplate) here
 		*/
 
+		logPrint(issueListTemplate.Execute(w, nis))
 		return
 	}
 
 	/*
 		Show issues (issueTemplate) here
 	*/
+
+	index, _ := strconv.Atoi(pathParts[2])
+	logPrint(issueTemplate.Execute(w, nis.Items[index]))
 
 }
 
@@ -83,10 +88,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	http.Handle("/")
+	// http.Handle("/")
 
 	//Hint: "isr" is "github.issuesSearchResult"
 	//http.Handle("/", ???)
 	//log.Fatal(http.ListenAndServe(":8080", nil))
+	issue := newIssues{*isr}
+	http.Handle("/", issue)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
