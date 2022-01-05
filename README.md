@@ -1,5 +1,5 @@
 This repository is for collecting homework assignments for
-xxxxx in the semester of 2021 autumn.
+NCTU-GoProgramming in the semester of 2021 autumn.
 
 To turn in your submission, you need to clone this repository, and create a
 [pull request (PR)](https://github.com/benchen216/NCTU-GoProgramming-2021/pulls).  Your
