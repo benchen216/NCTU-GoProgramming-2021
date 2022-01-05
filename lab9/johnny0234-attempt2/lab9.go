@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	// [TODO] set your module name, go mod init my_module->MOUDULE_NAME
+	// [TODO] set your module name, go mod init my_module->M
 	"johnny0234/cw"
 
 	"os"
