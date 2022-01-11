@@ -84,10 +84,10 @@ ans7 = '''1. 姓名: 張燕光, 網站: http://cial.csie.ncku.edu.tw/
 29. 姓名: 林英超, 網站: http://caid.csie.ncku.edu.tw/
 30. 姓名: 賀保羅, 網站: NULL
 31. 姓名: 朱威達, 網站: http://mmcv.csie.ncku.edu.tw
-32. 姓名: 許靜芳, 網站: http://hsnl.csie.ncku.edu.tw/
-33. 姓名: 楊中平, 網站: http://neat.csie.ncku.edu.tw
-34. 姓名: 吳明龍, 網站: http://bmilab.csie.ncku.edu.tw
-35. 姓名: 蔡孟勳, 網站: http://imslab.org/
+32. 姓名: 蔡孟勳, 網站: http://imslab.org/
+33. 姓名: 許靜芳, 網站: http://hsnl.csie.ncku.edu.tw/
+34. 姓名: 楊中平, 網站: http://neat.csie.ncku.edu.tw
+35. 姓名: 吳明龍, 網站: http://bmilab.csie.ncku.edu.tw
 36. 姓名: 莊坤達, 網站: https://ncku-ccs.github.io/netdb-web/
 37. 姓名: 蔡佩璇, 網站: http://cps.imis.ncku.edu.tw/
 38. 姓名: 涂嘉恒, 網站: http://chiaheng.wordpress.com/advanced-systems-research-lab/
