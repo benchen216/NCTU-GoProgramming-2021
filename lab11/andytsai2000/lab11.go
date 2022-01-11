@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/gocolly/colly"
 )
@@ -24,11 +23,9 @@ func ptt(c *colly.Collector) {
 	c.OnHTML("div[id='main-content']", func(e *colly.HTMLElement) {
 		e.ForEach("div[class='push']", func(i int, e *colly.HTMLElement) {
 			if i < max {
-				var str string
-				str = strconv.Itoa(i+1) + ". 名字: " + e.ChildText(".push-userid") +
+				str := strconv.Itoa(i+1) + ". 名字: " + e.ChildText(".push-userid") +
 					", 留言" + e.ChildText(".push-content") +
 					", 時間: " + e.ChildText(".push-ipdatetime") + "\n"
-				str = strings.ReplaceAll(str, "(MISSING)", "")
 				fmt.Printf(str)
 			}
 		})
