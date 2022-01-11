@@ -27,7 +27,7 @@ func ptt(c *colly.Collector) {
 				str := strconv.Itoa(i+1) + ". 名字: " + e.ChildText(".push-userid") +
 					", 留言" + e.ChildText(".push-content") +
 					", 時間: " + e.ChildText(".push-ipdatetime") + "\n"
-				strings.ReplaceAll(str, "(MISSING)", "")
+				str = strings.ReplaceAll(str, "(MISSING)", "")
 				fmt.Printf(str)
 			}
 		})
