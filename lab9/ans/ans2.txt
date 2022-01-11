@@ -1,2 +1,0 @@
-Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>
-exit status 1
