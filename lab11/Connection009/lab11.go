@@ -1,9 +1,10 @@
 package main
 
 import (
-	"flag"
+	"os"
 	"fmt"
-
+	"flag"
+	"strings"
 	"github.com/gocolly/colly"
 )
 
