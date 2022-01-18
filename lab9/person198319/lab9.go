@@ -19,8 +19,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	ip_user_num, _ := strconv.Atoi(os.Args[1])
-	cwSystem.CountCyberWarriors(ip_user_num)
+	user_ip_num, _ := strconv.Atoi(os.Args[1])
+	cwSystem.CountCyberWarriors(user_ip_num)
 
 	keywords := os.Args[3:]
 	keyword_count, _ := strconv.Atoi(os.Args[2])

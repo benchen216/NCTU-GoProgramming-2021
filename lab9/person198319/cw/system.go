@@ -16,8 +16,8 @@ func checkErr(e error) {
 
 type System struct {
 	// you can add some data type if you like
-	ptt_articles PTTArticles
-	fb_articles  FBArticles
+	ptt PTTArticles
+	fb  FBArticles
 }
 
 func (System) String() string {
@@ -28,7 +28,7 @@ func (s *System) LoadPTT(url string) PTTArticles {
 	var articles PTTArticles
 	jsonBlob, _ := ioutil.ReadFile(url)
 	checkErr(json.Unmarshal(jsonBlob, &articles))
-	s.ptt_articles = articles
+	s.ptt = articles
 	return articles
 }
 
@@ -36,7 +36,7 @@ func (s *System) LoadFB(url string) FBArticles {
 	var articles FBArticles
 	jsonBlob, _ := ioutil.ReadFile(url)
 	checkErr(json.Unmarshal(jsonBlob, &articles))
-	s.fb_articles = articles
+	s.fb = articles
 	return articles
 }
 
@@ -44,7 +44,7 @@ func (s *System) CountCyberWarriors(ip_user_num int) {
 
 	ip_map := make(map[string]map[string]struct{})
 
-	for _, v := range s.ptt_articles.Articles {
+	for _, v := range s.ptt.Articles {
 		_, found := ip_map[v.Ip]
 		if v.Author != "" && v.Author != " " {
 			if found {
@@ -82,7 +82,7 @@ func (s *System) CountKeyWord(keyword_count int, keywords []string) {
 		keyword_map[keyword] = make(map[string]int)
 	}
 
-	for _, v := range s.ptt_articles.Articles {
+	for _, v := range s.ptt.Articles {
 		for _, keyword := range keywords {
 			if strings.Contains(v.Article_title, keyword) {
 				_, found := keyword_map[keyword][v.Author]
@@ -96,7 +96,7 @@ func (s *System) CountKeyWord(keyword_count int, keywords []string) {
 			}
 		}
 	}
-	for _, v := range s.fb_articles.Articles {
+	for _, v := range s.fb.Articles {
 		for _, keyword := range keywords {
 			if strings.Contains(v.Article_title, keyword) {
 				_, found := keyword_map[keyword][v.Author]
