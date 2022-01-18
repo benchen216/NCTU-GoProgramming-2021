@@ -1,16 +1,28 @@
 package main
 
 import (
+	// [TODO] set your module name, go mod init my_module->MOUDULE_NAME
 	"fmt"
-	"yydderf/cw"
+	"lab9/cw"
+	"os"
+	"strconv"
 )
 
 func main() {
 	cwSystem := cw.System{}
-	fmt.Print(cwSystem)
 
-	PTTArticles := cwSystem.LoadPTT("./data/ptt.json")
-	cwSystem.CountCyberWarriors(PTTArticles)
-	FBArticles := cwSystem.LoadFB("./data/fb.json")
-	cwSystem.CountKeyWord(FBArticles, PTTArticles)
+	cwSystem.LoadPTT("data/ptt.json")
+
+	cwSystem.LoadFB("data/fb.json")
+	if len(os.Args) < 4 {
+		fmt.Println("Usage: go run lab9.go <IP_USER_NUM> <KEYWORD_COUNT> <KEYWORD...>")
+		os.Exit(1)
+	}
+
+	ip_user_num, _ := strconv.Atoi(os.Args[1])
+	cwSystem.CountCyberWarriors(ip_user_num)
+
+	keywords := os.Args[3:]
+	keyword_count, _ := strconv.Atoi(os.Args[2])
+	cwSystem.CountKeyWord(keyword_count, keywords)
 }
