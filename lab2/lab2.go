@@ -1,17 +1,31 @@
 package main
 
-import "fmt"
-
-func Sum() {
-
-}
+import (
+	"fmt"
+	"log"
+)
 
 func main() {
-	// Please complete the code to make this program be compiled without error.
-	// Notice that you can only add code in this file.
-	var n int64
+	var n, total, i int64
 	for {
-		fmt.Scanln(&n)
-
+		_, err := fmt.Scanln(&n)
+		if err != nil {
+			log.Fatal("Failed\n")
+		}
+		if n < 1 {
+			break
+		}
+		total = 0
+		for i = 1; i <= n; i++ {
+			if i%7 == 0 {
+				continue
+			}
+			if i != 1 {
+				fmt.Print("+")
+			}
+			total += i
+			fmt.Print(i)
+		}
+		fmt.Printf("=%d\n", total)
 	}
 }
