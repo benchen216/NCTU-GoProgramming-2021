@@ -65,12 +65,16 @@ func logPrint(v interface{}) {
 func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathParts := strings.SplitN(r.URL.Path, "/", -1)
 	if len(pathParts) < 3 || pathParts[2] == "" {
-		//List issues (issueListTemplate) here
+		/*
+			List issues (issueListTemplate) here
+		*/
 		logPrint(issueListTemplate.Execute(w, nis.IssuesSearchResult))
 		return
 	}
 
-	//Show issues (issueTemplate) here
+	/*
+		Show issues (issueTemplate) here
+	*/
 	index, _ := strconv.Atoi(pathParts[2])
 	logPrint(issueTemplate.Execute(w, nis.IssuesSearchResult.Items[index]))
 }
@@ -78,12 +82,9 @@ func (nis newIssues) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func main() {
 	queryString := []string{"repo:vuejs/vue", "is:open", "label:bug"}
 	isr, err := github.SearchIssues(queryString)
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	http.Handle("/", newIssues{*isr})
 	log.Fatal(http.ListenAndServe(":8080", nil))
-
 }
