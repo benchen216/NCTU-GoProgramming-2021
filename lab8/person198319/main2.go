@@ -49,7 +49,7 @@ func getBook(db *sql.DB) gin.HandlerFunc {
 		book := Book{}
 		err := db.QueryRow("SELECT * FROM bookshelf WHERE id=$1", i).Scan(&book.ID, &book.NAME, &book.PAGES)
 		if err != nil {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "Not Found"})
+			c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 		} else {
 			c.IndentedJSON(http.StatusOK, book)
 		}
@@ -83,7 +83,7 @@ func updateBook(db *sql.DB) gin.HandlerFunc {
 		}
 		err := db.QueryRow("UPDATE bookshelf SET name=$1, pages=$2 WHERE id=$3 RETURNING *", submit.NAME, submit.PAGES, i).Scan(&submit.ID, &submit.NAME, &submit.PAGES)
 		if err != nil {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "Not Found"})
+			c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 		} else {
 			c.IndentedJSON(http.StatusOK, submit)
 		}
@@ -97,7 +97,7 @@ func deleteBook(db *sql.DB) gin.HandlerFunc {
 		var book Book
 		err := db.QueryRow("DELETE FROM bookshelf WHERE id=$1 RETURNING *", i).Scan(&book.ID, &book.NAME, &book.PAGES)
 		if err != nil {
-			c.IndentedJSON(http.StatusOK, gin.H{"message": "Not Found"})
+			c.IndentedJSON(http.StatusOK, gin.H{"message": "book not found"})
 		} else {
 			c.IndentedJSON(http.StatusOK, book)
 		}
