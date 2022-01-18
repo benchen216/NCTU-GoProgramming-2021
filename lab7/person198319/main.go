@@ -16,21 +16,17 @@ type Book struct {
 
 var bookshelf = []Book{
 	// init data
-	{
-		ID:    "1",
-		NAME:  "Blue Bird",
-		PAGES: "500",
-	},
+	{"1", "Blue Bird", "500"},
 }
 
 func getBooks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, bookshelf)
 }
 func getBook(c *gin.Context) {
-	x := c.Param("id")
-	for _, v := range bookshelf {
-		if v.ID == x {
-			c.IndentedJSON(http.StatusOK, v)
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			c.IndentedJSON(http.StatusOK, bookshelf[j])
 			return
 		}
 	}
@@ -42,21 +38,21 @@ func addBook(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	for _, v := range bookshelf {
-		if v.ID == json.ID {
+	for i := 0; i < len(bookshelf); i++ {
+		if bookshelf[i].ID == json.ID {
 			c.IndentedJSON(http.StatusOK, gin.H{"message": "duplicate book id"})
 			return
 		}
 	}
 	bookshelf = append(bookshelf, json)
-	c.JSON(http.StatusOK, json)
+	c.IndentedJSON(http.StatusOK, json)
 }
 func deleteBook(c *gin.Context) {
-	x := c.Param("id")
-	for y := 0; y < len(bookshelf); y++ {
-		if bookshelf[y].ID == x {
-			c.IndentedJSON(http.StatusOK, bookshelf[y])
-			bookshelf = append(bookshelf[:y], bookshelf[y+1:]...)
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			c.IndentedJSON(http.StatusOK, bookshelf[j])
+			bookshelf = append(bookshelf[:j], bookshelf[j+1:]...)
 			return
 		}
 	}
@@ -68,10 +64,10 @@ func updateBook(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	x := c.Param("id")
-	for y := 0; y < len(bookshelf); y++ {
-		if bookshelf[y].ID == x {
-			bookshelf[y] = json
+	i := c.Param("index")
+	for j := 0; j < len(bookshelf); j++ {
+		if bookshelf[j].ID == i {
+			bookshelf[j] = json
 			c.IndentedJSON(http.StatusOK, json)
 			return
 		}
@@ -82,11 +78,10 @@ func main() {
 	r := gin.Default()
 	r.RedirectFixedPath = true
 	r.GET("/bookshelf", getBooks)
-	r.GET("/bookshelf/:id", getBook)
+	r.GET("/bookshelf/:index", getBook)
 	r.POST("/bookshelf", addBook)
-	r.DELETE("/bookshelf/:id", deleteBook)
-	r.PUT("/bookshelf/:id", updateBook)
-
+	r.DELETE("/bookshelf/:index", deleteBook)
+	r.PUT("/bookshelf/:index", updateBook)
 	port := "8080"
 	if v := os.Getenv("PORT"); len(v) > 0 {
 		port = v
